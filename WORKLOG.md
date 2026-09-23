@@ -34,3 +34,35 @@ A simple diary of what the agent did in each phase. New entries go at the bottom
 - **My mistake:** the benchmark looked frozen for about 8 minutes. The broken `qwen3.6` model never answered, and I had piped the output through `tail`, which shows nothing until the very end. Fix: shorter timeouts, a time limit per model, and results printed as soon as each model finishes.
 
 **Commit:** `Phase 0: project setup`
+
+---
+
+## Phase 1: foundation, v1 bare LLM, v2 simple RAG (2026-09-23)
+
+**What I did, step by step**
+1. Read `HANDOFF.md` and the plan. Phase 0 was done, so this session was Phase 1.
+2. Looked at the raw output of Keenable once more (search results are plain text blocks separated by `---`, a failed page fetch comes back marked as an error), so the parser matches reality.
+3. Wrote the foundation:
+   - `config.py`: reads the keys and model names.
+   - `llm.py`: talks to the language model, retries when the server has trouble, and at most 3 calls at a time. When we ask for JSON, it checks the JSON and, if it's wrong, tells the model the error and asks again.
+   - `search.py`: search and page fetch through Keenable, saved on disk so a repeated question costs nothing.
+   - `report.py`: a step log (`trace.jsonl`) written as the run goes, plus the final `report.md` and `report.json`.
+   - `text.py`: splits the answer into sentences and reads the `[1][2]` citations.
+4. Wrote v1 (the model answers alone) and v2 (1 search → 8 best results → answer with `[n]`), plus the `python -m taro "question" --mode v1|v2` command.
+5. Wrote 16 small tests that run without internet.
+6. Ran real questions in English and Russian, and a trick question ("first human on Mars in 2024").
+
+**What came out**
+- v1 honestly says it doesn't know about the 2025 Nobel Prize, which is a good baseline.
+- v2 answers correctly (Clarke, Devoret, Martinis) with citations in about 5 seconds, and for the Mars question says the sources don't mention it.
+- A repeated question uses the saved search result (cache hit).
+- Interesting v2 mistake: asked who led ISP RAS after Ivannikov, it said "after his death", but he died in 2016 and the new director was appointed in 2015. The model filled a gap on its own. This is exactly what v3 must prevent, and it's a good example for the report.
+
+**Problems and how I solved them**
+- **My mistake:** the retry logger read the previous error at the wrong moment (the retry library had already cleared it), which crashed the test. Fix: log the error in the library's "before waiting" hook.
+- **My mistake:** the sentence splitter cut "Michel H. Devoret" into pieces at the initial "H.", so the first pieces lost their citations. I found it by reading the saved report. Fix: don't split after single-letter initials and common abbreviations (Dr., им., г. …), and added a test for it.
+- Some search results have HTML inside the title (`<br/><small>…`). Fix: strip the tags.
+- Removing the model's own `【source】` markers left double spaces. Fix: clean spaces after removing the markers.
+- One test run took about 5 minutes for no clear reason (it normally takes 5 seconds). A rerun was normal, so it was a one-time slowdown on the machine, not in the code.
+
+**Commit:** `Phase 1: foundation, v1 bare LLM, v2 simple RAG`

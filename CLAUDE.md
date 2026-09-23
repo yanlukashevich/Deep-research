@@ -49,7 +49,7 @@ These are planned commands. Confirm them in `HANDOFF.md` once they exist.
 - Setup: `python -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`, copy `.env.example` to `.env` and fill in the keys.
 - `python scripts/smoke_test.py`: runs 1 LLM call, 1 Keenable search and 1 fetch (exists, Phase 0).
 - `python scripts/model_bench.py [model ...]`: the model selection benchmark (exists, Phase 0).
-- `python -m taro "question" --mode v1|v2|v3`: run the agent. Output goes to `runs/<time>/` (`report.md`, `report.json`, `trace.jsonl`).
+- `python -m taro "question" --mode v1|v2|v3 [--no-cache]`: run the agent (v1 and v2 exist since Phase 1, v3 comes in Phase 2). Output goes to `runs/<YYYYmmdd-HHMMSS>-<mode>/` (`report.md`, `report.json`, `trace.jsonl`). `taro/runner.py:run()` is the shared entry point for the CLI and the server.
 - `python -m taro serve`: start the web UI at http://localhost:8000. The built page in `web/` is committed, so Node is only needed to change the UI.
-- `pytest` runs all tests. `pytest tests/test_x.py::test_name` runs a single test.
+- `pytest` runs all tests (they need no network; `pytest.ini` sets `asyncio_mode = auto`). `pytest tests/test_x.py::test_name` runs a single test.
 - `python -m eval.run_eval`: run the evaluation and experiments.
