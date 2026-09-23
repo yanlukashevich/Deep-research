@@ -1,0 +1,302 @@
+[
+ {
+  "model": "openai/gpt-oss-120b",
+  "extract": [
+   {
+    "reasoning_chars": 1018,
+    "latency": 4.290666818618774,
+    "prompt_tokens": 304,
+    "completion_tokens": 429,
+    "tok_per_s": 99.98445885809915,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 3,
+    "exact_quotes": 3,
+    "fuzzy_quotes": 3
+   },
+   {
+    "reasoning_chars": 947,
+    "latency": 4.518604516983032,
+    "prompt_tokens": 304,
+    "completion_tokens": 463,
+    "tok_per_s": 102.46526295006105,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 1223,
+    "latency": 5.194693088531494,
+    "prompt_tokens": 296,
+    "completion_tokens": 551,
+    "tok_per_s": 106.06978903459417,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 3,
+    "exact_quotes": 3,
+    "fuzzy_quotes": 3
+   },
+   {
+    "reasoning_chars": 1207,
+    "latency": 3.666551351547241,
+    "prompt_tokens": 296,
+    "completion_tokens": 543,
+    "tok_per_s": 148.09556663398712,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 3,
+    "exact_quotes": 3,
+    "fuzzy_quotes": 3
+   }
+  ],
+  "writer": {
+   "content": "Эйфелева башня была завершена в марте 1889 года к Всемирной выставке [2]. Она спроектирована инженерной компанией Гюстава Эйфеля, а главными инженерами были Морис Кёхлин и Эмиль Нугье [3]. Высота башни составляет 330 метров, включая антенны [1]. Её ежегодно посещают около 6 миллионов человек [4]. Однако в 2024 году Reuters сообщает, что в 2023 году её посетило 6,3 млн человек, что немного отличается от обычно указываемых около 6 млн [5][4].",
+   "reasoning_chars": 1296,
+   "latency": 3.838855504989624,
+   "prompt_tokens": 299,
+   "completion_tokens": 514,
+   "tok_per_s": 133.89407320278633,
+   "finish": "stop",
+   "text": "Эйфелева башня была завершена в марте 1889 года к Всемирной выставке [2]. Она спроектирована инженерной компанией Гюстава Эйфеля, а главными инженерами были Морис Кёхлин и Эмиль Нугье [3]. Высота башни составляет 330 метров, включая антенны [1]. Её ежегодно посещают около 6 миллионов человек [4]. Однако в 2024 году Reuters сообщает, что в 2023 году её посетило 6,3 млн человек, что немного отличается от обычно указываемых около 6 млн [5][4].",
+   "cyrillic_share": 0.98,
+   "cjk_leak": false,
+   "sentences": 5,
+   "cited_sentences": 5
+  },
+  "context": {
+   "max_passed_k": 0,
+   "detail": {
+    "16k": {
+     "ok": false,
+     "latency": 2.2,
+     "prompt_tokens": 10512,
+     "error": null
+    }
+   }
+  }
+ },
+ {
+  "model": "qwen/qwen3.8-27B-fp8",
+  "extract": [
+   {
+    "reasoning_chars": 1972,
+    "latency": 18.395993947982788,
+    "prompt_tokens": 296,
+    "completion_tokens": 787,
+    "tok_per_s": 42.781053430727965,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 2201,
+    "latency": 20.388350009918213,
+    "prompt_tokens": 296,
+    "completion_tokens": 871,
+    "tok_per_s": 42.72047515254002,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 1426,
+    "latency": 15.709502458572388,
+    "prompt_tokens": 280,
+    "completion_tokens": 668,
+    "tok_per_s": 42.522034148540754,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 1699,
+    "latency": 16.771594762802124,
+    "prompt_tokens": 280,
+    "completion_tokens": 759,
+    "tok_per_s": 45.255088185375975,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   }
+  ],
+  "writer": {
+   "content": "\n\nЭйфелева башня была завершена в марте 1889 года для Всемирной выставки [2].  \nЕё спроектировало инженерное бюро Гюстава Эйфеля, а главными инженерами были Морис Кёшлин и Эмиль Нугье [3].  \nВысота башни составляет 330 метров с учётом антенн [1].  \nЕжегодно её посещают около 6 миллионов человек [4].  \nПри этом данные за 2023 год указывают на 6,3 миллиона посетителей, что расходится с оценкой «около 6 миллионов» [5][4].",
+   "reasoning_chars": 1841,
+   "latency": 15.266916751861572,
+   "prompt_tokens": 295,
+   "completion_tokens": 696,
+   "tok_per_s": 45.588772855208845,
+   "finish": "stop",
+   "text": "\n\nЭйфелева башня была завершена в марте 1889 года для Всемирной выставки [2].  \nЕё спроектировало инженерное бюро Гюстава Эйфеля, а главными инженерами были Морис Кёшлин и Эмиль Нугье [3].  \nВысота башни составляет 330 метров с учётом антенн [1].  \nЕжегодно её посещают около 6 миллионов человек [4].  \nПри этом данные за 2023 год указывают на 6,3 миллиона посетителей, что расходится с оценкой «около 6 миллионов» [5][4].",
+   "cyrillic_share": 1.0,
+   "cjk_leak": false,
+   "sentences": 5,
+   "cited_sentences": 5
+  },
+  "context": {
+   "max_passed_k": 100,
+   "detail": {
+    "16k": {
+     "ok": true,
+     "latency": 3.0,
+     "prompt_tokens": 10501,
+     "error": null
+    },
+    "48k": {
+     "ok": true,
+     "latency": 3.1,
+     "prompt_tokens": 31381,
+     "error": null
+    },
+    "100k": {
+     "ok": true,
+     "latency": 3.4,
+     "prompt_tokens": 65281,
+     "error": null
+    }
+   }
+  }
+ },
+ {
+  "model": "google/gemma4:31b",
+  "extract": [
+   {
+    "reasoning_chars": 0,
+    "latency": 4.351531982421875,
+    "prompt_tokens": 258,
+    "completion_tokens": 175,
+    "tok_per_s": 40.21572188988085,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 0,
+    "latency": 4.540238857269287,
+    "prompt_tokens": 258,
+    "completion_tokens": 175,
+    "tok_per_s": 38.54422762798282,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 0,
+    "latency": 4.179337024688721,
+    "prompt_tokens": 243,
+    "completion_tokens": 164,
+    "tok_per_s": 39.240673587987274,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   },
+   {
+    "reasoning_chars": 0,
+    "latency": 4.090879917144775,
+    "prompt_tokens": 243,
+    "completion_tokens": 165,
+    "tok_per_s": 40.33362096709051,
+    "finish": "stop",
+    "valid": true,
+    "n_facts": 4,
+    "exact_quotes": 4,
+    "fuzzy_quotes": 4
+   }
+  ],
+  "writer": {
+   "content": "Эйфелева башня была построена к Всемирной выставке и завершена в марте 1889 года [2]. Проект был разработан инженерной компанией Гюстава Эйфеля, а основными инженерами выступили Морис Кёхлин и Эмиль Нугье [3]. Высота сооружения вместе с антеннами составляет 330 метров [1]. Что касается посещаемости, ежегодно башню посещают около 6 миллионов человек [4], при этом в 2023 году число посетителей составило 6,3 миллиона [5].",
+   "reasoning_chars": 0,
+   "latency": 3.188410520553589,
+   "prompt_tokens": 258,
+   "completion_tokens": 130,
+   "tok_per_s": 40.77266687020864,
+   "finish": "stop",
+   "text": "Эйфелева башня была построена к Всемирной выставке и завершена в марте 1889 года [2]. Проект был разработан инженерной компанией Гюстава Эйфеля, а основными инженерами выступили Морис Кёхлин и Эмиль Нугье [3]. Высота сооружения вместе с антеннами составляет 330 метров [1]. Что касается посещаемости, ежегодно башню посещают около 6 миллионов человек [4], при этом в 2023 году число посетителей составило 6,3 миллиона [5].",
+   "cyrillic_share": 1.0,
+   "cjk_leak": false,
+   "sentences": 4,
+   "cited_sentences": 4
+  },
+  "context": {
+   "max_passed_k": 100,
+   "detail": {
+    "16k": {
+     "ok": true,
+     "latency": 0.4,
+     "prompt_tokens": 10114,
+     "error": null
+    },
+    "48k": {
+     "ok": true,
+     "latency": 0.6,
+     "prompt_tokens": 30298,
+     "error": null
+    },
+    "100k": {
+     "ok": true,
+     "latency": 0.9,
+     "prompt_tokens": 63068,
+     "error": null
+    }
+   }
+  }
+ },
+ {
+  "model": "glm-4.7-flash",
+  "extract": [
+   {
+    "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}",
+    "latency": 30.218429803848267
+   },
+   {
+    "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}",
+    "latency": 30.186054229736328
+   },
+   {
+    "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}",
+    "latency": 30.28622055053711
+   },
+   {
+    "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}",
+    "latency": 30.238141298294067
+   }
+  ],
+  "writer": {
+   "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}",
+   "latency": 30.917744398117065
+  },
+  "context": {
+   "max_passed_k": 16,
+   "detail": {
+    "16k": {
+     "ok": true,
+     "latency": 16.4,
+     "prompt_tokens": 10453,
+     "error": null
+    },
+    "48k": {
+     "ok": false,
+     "latency": 30.5,
+     "prompt_tokens": null,
+     "error": "InternalServerError: Error code: 500 - {'error': {'message': \"'>' not supported between instances of 'NoneType' and 'int'\", 'type': 'None', 'param': 'None', 'code': '500'}}"
+    }
+   }
+  }
+ }
+]

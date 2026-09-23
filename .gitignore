@@ -1,0 +1,21 @@
+# Secrets — task.md contains API keys
+.env
+task.md
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime data
+cache/
+runs/
+
+# Node
+web/node_modules/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
