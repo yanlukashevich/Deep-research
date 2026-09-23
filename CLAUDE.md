@@ -20,7 +20,14 @@ TARO is a deep-research agent. It takes a question, searches the web through Kee
      - any deviations from the plan
      - known issues or TODOs
      - exact commands to check that things work
-   - Commit using the message given in the plan (for example, `Phase 1: foundation, v1 bare LLM, v2 simple RAG`), with `HANDOFF.md` included.
+   - Add an entry at the bottom of `WORKLOG.md`: a simple diary in plain language, with no jargon. Never rewrite old entries. Each entry covers:
+     - what you did, step by step
+     - what came out
+     - problems and how you solved them, including your own mistakes
+     - the commit message
+
+     `HANDOFF.md` holds the current state, while `WORKLOG.md` is the history.
+   - Commit using the message given in the plan (for example, `Phase 1: foundation, v1 bare LLM, v2 simple RAG`), with `HANDOFF.md` and `WORKLOG.md` included.
    - Give the user a short, simple explanation of what was built.
 4. If you change a command or a key architectural fact, update this file too.
 
