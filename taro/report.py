@@ -1,59 +1,14 @@
-"""Run output: the step log (trace.jsonl) and the final report (report.md, report.json)."""
-import json
-import time
-from collections import Counter
-from collections.abc import Callable
-from datetime import datetime
+"""The final report: sentences with their confidence marks, rendered to report.md and report.json."""
 from pathlib import Path
-from typing import Any
 from urllib.parse import urlsplit
 
+from .confidence import MARKS, level_of, score_report
 from .schemas import Report, Sentence, Source
-from .text import clean_answer, parse_citations, split_sentences
+from .text import clean_answer, is_prose_line, parse_citations, split_line, split_sentences
+from .trace import Listener, Trace, new_run_dir
 
-Listener = Callable[[dict[str, Any]], None]
-
-
-class Trace:
-    """Records every step of a run.
-
-    Each event is appended to trace.jsonl right away (so a crashed run still leaves a log) and passed
-    to an optional listener (the web UI streams these live). `stats` counts calls, tokens and cache hits.
-    """
-
-    def __init__(self, path: Path | None = None, listener: Listener | None = None):
-        self.path = path
-        self.listener = listener
-        self.stats: Counter[str] = Counter()
-        self.t0 = time.monotonic()
-        if path:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text("", encoding="utf-8")
-
-    def event(self, kind: str, **data: Any) -> None:
-        record = {"t": round(time.monotonic() - self.t0, 3), "kind": kind, **data}
-        if self.path:
-            with self.path.open("a", encoding="utf-8") as f:
-                f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
-        if self.listener:
-            self.listener(record)
-
-    def count(self, key: str, n: float = 1) -> None:
-        self.stats[key] += n
-
-    def elapsed(self) -> float:
-        return time.monotonic() - self.t0
-
-
-def new_run_dir(runs_dir: Path, mode: str) -> Path:
-    """runs/<YYYYmmdd-HHMMSS>-<mode>/, with a numeric suffix if that already exists."""
-    base = runs_dir / f"{datetime.now():%Y%m%d-%H%M%S}-{mode}"
-    path, i = base, 1
-    while path.exists():
-        i += 1
-        path = base.with_name(f"{base.name}-{i}")
-    path.mkdir(parents=True)
-    return path
+__all__ = ["Listener", "Trace", "new_run_dir", "build_sentences", "finalize", "marked_answer",
+           "to_markdown", "save_report"]
 
 
 def build_sentences(answer: str, n_sources: int) -> list[Sentence]:
@@ -67,11 +22,33 @@ def build_sentences(answer: str, n_sources: int) -> list[Sentence]:
 
 
 def finalize(report: Report, trace: Trace) -> Report:
-    """Clean the answer, parse sentences and copy run stats into the report."""
+    """Clean the answer, parse sentences, score them and copy run stats into the report."""
     report.answer = clean_answer(report.answer)
     report.sentences = build_sentences(report.answer, len(report.sources))
+    score_report(report)
     report.stats = {k: round(v, 2) for k, v in trace.stats.items()} | {"seconds": round(trace.elapsed(), 1)}
     return report
+
+
+def marked_answer(report: Report) -> str:
+    """The answer with a 🟢🟡🔴 mark after each sentence, the rest of the markdown untouched.
+
+    Walks the answer exactly the way `build_sentences` did, so mark i belongs to sentence i even
+    when a line holds several sentences or a piece was only a stray citation.
+    """
+    marks = iter(MARKS.get(s.level or "low", "") for s in report.sentences)
+    out: list[str] = []
+    for line in report.answer.splitlines():
+        if not is_prose_line(line):
+            out.append(line)
+            continue
+        prefix, sentences = split_line(line)
+        pieces = []
+        for raw in sentences:
+            text, _ = parse_citations(raw)
+            pieces.append(f"{raw} {next(marks, '')}".strip() if text else raw)
+        out.append(prefix + " ".join(pieces))
+    return "\n".join(out)
 
 
 def to_markdown(report: Report) -> str:
@@ -83,21 +60,26 @@ def to_markdown(report: Report) -> str:
         "",
         "## Answer",
         "",
-        report.answer or "_(empty answer)_",
+        marked_answer(report) if report.answer else "_(empty answer)_",
+        "",
+        "*Per sentence: 🟢 well supported · 🟡 thin support · 🔴 weak or not cited at all.*",
         "",
     ]
     if report.confidence is not None:
-        lines += ["## Confidence", "", f"**{report.confidence:.2f}**: {report.confidence_why}", ""]
+        mark = MARKS.get(level_of(report.confidence), "")
+        lines += ["## Confidence", "",
+                  f"**{report.confidence:.2f}** {mark} — {report.confidence_why}", ""]
     if report.contradictions:
         lines += ["## Where the sources disagree", ""] + [f"- {x}" for x in report.contradictions] + [""]
     if report.not_found:
         lines += ["## What we couldn't find", ""] + [f"- {x}" for x in report.not_found] + [""]
     if report.sources:
         lines += ["## Sources", ""]
+        cited = {c for sent in report.sentences for c in sent.citations}
         for s in report.sources:
-            lines.append(_source_line(s))
+            lines.append(_source_line(s) + ("" if s.id in cited else " _(read, but the answer does not cite it)_"))
             # the quotes this source supplied, so a reader can open the page and check them
-            lines += [f"   > {f.quote}" for f in report.facts if f.source_id == s.id][:3]
+            lines += [f"   > {q}" for q in _quotes(report, s.id)]
         lines += [""]
     s = report.stats
     lines += [
@@ -110,6 +92,24 @@ def to_markdown(report: Report) -> str:
         "",
     ]
     return "\n".join(lines)
+
+QUOTE_CHARS = 300
+
+
+def _quotes(report: Report, source_id: int, limit: int = 3) -> list[str]:
+    """Up to `limit` different quotes this source supplied, each on one line so the > block holds."""
+    out: list[str] = []
+    for f in report.facts:
+        if f.source_id != source_id:
+            continue
+        quote = " ".join(f.quote.split())
+        if len(quote) > QUOTE_CHARS:
+            quote = quote[:QUOTE_CHARS].rsplit(" ", 1)[0] + " ..."
+        if quote and quote not in out:
+            out.append(quote)
+        if len(out) == limit:
+            break
+    return out
 
 
 def _source_line(s: Source) -> str:

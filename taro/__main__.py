@@ -6,6 +6,8 @@ import sys
 from rich.console import Console
 from rich.markdown import Markdown
 
+from .confidence import MARKS, level_of
+from .report import marked_answer
 from .runner import IMPLEMENTED_MODES, run
 
 
@@ -31,7 +33,10 @@ def main(argv: list[str] | None = None) -> int:
     report, run_dir = asyncio.run(run(args.question, args.mode, listener=show_step, use_cache=not args.no_cache))
 
     console.rule(f"[bold]{args.mode}")
-    console.print(Markdown(report.answer))
+    console.print(Markdown(marked_answer(report)))
+    if report.confidence is not None:
+        console.print(f"\nconfidence [bold]{report.confidence:.2f}[/bold] "
+                      f"{MARKS[level_of(report.confidence)]} [dim]{report.confidence_why}")
     if report.sources:
         console.print()
         for s in report.sources:

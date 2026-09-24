@@ -3,9 +3,10 @@ from pathlib import Path
 
 from .config import get_settings
 from .llm import LLM
-from .report import Listener, Trace, finalize, new_run_dir, save_report
+from .report import finalize, save_report
 from .schemas import Mode, Report
 from .search import Search
+from .trace import Listener, Trace, new_run_dir
 from .v1_bare import run_v1
 from .v2_rag import run_v2
 from .v3_research import run_v3

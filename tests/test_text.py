@@ -60,3 +60,11 @@ def test_remap_citations_fact_numbers_to_source_numbers():
 def test_remap_citations_drops_invented_fact_numbers():
     assert remap_citations("An unsupported claim [42].", {1: 1}) == "An unsupported claim."
     assert remap_citations("Half supported [1][42].", {1: 3}) == "Half supported [3]."
+
+
+def test_chained_initials_do_not_split_a_sentence():
+    text = "Академик В.П. Иванников был первым директором [1]. После него пришёл А. И. Аветисян [2]."
+    assert split_sentences(text) == [
+        "Академик В.П. Иванников был первым директором [1].",
+        "После него пришёл А. И. Аветисян [2].",
+    ]

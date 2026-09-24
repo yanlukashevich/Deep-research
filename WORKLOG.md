@@ -151,3 +151,85 @@ Then open `runs/<time>-v3/report.md`, take a quote from the source list, open th
 `trace.jsonl` in the same folder holds every step, every search and every rejected quote.
 
 **Commit:** `Phase 2: v3 research agent with critic loop`
+
+---
+
+## Phase 3: confidence scoring, report format, tests (2026-09-24)
+
+**What I did, step by step**
+1. Read `HANDOFF.md`: phases 0-2 were done, so this session was Phase 3 — putting a number on how much each
+   sentence of the answer can be trusted.
+2. Wrote `taro/confidence.py`. For every sentence it looks only at the sources that sentence cites and asks
+   three questions: how many *different* websites back it, how good those websites are, and whether the critic
+   caught those sources contradicting each other. The formula from the plan turns that into one number between
+   0 and 1, and the number into a colour: green from 0.75, yellow from 0.5, red below that. A sentence with no
+   citation at all is always red and scores zero.
+3. Gave the whole report a score too: the average of its sentences, multiplied by the share of the sub-questions
+   the agent actually found facts for. A report can be beautifully sourced on half the question and should not
+   look complete because of it. Next to the number there is a plain line saying what it is made of, so a reader
+   never has to trust the number itself.
+4. Made the report show it. `report.md` now prints the answer with a 🟢🟡🔴 after every sentence, a legend, and
+   a "Confidence" section. The terminal prints the same thing at the end of a run. The saved JSON keeps the
+   answer clean and stores the colour per sentence separately, so the web page in the next phase can paint the
+   text itself instead of parsing emoji out of it.
+5. Tidied the source list at the bottom of the report: quotes are now squeezed onto one line (a quote with a
+   line break inside it used to break the layout and spill raw page markup into the report), repeated quotes
+   are shown once, very long ones are cut at 300 characters, and a source that no sentence cites is marked as
+   such instead of sitting there unexplained.
+6. Wrote 21 new tests: the formula on known combinations, the colour boundaries, one site cited twice, the
+   contradiction penalty, the no-citation rule, the sub-question multiplier, the v1 case, and the rendering —
+   that every sentence gets exactly one mark in the right place and the sections are all there.
+7. Ran all three versions on the three test questions and read the reports by hand.
+
+**What came out**
+- Nobel question, v3: **0.72 🟡**. The two sentences that matter — who won and the official wording of the
+  prize — are green, backed by nobelprize.org and Nature. Two throwaway sentences the writer added at the end,
+  sourced from a substack essay and an odd news site, came out red. That is exactly the split I wanted to see:
+  the colour separates the core of the answer from its edges without anyone reading the sources.
+- ИСП РАН question, v3: **0.72 🟡**, three sentences, the key one (who became director) green.
+- v1 on the Nobel question: **0.00 🔴**. It has no sources by construction, so it cannot score anything else.
+  This is the cleanest possible demonstration of why the project exists.
+- The Mars question (a made-up premise): v3 answers "the sources do not say", every sentence red, **0.00**.
+
+**Interesting moments**
+- **The score punished the agent for being careful.** On the Nobel run the very first sentence — who won the
+  prize — came out yellow, not green, because both sources it cites are nobelprize.org: the press release and
+  the scientific background PDF. Two pages, one site. My first instinct was that the score was wrong. It is
+  not: one organisation stating something twice is one claim, not two, and the agent had genuinely not found a
+  second independent confirmation for that exact sentence. I left it alone. The lesson is that the score is
+  measuring evidence, not truth, and those really are different things.
+- **A punctuation bug was quietly costing confidence.** The Russian run marked "Академик В.П." as its own red
+  sentence: the sentence splitter saw the dot after "П" and started a new sentence, leaving a two-word fragment
+  with no citation. That fragment alone dropped the report from 0.72 to 0.54. The splitter already knew that a
+  single initial ("Michel H. Devoret") is not a sentence end, but not that initials come in chains ("В.П."). A
+  one-character fix to the rule, and the run scored what it deserved. Worth recording because the failure was
+  invisible until a number depended on it — the answer had always read fine.
+- **Deciding what an uncited sentence is worth.** Zero is harsh: a lead-in like "Below is a short overview."
+  is not a lie, it just carries no facts. I tried excluding such sentences from the average and stopped: any
+  rule for "this sentence isn't really a claim" is a rule the model can slip an unsupported claim through.
+  Scoring every sentence and letting the writer's own instructions ("no fact, no sentence") keep the answer
+  clean is the safer side to err on. Noted in the handoff as a known cost.
+- **The contradiction penalty is blunter than it looks.** When the critic finds two sources disagreeing, every
+  sentence citing either of them loses 0.3 — even a sentence about a completely different point from the same
+  page. To do better, the report would have to remember which *fact* each sentence rests on, and that
+  information is deliberately thrown away when the writer's fact numbers are translated into source numbers.
+  Left as it is, written down as the first thing to fix if the scores ever look unfair in practice.
+- **The zero-source message had to be split in two.** "No sources" means two opposite things: v1 never looked,
+  while v3 looked hard and found nothing usable. Both score 0.00, but telling a reader the same sentence in
+  both cases would be misleading, so the explanation now depends on which one it was.
+- A practical note for the next phase: `report.json` now carries everything a web page needs to colour the
+  answer — a level and a one-line reason per sentence — so the page will not need to recompute anything.
+
+**What to check by hand**
+```
+pytest                                                    # 50 tests, ~4 s, no internet
+python -m taro "Who won the Nobel Prize in Physics in 2025 and for what?" --mode v3
+python -m taro "Who won the Nobel Prize in Physics in 2025 and for what?" --mode v1   # must be 0.00 red
+```
+Open `runs/<time>-v3/report.md`. Every sentence should end with a colour. Pick a red one, look up its `[n]` in
+the source list, and the site should visibly be a weak one (a blog, a forum, an unknown domain) or the sentence
+should have no `[n]` at all. Pick a green one and its sources should be two or three different serious sites.
+The "Confidence" line states how many sentences cite something and how many different sites were used — both
+are countable by hand from the same report.
+
+**Commit:** `Phase 3: confidence scoring, report format, tests`

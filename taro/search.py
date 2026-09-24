@@ -14,7 +14,7 @@ from mcp.client.streamable_http import streamable_http_client
 from tenacity import AsyncRetrying, retry_if_exception_type, stop_after_attempt, wait_exponential_jitter
 
 from .config import Settings
-from .report import Trace
+from .trace import Trace
 from .schemas import Page, SearchResult
 
 _TRACKING_PARAMS = re.compile(r"^(utm_\w+|fbclid|gclid|yclid|mc_cid|mc_eid|ref|ref_src|_ga)$", re.I)
