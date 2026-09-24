@@ -8,8 +8,9 @@ from .schemas import Mode, Report
 from .search import Search
 from .v1_bare import run_v1
 from .v2_rag import run_v2
+from .v3_research import run_v3
 
-IMPLEMENTED_MODES: tuple[Mode, ...] = ("v1", "v2")
+IMPLEMENTED_MODES: tuple[Mode, ...] = ("v1", "v2", "v3")
 
 
 async def run(question: str, mode: Mode, *, listener: Listener | None = None,
@@ -26,7 +27,8 @@ async def run(question: str, mode: Mode, *, listener: Listener | None = None,
             report = await run_v1(question, llm)
         else:
             async with Search(settings, trace, session_id=run_dir.name, use_cache=use_cache) as search:
-                report = await run_v2(question, llm, search)
+                report = await (run_v2(question, llm, search) if mode == "v2"
+                                else run_v3(question, llm, search))
     except Exception as e:
         trace.event("error", error=repr(e))
         raise

@@ -13,7 +13,7 @@ def main(argv: list[str] | None = None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")  # Windows console defaults to cp1250
     parser = argparse.ArgumentParser(prog="python -m taro", description="TARO deep-research agent")
     parser.add_argument("question")
-    parser.add_argument("--mode", choices=["v1", "v2", "v3"], default="v2",
+    parser.add_argument("--mode", choices=["v1", "v2", "v3"], default="v3",
                         help="v1 bare LLM, v2 simple RAG, v3 research agent")
     parser.add_argument("--no-cache", action="store_true", help="do not use the on-disk search/fetch cache")
     args = parser.parse_args(argv)

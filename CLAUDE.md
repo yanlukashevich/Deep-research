@@ -19,16 +19,15 @@ TARO is a deep-research agent. It takes a question, searches the web through Kee
      - what was built and the key decisions (for example, the chosen models and why)
      - any deviations from the plan
      - known issues or TODOs
-     - exact commands to check that things work
-   - Add an entry at the bottom of `WORKLOG.md`: a simple diary in plain language, with no jargon. Never rewrite old entries. Each entry covers:
-     - what you did, step by step
+   - Add an entry at the bottom of `WORKLOG.md`: a simple diary in plain language, with no jargon. Never rewrite old entries. Write it in detail, so that someone who has not seen the code can follow what happened. Each entry covers:
+     - what you did, step by step, and why each step was needed
      - what came out
-     - problems and how you solved them, including your own mistakes
+     - **interesting moments**: things that were surprising or that you had to decide about the AI side of the work, and what you decided in the end. For example how the model behaved, where it made things up or ignored the instructions, what the prompt had to say to make it behave, which model turned out better and why, how the search results or the confidence scores looked. Plain technical hiccups (typos, wrong imports, library versions, failing tests) do **not** belong here.
+     - examples what to check by hand that things work
      - the commit message
 
      `HANDOFF.md` holds the current state, while `WORKLOG.md` is the history.
    - Commit using the message given in the plan (for example, `Phase 1: foundation, v1 bare LLM, v2 simple RAG`), with `HANDOFF.md` and `WORKLOG.md` included.
-   - Give the user a short, simple explanation of what was built.
 4. If you change a command or a key architectural fact, update this file too.
 
 ## Conventions
@@ -49,7 +48,7 @@ These are planned commands. Confirm them in `HANDOFF.md` once they exist.
 - Setup: `python -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`, copy `.env.example` to `.env` and fill in the keys.
 - `python scripts/smoke_test.py`: runs 1 LLM call, 1 Keenable search and 1 fetch (exists, Phase 0).
 - `python scripts/model_bench.py [model ...]`: the model selection benchmark (exists, Phase 0).
-- `python -m taro "question" --mode v1|v2|v3 [--no-cache]`: run the agent (v1 and v2 exist since Phase 1, v3 comes in Phase 2). Output goes to `runs/<YYYYmmdd-HHMMSS>-<mode>/` (`report.md`, `report.json`, `trace.jsonl`). `taro/runner.py:run()` is the shared entry point for the CLI and the server.
+- `python -m taro "question" --mode v1|v2|v3 [--no-cache]`: run the agent (all three exist; `v3` is the default). Output goes to `runs/<YYYYmmdd-HHMMSS>-<mode>/` (`report.md`, `report.json`, `trace.jsonl`). `taro/runner.py:run()` is the shared entry point for the CLI and the server.
 - `python -m taro serve`: start the web UI at http://localhost:8000. The built page in `web/` is committed, so Node is only needed to change the UI.
 - `pytest` runs all tests (they need no network; `pytest.ini` sets `asyncio_mode = auto`). `pytest tests/test_x.py::test_name` runs a single test.
 - `python -m eval.run_eval`: run the evaluation and experiments.

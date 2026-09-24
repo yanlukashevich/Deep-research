@@ -40,6 +40,8 @@ class Fact(BaseModel):
     quote: str
     source_id: int
     subquestion: int | None = None
+    quote_score: float | None = None  # how well the quote matched the page text
+    disputed: bool = False  # the critic found a source saying the opposite
 
 
 class Sentence(BaseModel):
@@ -61,6 +63,46 @@ class Report(BaseModel):
     confidence: float | None = None
     confidence_why: str = ""
     not_found: list[str] = Field(default_factory=list)
+    subquestions: list[str] = Field(default_factory=list)  # v3 research plan
+    contradictions: list[str] = Field(default_factory=list)  # what the critic saw disagreeing
     models: dict[str, str] = Field(default_factory=dict)
     stats: dict[str, float] = Field(default_factory=dict)
     created_at: datetime = Field(default_factory=lambda: datetime.now().astimezone())
+
+
+# ---------- what the LLM returns in v3 (validated by LLM.json) ----------
+
+
+class PlannedSubQuestion(BaseModel):
+    """One sub-question with the searches that should answer it. Ids come from the list order."""
+    question: str
+    queries: list[str] = Field(default_factory=list)
+
+
+class Plan(BaseModel):
+    subquestions: list[PlannedSubQuestion] = Field(default_factory=list)
+    published_after: str | None = None  # YYYY-MM-DD, set only for questions about recent events
+
+
+class ExtractedFact(BaseModel):
+    statement: str
+    quote: str
+    subquestion: int | None = None
+
+
+class Extraction(BaseModel):
+    facts: list[ExtractedFact] = Field(default_factory=list)
+
+
+class Contradiction(BaseModel):
+    fact_ids: list[int] = Field(default_factory=list)
+    note: str = ""
+
+
+class Critique(BaseModel):
+    """The critic's verdict after a round of reading."""
+    enough: bool = False
+    missing: list[int] = Field(default_factory=list)  # sub-question ids still without facts
+    contradictions: list[Contradiction] = Field(default_factory=list)
+    queries: list[str] = Field(default_factory=list)  # searches to fill the gaps
+    note: str = ""

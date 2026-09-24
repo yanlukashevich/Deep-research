@@ -88,10 +88,17 @@ def to_markdown(report: Report) -> str:
     ]
     if report.confidence is not None:
         lines += ["## Confidence", "", f"**{report.confidence:.2f}**: {report.confidence_why}", ""]
+    if report.contradictions:
+        lines += ["## Where the sources disagree", ""] + [f"- {x}" for x in report.contradictions] + [""]
     if report.not_found:
         lines += ["## What we couldn't find", ""] + [f"- {x}" for x in report.not_found] + [""]
     if report.sources:
-        lines += ["## Sources", ""] + [_source_line(s) for s in report.sources] + [""]
+        lines += ["## Sources", ""]
+        for s in report.sources:
+            lines.append(_source_line(s))
+            # the quotes this source supplied, so a reader can open the page and check them
+            lines += [f"   > {f.quote}" for f in report.facts if f.source_id == s.id][:3]
+        lines += [""]
     s = report.stats
     lines += [
         "## Run stats",

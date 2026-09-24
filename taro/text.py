@@ -7,6 +7,8 @@ _ODD_SPACES = re.compile(r"[     　]")
 _BRACKET_MARKERS = re.compile(r"【[^】]*】")
 # [1] · [1][2] · [1, 2] · [1-3] · [1–3]
 _CITATION = re.compile(r"\[(\d+(?:\s*[,;–-]\s*\d+)*)\]")
+# a run of adjacent markers: "[1][2]" or "[1] [2]"
+_CITATION_RUN = re.compile(r"\[\d+(?:\s*[,;–-]\s*\d+)*\](?:\s*\[\d+(?:\s*[,;–-]\s*\d+)*\])*")
 # A sentence ends at . ! ? … (optionally followed by citations or a closing quote/bracket),
 # then whitespace, then something that starts a new sentence.
 _SENTENCE_END = re.compile(
@@ -72,3 +74,23 @@ def split_sentences(text: str) -> list[str]:
                 out.append((pending + cites).strip())
             pending = ""
     return out
+
+
+def remap_citations(text: str, mapping: dict[int, int]) -> str:
+    """Rewrite [n] markers through `mapping`, dropping unknown numbers and repeats.
+
+    v3's writer cites fact numbers, while the report shows source numbers, and one source can back
+    several facts, so "[3][7]" from two facts of source 2 becomes "[2]".
+    """
+    def replace(m: re.Match[str]) -> str:
+        _, nums = parse_citations(m.group(0))
+        out: list[int] = []
+        for n in nums:
+            target = mapping.get(n)
+            if target is not None and target not in out:
+                out.append(target)
+        return "".join(f"[{n}]" for n in out)
+
+    # whole runs of adjacent markers at once, so two facts from one source collapse into one [n]
+    text = _CITATION_RUN.sub(replace, text)
+    return re.sub(r"\s+([.,;:!?…])", r"\1", text)

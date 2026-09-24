@@ -33,6 +33,19 @@ class Settings:
     v2_results: int = 8
     v2_snippet_chars: int = 2000
 
+    # v3 research agent
+    v3_max_rounds: int = 3            # planner round + up to 2 critic rounds
+    v3_search_results: int = 8        # results per query
+    v3_pages_per_round: int = 6
+    v3_max_pages: int = 14            # pages read per run
+    v3_per_domain: int = 2            # pages from one website
+    v3_page_chars: int = 40_000       # how much of a page Keenable returns
+    v3_passage_chars: int = 6_000     # how much of it the extractor sees (after BM25)
+    v3_facts_per_page: int = 8
+    v3_max_facts: int = 60
+    v3_time_budget_s: float = 420     # stop starting new rounds after this
+    quote_min_score: float = 85.0     # rapidfuzz partial_ratio needed to accept a quote
+
 
 def _required(name: str) -> str:
     value = os.environ.get(name, "").strip()
