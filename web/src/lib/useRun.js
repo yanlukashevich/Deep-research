@@ -47,7 +47,13 @@ export function useRun() {
       });
       source.addEventListener("report", (e) => {
         const data = JSON.parse(e.data);
-        patch(data.mode, { report: data.report, markdown: data.markdown, run: data.run, done: true });
+        // `lines` (the answer split into sentences) travels beside the report, not inside it
+        patch(data.mode, {
+          report: { ...data.report, lines: data.lines || [] },
+          markdown: data.markdown,
+          run: data.run,
+          done: true,
+        });
       });
       source.addEventListener("failed", (e) => {
         const data = JSON.parse(e.data);
