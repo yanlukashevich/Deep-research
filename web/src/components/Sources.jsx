@@ -14,16 +14,16 @@ function Pips({ n }) {
 }
 
 /** The pages the answer stands on, numbered the way the [n] markers are. */
-export function Sources({ report }) {
+export function Sources({ report, inline = false }) {
   const sources = report.sources || [];
   if (!sources.length) return null;
   const cited = new Set((report.sentences || []).flatMap((s) => s.citations));
   const quotesOf = (id) => (report.facts || []).filter((f) => f.source_id === id).map((f) => f.quote);
 
   return (
-    <section className="mt-10">
-      <h2 className="font-sans text-sm font-semibold">Sources</h2>
-      <ol className="mt-3 divide-y divide-rule border-y border-rule dark:divide-night-rule dark:border-night-rule">
+    <section className={inline ? "" : "mt-10"}>
+      {!inline && <h3 className="font-sans text-sm font-semibold">Sources</h3>}
+      <ol className="mt-1 divide-y divide-rule dark:divide-night-rule">
         {sources.map((s) => {
           const q = quality(s.quality);
           const quotes = quotesOf(s.id);

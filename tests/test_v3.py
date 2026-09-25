@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 from taro.config import Settings
 from taro.llm import LLM
-from taro.schemas import Page, SearchResult
+from taro.schemas import Page, Plan, SearchResult
 from taro.v3_research import Research, _ReadPage
 
 PAGE_TEXT = (
@@ -72,3 +72,20 @@ async def test_numbering_only_counts_pages_that_gave_facts():
     facts, sources = research._numbered()
     assert [s.url for s in sources.values()] == [RESULT.url]
     assert [(f.id, f.source_id) for f in facts] == [(1, 1)]
+
+
+async def test_plan_records_which_subquestion_each_query_belongs_to():
+    """The run graph groups the searches under the sub-question they were written for."""
+    plan = {"subquestions": [
+        {"question": "Who is the new director?", "queries": ["ISP RAS director", "директор ИСП РАН"]},
+        {"question": "", "queries": ["stray query from a sub-question with no text"]},
+        {"question": "In which year?", "queries": ["ISP RAS director appointed year"]},
+    ]}
+    research, _ = make_research([json.dumps(plan)])
+    queries = await research._plan()
+
+    assert research.subquestions == ["Who is the new director?", "In which year?"]
+    assert queries == ["ISP RAS director", "директор ИСП РАН",
+                       "stray query from a sub-question with no text", "ISP RAS director appointed year"]
+    # 0 means "no sub-question owns this query", which is also what the critic's later queries get
+    assert research._query_owners(Plan(**plan), queries) == [1, 1, 0, 2]

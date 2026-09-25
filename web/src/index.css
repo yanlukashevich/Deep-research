@@ -101,18 +101,18 @@
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
   /* archive blue-greys: paper under glass, not cream */
-  --color-paper: #eceff3;
-  --color-card: #f7f9fb;
-  --color-ink: #151a23;
-  --color-muted: #5c6673;
-  --color-rule: #ccd4de;
-  --color-accent: #3d3a98;
+  --color-paper: #f1f4f7;
+  --color-card: #ffffff;
+  --color-ink: #141922;
+  --color-muted: #5f6a78;
+  --color-rule: #d8dfe7;
+  --color-accent: #4340b8;
 
-  --color-night: #0f131a;
-  --color-night-card: #161c25;
-  --color-night-ink: #e3e8ef;
-  --color-night-muted: #98a3b2;
-  --color-night-rule: #2a323d;
+  --color-night: #0c0f14;
+  --color-night-card: #141a23;
+  --color-night-ink: #e4e9f0;
+  --color-night-muted: #94a0b0;
+  --color-night-rule: #242c37;
   --color-night-accent: #a9a6f2;
 
   /* the three verdicts: forced by the subject, used nowhere decorative */
@@ -122,6 +122,9 @@
   --color-solid-dark: #58c191;
   --color-thin-dark: #d9a441;
   --color-weak-dark: #ef8279;
+
+  /* one ease for everything that travels: steps arriving, panels opening, the box moving away */
+  --ease-travel: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
@@ -167,13 +170,101 @@ body {
 .dark .claim-medium { text-decoration-color: var(--color-thin-dark); }
 .dark .claim-low { text-decoration-color: var(--color-weak-dark); }
 
-.log-line {
-  animation: log-in 220ms ease-out;
+/* ---------- motion ----------
+   Every animation here answers something: a node that has just appeared in the run, an edge the
+   work is travelling along right now, a panel the reader opened. Nothing moves decoratively, and
+   all of it stops under prefers-reduced-motion. */
+
+/* a step of the run arriving in the graph */
+.node-in {
+  animation: node-in 460ms var(--ease-travel) both;
 }
-@keyframes log-in {
-  from { opacity: 0; transform: translateY(2px); }
+@keyframes node-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
   to { opacity: 1; transform: none; }
 }
+
+/* the edge into a node that has just appeared draws itself from its parent */
+.edge-draw {
+  stroke-dasharray: 1400;
+  animation: edge-draw 700ms var(--ease-travel) both;
+}
+@keyframes edge-draw {
+  from { stroke-dashoffset: 1400; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* an edge whose target is still working: the dashes crawl towards it */
+.edge-live {
+  stroke-dasharray: 4 8;
+  animation: edge-flow 900ms linear infinite;
+}
+@keyframes edge-flow {
+  to { stroke-dashoffset: -24; }
+}
+
+/* a node that is still working */
+.breathing {
+  animation: breathe 1.6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* anything that opens: a step's detail, a statistic's breakdown, the folded graph.
+   The grid row goes 0fr -> 1fr, so the panel animates to its own height without measuring it. */
+.fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 320ms var(--ease-travel), opacity 220ms ease;
+}
+.fold > * {
+  overflow: hidden;
+  min-height: 0;
+}
+.fold-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* the answer, and the blocks of the answer, arriving */
+.reveal {
+  animation: reveal 520ms var(--ease-travel) both;
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.unfold {
+  animation: unfold 220ms ease-out;
+}
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.suggestion {
+  animation: fade-in 500ms ease-out;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .log-line { animation: none; }
+  .node-in,
+  .edge-draw,
+  .edge-live,
+  .breathing,
+  .reveal,
+  .unfold,
+  .suggestion {
+    animation: none;
+  }
+  .fold {
+    transition: none;
+  }
 }

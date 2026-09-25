@@ -757,3 +757,246 @@ Then fill in the two keys and ask one question.
 **Commit:** `Phase 6: README, report, examples`
 
 ---
+
+## Extra pass: the page, and the run drawn as a graph (2026-09-25)
+
+This entry is not one of the planned phases. The plan was finished; this was asked for afterwards,
+and it is about the page only. Three complaints, in the order they were given: asking a question
+should feel like sending a message in a chat, and the question should not stay editable afterwards;
+the four example questions took up too much room, so one example that changes by itself would be
+enough; and the run itself should be shown layer by layer, like a graph — the question went to the
+planner, the planner turned it into four searches, then twelve pages were fetched, and so on — with
+each node opening up to show what was actually sent to the search tool, what came back, and what the
+critic thought.
+
+**What I did, step by step**
+
+1. **Read the whole page and the whole event stream first.** The page already received every step of
+   the run live; it just printed them as a scrolling log of one line each. So the material for a
+   graph was almost all there, and the work was mostly arranging it. Three things were genuinely
+   missing from what the server sends the browser, and no arranging would have invented them: a
+   search reported only *how many* results it got, never which ones; a fetched page reported its size
+   but not its title; and a kept fact reported its statement but not the quote that backs it. Those
+   are exactly the three things a reader wants when opening a node, so I added them at the source (in
+   the search client and in the research agent) and let the server's filter trim them on the way out
+   — six results per query, six facts per page, quotes cut at 300 characters. The filter that keeps
+   prompts and page bodies away from the browser was left as it was, and the test that enforces it
+   still passes.
+
+2. **Wrote the graph as a separate, plain piece of code** that takes the list of events and returns
+   the layers: planner, the searches of a round, the pages picked, the pages read, the facts pulled
+   out, the critic, the writer. Each layer carries how many things went into it and how many came
+   out, plus the blocks a reader can open. It imports nothing at all, which mattered more than I
+   expected: it meant I could run it with `node` directly over the trace files of runs saved days ago
+   and read the result as text, before any of it was drawn on a screen. Every mistake listed below
+   was found that way.
+
+3. **Drew the layers as a rail.** A vertical line down the left, one band per step hanging off it,
+   the time in the margin. Under each step's sentence there is a row of small ticks, one tick per
+   thing that step produced, so the funnel is visible without reading any numbers: eight queries
+   become forty-eight results, forty-eight results become six pages, six pages become thirty-one
+   facts. The marker on the line is filled when the step was the model doing something and hollow
+   when it was plain code or the search tool. That distinction is the whole argument of this project,
+   so it seemed worth putting in the drawing rather than in a caption.
+
+4. **Put the detail of a step behind a click.** Opening the planner shows the sub-questions it wrote
+   and the searches it derived from them. Opening a search shows each query exactly as the tool
+   received it, how long it took, and the titles, sites and snippets that came back. Opening the
+   reading step shows each page with its title and size. Opening the fact step shows every statement
+   with its quote underneath, and the thrown-out quotes struck through with the reason. Opening the
+   critic shows its verdict and its note in its own words.
+
+5. **Made asking work like a chat.** The question leaves the box when you send it, the box empties,
+   and the question becomes the heading of that turn — no control on the page still holds the text,
+   so it cannot be edited. Asking again starts a second turn and keeps the first one, answer and all,
+   above it. The box itself now sits at the bottom of the page and stays there while you scroll.
+
+6. **Replaced the four examples with one that rotates** every nine seconds, and it stops rotating as
+   soon as you focus the box or type anything, which is the moment a moving suggestion turns from
+   helpful into annoying. Clicking it fills the box but does not send it.
+
+7. **Checked it without a browser, because there was none available here.** Two harnesses, neither
+   committed. The first runs the graph code over saved traces and prints the layers. The second
+   bundles the real page, renders it into a fake browser, types the question, presses Enter, replays
+   the exact stream of a real recorded run frame by frame, and reads back what the page shows —
+   including opening every step of the rail and confirming the planner's sub-questions, a real query,
+   the "did not come back" note, the quote rules and the critic's words are all there. Then one real
+   question was run through the real server, end to end, twice.
+
+**What came out**
+
+The run of "Who won the Nobel Prize in Physics in 2025 and for what?" now reads, on the page:
+planner — 4 sub-questions, 8 searches to run; round 1 — 8 searches, 48 results, 2 did not come back;
+6 of 48 results worth opening; 6 pages read, 99k characters; 31 facts kept, 1 quote thrown out;
+critic — 1 sub-question still open, 3 new searches; round 2 — 3 searches, 24 results; 6 pages read;
+19 facts kept; critic — enough material to answer; writer — writing from 50 facts and 10 sources.
+Eleven lines, every one of which opens.
+
+**Interesting moments**
+
+- **The old log was hiding a real failure.** The moment each query was shown with its own result
+  count, two of the eight searches in the first round turned out to have come back with nothing, and
+  opening the node gave the reason in the search service's own words: "Too many requests — your
+  organization has a 10 RPS limit". The agent fires a whole round of searches at once, which is over
+  that limit, so it quietly loses a quarter of its coverage on wide plans. The old one-line log said
+  "searched: … — 0 results" and nobody would have looked twice. I have not changed how the agent
+  searches — that is not what this pass was for — but it is now the first item in the known issues,
+  because it costs answers.
+- **The agent's own totals are not the round's totals.** The step that ends a round reports how many
+  facts the whole *run* has, not how many that round found, so round two proudly claimed fifty facts
+  when it had found nineteen. Drawing the funnel made this obvious at once, because the ticks got
+  longer at a step that should have been narrowing. The graph now adds up the round's own pages and
+  leaves the running total to the writer step, which is the one place it means something.
+- **One failure, traced twice.** A failing search is recorded once by the search client and again by
+  the agent that caught it, with the same query. The first version of the rail therefore showed ten
+  queries in a round the planner had written eight for. Merging the two records on the query text
+  fixed it, and it is a good reminder that a trace is a record of what the code did, not a tidy list
+  of what happened — the drawing has to do the tidying.
+- **Showing the extraction step is uncomfortable, and that is the point.** With the quotes on screen
+  next to their statements, the fast model's habit of spelling numbers out in words is suddenly very
+  visible: the statement says "две тысячи пятнадцатом" where the quote under it says "2015". Nothing
+  is broken — the quote is real and the statement is true — but you can watch the model paraphrase
+  where it had no reason to. It was already a known issue; the page is now where it shows up first.
+- **The critic finally speaks in its own voice.** Its note used to be dropped on the way to the
+  browser and summarised as "critic: enough material". Opening the critic node now shows what it
+  actually wrote — "All required facts are present; the calculation of full years (22) is
+  straightforward" — and that one sentence explains the loop better than the summary ever did,
+  because you can see it reasoning about the *plan* rather than about the text.
+- **What to leave out.** The temptation with a graph is to draw the whole trace: every retry, every
+  invalid-JSON repair, every stop reason as its own node. I tried that and the rail became
+  unreadable. The version that shipped shows only the steps a person would name if they described the
+  run out loud, and the mechanical details attach themselves to their step instead — the stop reason
+  as a caption under the step that stopped; the model, the tokens and the seconds as a quiet line
+  under each step's sentence.
+- **The rail folds itself away when the answer arrives.** Watching the work is interesting for the
+  minute it lasts and then it stands between you and the thing you asked for. When the report comes
+  in, the whole rail collapses to one line — "8 searches, 12 pages read, 50 facts, 2 rounds of
+  criticism" — with the answer below it and a link to open the trail again.
+
+**What to check by hand**
+
+```
+pytest                        # 96 tests, ~8 s, no internet
+python -m taro serve          # http://localhost:8000
+```
+Ask something, and while it runs watch the rail fill in. Then: open the planner and check that the
+searches listed there are the ones the search step shows; open a search and follow one of the results
+it returned; open the fact step and check that each quote really is in the page it is attributed to;
+open the critic and read its note. Send a second question and confirm the first turn stays where it
+was, complete. Try to edit a question you have already sent — there should be no way to. Leave the
+box alone for half a minute and watch the example above it change, then click into the box and
+confirm it stops changing. Run the same question as "All three" and check that each of the three
+columns says what it is doing while it runs and folds to a summary when it finishes. Finally, narrow
+the window to phone width and read the whole thing again.
+
+**Commit:** `The page: chat-style asking and the run as a layered graph`
+
+---
+
+## 2026-09-25 — The page again: an empty start, a real graph, and one answer with the numbers folded under it
+
+**What was asked.** Three things. The page should open empty and modern — the question box in the
+middle, the options under it — and the box should fly to the top right corner once the question is
+sent. The research should look like a *graph*, not a list: the question in the middle, the planner
+under it, the four search blocks side by side in the next line, and a block that gathers all four
+back together. And the answer should stop being cut into pieces: the text is the thing, everything
+else (links, scoring) belongs under it as run statistics that open when you want them.
+
+**What I did, step by step**
+
+1. **Read what was already there.** The previous pass drew the run as a vertical rail — one line per
+   step, hanging off a spine. The data behind it was already good: `web/src/lib/graph.js` folded the
+   live trace into layers. The layers were the problem: a rail can only ever go down, so a search
+   that produced six pages and a critic that swallowed six pages look exactly alike.
+
+2. **Rewrote the model behind the picture.** `graph.js` now returns nodes, edges, rounds and run
+   totals instead of layers. One node per thing that happened: the question, the planner, *one node
+   per search* (not one node for all eight), one node per page opened, the critic, the writer. Rows
+   are numbered as the run goes, so round two simply adds three more rows under round one.
+
+3. **Made the edges real.** This is the part I expected to fake and did not have to. The trace
+   records, for every search, the full list of urls it came back with; so when a page is fetched, the
+   graph can ask which searches returned that url and draw an edge from each of them. Nothing is
+   invented: if a page hangs under three searches, three different queries really found it.
+
+4. **Added one field to the agent.** The planner writes several searches per sub-question, but the
+   trace only kept the flat list of queries. The `plan_done` event now also carries, for each query,
+   the number of the sub-question it was written for, so every search block can wear a small `#2`.
+   Twenty lines in `taro/v3_research.py` and one test.
+
+5. **Drew it.** `RunGraph.jsx` lays the blocks out with ordinary flexbox rows and then *measures*
+   them: after every render it reads each block's rectangle and draws the edges as SVG curves between
+   the measured points. That way a row that wraps on a narrow screen still gets correct curves, and
+   nothing has to know the geometry in advance. Blocks fade up as they arrive, an edge into a block
+   that is still working has crawling dashes, and clicking any block opens what it sent and what came
+   back under the graph.
+
+6. **Rebuilt the answer view.** The report used to be five sections stacked down the page: answer,
+   confidence, contradictions, not-found, sources, downloads. Now there is the answer, and under it
+   the confidence as a percentage with a bar, and under that a strip of tiles — seconds, model calls,
+   tokens of context, searches, pages fetched, quoted facts, sources, estimated price. One tile opens
+   at a time into a breakdown; the list of sources with their quotes lives inside the sources tile.
+   Contradictions and what-it-could-not-find became small chips that open.
+
+7. **Moved the composer.** It is now one element that is fixed in both of its two places — the middle
+   of the empty page and the top right corner. The rectangle is taken in the click handler before
+   React moves it, and the difference is replayed as a transform, so the box visibly flies to the
+   corner instead of vanishing from one place and appearing in another.
+
+8. **Looked at it.** No API calls were spent on this: a throwaway server replayed a saved
+   `trace.jsonl` over the real streaming endpoint, and headless Chrome was driven over its debugging
+   port to ask the question, wait for the answer and take screenshots at every stage, at desktop and
+   at phone width, in both themes.
+
+**What came out.** For the Russian ISP RAS question the page now draws: the question, the planner
+("4 sub-questions to answer, 8 queries"), eight search blocks in one line each tagged with its
+sub-question, a caption saying "64 results to 6 worth opening", six page blocks each showing its
+site, its size and how many facts came out of it, all six converging on the critic ("enough material
+to answer"), and the writer. Under the answer: 58% confidence, and eight tiles from "44.6 s" to
+"0.31 cents".
+
+**Interesting moments**
+
+- **The graph exposes how wasteful the plan is, and it should.** Three of the eight queries returned
+  the same Russian Wikipedia page, which shows up immediately as three edges converging on one block.
+  Two other pages produced zero facts. None of this is new behaviour — the numbers were in the
+  evaluation all along — but a reader now sees the redundancy without being told, which is a better
+  argument for the critic loop than any paragraph.
+- **Half the model's work cannot honestly be pinned to a node.** Planning, criticising and writing
+  happen one at a time, so each of those blocks can show its own model, tokens and seconds. Reading
+  pages happens six at a time, and there is no way to say which call belonged to which page without
+  guessing. So those calls are summed onto the row instead ("6 model calls, 10.2k tokens" under the
+  page row), which is the true statement rather than a plausible-looking one.
+- **The price has to be labelled as a guess.** The gateway this runs against is not billed per token,
+  so there is no real number to show. Leaving money out felt wrong (the size of a run is worth
+  knowing) and inventing a bill felt worse, so the tile says "est." and the panel behind it names the
+  rates it used and says searches are not counted.
+- **What not to draw, again.** The step where plain code throws away 58 of 64 results is a real step,
+  but as a block it sat in the middle of the funnel adding nothing. It became a caption on the gap
+  between the two rows instead — "64 results to 6 worth opening" — and the graph reads better for it.
+- **The three-way comparison cannot hold three graphs.** Side by side, each column is too narrow for
+  the fan-out to mean anything, so a running column shows one line of what it is doing and offers the
+  graph only after it finishes. The comparison is about the three answers, not about three pictures.
+
+**What to check by hand**
+
+```
+pytest                        # 97 tests, ~10 s, no internet
+python -m taro serve          # http://localhost:8000
+```
+The page should open with nothing on it but one box in the middle. Ask something and watch the box
+fly to the top right corner while the graph starts drawing itself under the question. While it runs:
+count the search blocks and check the number matches what the planner block claims; open a search
+block and confirm one of the urls it returned is a page block in the row below; check that the page
+block is actually joined by a line to that search. When the critic appears, check every page of the
+round has a line into it. Open the critic and read its note. When the answer lands the graph should
+fold to one line — open it again from there. Under the answer: click each tile and check the numbers
+add up (the per-step tokens should sum to the tokens tile), open the sources tile and confirm the
+list matches the `[1]` markers in the text, open "why this number" and check each sentence's score.
+Ask a second question and confirm the first turn stays complete above it. Run one question as "All
+three" and check the three columns. Then narrow the window to phone width and read all of it again,
+and switch to the light theme.
+
+**Commit:** `The page: an empty start, the run as a graph, the answer first`
+
+---

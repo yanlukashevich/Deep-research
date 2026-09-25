@@ -38,15 +38,35 @@ MEDIA_TYPES = {".woff2": "font/woff2", ".woff": "font/woff", ".js": "text/javasc
 # fields that must not reach the browser: whole prompts and page texts, megabytes of them
 DROP = {"messages", "response", "run_dir", "text"}
 
+# how much of a list or a quote the page gets: the graph shows what a step did, not the whole run
+MAX_RESULTS = 6
+MAX_FACTS = 6
+MAX_QUOTE = 300
+
 
 def slim(event: dict[str, Any]) -> dict[str, Any]:
-    """The part of a trace event the page needs. Prompts and answers of single LLM calls are dropped."""
+    """The part of a trace event the page needs.
+
+    Prompts and model replies are dropped; lists are cut to what a node of the run graph shows. What
+    stays is what the page draws: the query as it was sent, the results it came back with, the
+    statements and their quotes.
+    """
     out = {k: v for k, v in event.items() if k not in DROP}
-    if out.get("kind") == "search":
+    if out.get("kind") in ("search", "search_error"):
         args = out.pop("args", {}) or {}
+        results = out.get("results") or []
         out["query"] = args.get("query", "")
+        out["filters"] = {k: v for k, v in args.items() if k not in ("query", "max_results", "session_id")}
+        # every url, cheaply: the graph joins a page to the search that returned it, and a page found
+        # only by the seventh result would otherwise hang off nothing
+        out["urls"] = [r.get("url") for r in results]
+        out["results"] = [{k: r.get(k) for k in ("url", "title", "published", "snippet")}
+                          for r in results[:MAX_RESULTS]]
     if out.get("kind") == "facts":
-        out["statements"] = (out.get("statements") or [])[:4]
+        out["statements"] = (out.get("statements") or [])[:MAX_FACTS]
+        out["quotes"] = [q[:MAX_QUOTE] for q in (out.get("quotes") or [])[:MAX_FACTS]]
+    if out.get("kind") == "quote_rejected":
+        out["quote"] = (out.get("quote") or "")[:MAX_QUOTE]
     return out
 
 

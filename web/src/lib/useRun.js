@@ -4,16 +4,18 @@ const MODES = ["v1", "v2", "v3"];
 
 const emptyRun = () => ({ events: [], report: null, markdown: "", error: null, done: false });
 
-/** Runs a question on the server and keeps the live state of every mode it runs.
+/** Runs questions on the server and keeps the thread of everything asked so far.
  *
- * One EventSource per run. `trace` events append to that mode's log, `report` finishes it,
- * `failed` records why it stopped. Closing the stream also stops the research on the server.
+ * A question becomes a turn the moment it is sent, and a turn never changes again: its events, its
+ * report and its error stay as they came in. One EventSource at a time, belonging to the newest
+ * turn — asking again stops the run before it, and closing the stream stops the research on the
+ * server too.
  */
 export function useRun() {
-  const [runs, setRuns] = useState({});       // mode -> {events, report, markdown, error, done}
+  const [turns, setTurns] = useState([]); // [{id, question, mode, runs: {mode: run}}]
   const [running, setRunning] = useState(false);
-  const [asked, setAsked] = useState("");
   const sourceRef = useRef(null);
+  const lastId = useRef(0);
 
   const stop = useCallback(() => {
     if (sourceRef.current) {
@@ -26,24 +28,36 @@ export function useRun() {
   const start = useCallback(
     (question, mode) => {
       stop();
+      const id = (lastId.current += 1);
       const modes = mode === "all" ? MODES : [mode];
-      setRuns(Object.fromEntries(modes.map((m) => [m, emptyRun()])));
-      setAsked(question);
+      setTurns((prev) => [
+        ...prev,
+        { id, question, mode, runs: Object.fromEntries(modes.map((m) => [m, emptyRun()])) },
+      ]);
       setRunning(true);
 
-      const url = `api/run?question=${encodeURIComponent(question)}&mode=${mode}`;
-      const source = new EventSource(url);
-      sourceRef.current = source;
-
+      /** Change one mode's run inside this turn, leaving every other turn alone. */
       const patch = (m, change) =>
-        setRuns((prev) => ({ ...prev, [m]: { ...(prev[m] || emptyRun()), ...change } }));
+        setTurns((prev) =>
+          prev.map((turn) =>
+            turn.id !== id
+              ? turn
+              : {
+                  ...turn,
+                  runs: {
+                    ...turn.runs,
+                    [m]: { ...(turn.runs[m] || emptyRun()), ...(typeof change === "function" ? change(turn.runs[m] || emptyRun()) : change) },
+                  },
+                }
+          )
+        );
+
+      const source = new EventSource(`api/run?question=${encodeURIComponent(question)}&mode=${mode}`);
+      sourceRef.current = source;
 
       source.addEventListener("trace", (e) => {
         const event = JSON.parse(e.data);
-        setRuns((prev) => {
-          const run = prev[event.mode] || emptyRun();
-          return { ...prev, [event.mode]: { ...run, events: [...run.events, event] } };
-        });
+        patch(event.mode, (run) => ({ events: [...run.events, event] }));
       });
       source.addEventListener("report", (e) => {
         const data = JSON.parse(e.data);
@@ -62,18 +76,16 @@ export function useRun() {
       source.addEventListener("end", () => stop());
       source.onerror = () => {
         // the server closed the stream, or it was never reachable
-        setRuns((prev) => {
-          const next = { ...prev };
-          for (const m of modes) {
-            if (!next[m]?.done) next[m] = { ...next[m], done: true, error: next[m]?.error || "Lost the connection to the server." };
-          }
-          return next;
-        });
+        for (const m of modes) {
+          patch(m, (run) =>
+            run.done ? {} : { done: true, error: run.error || "Lost the connection to the server." }
+          );
+        }
         stop();
       };
     },
     [stop]
   );
 
-  return { runs, running, asked, start, stop, modes: MODES };
+  return { turns, running, start, stop, modes: MODES };
 }

@@ -7,6 +7,13 @@
 - **Phase 3 (confidence scoring, report format, tests): DONE**
 - **Phase 4 (CLI and web UI): DONE**
 - **Phase 5 (evaluation and experiments): DONE** - 28 questions, 108 runs, E1-E4 all measured.
+- **Extra pass (the page): DONE (2026-09-25)** - chat-style asking, one rotating example, and the run
+  drawn as a layered graph whose every step opens up. Not in the plan; asked for after Phase 6.
+- **Second pass (the page again): DONE (2026-09-25)** - an empty landing page with the box in the
+  middle that flies to the top right when the question is sent, the run drawn as a real two-dimensional
+  graph (searches fan out, pages hang off the search that found them, everything converges on the
+  critic), and one answer with the numbers under it as fold-out statistics instead of several
+  sections. Not in the plan; asked for after the first extra pass.
 - **Phase 6 (README, report, examples): DONE** - `README.md` and `REPORT.md` in Russian,
   `examples/` with 5 saved reports, fresh-clone check passed (it found two real bugs, both fixed
   below).
@@ -33,9 +40,13 @@
 | `taro/v3_research.py` | `Research`: planner → (search → pick pages → read → extract quoted facts) → critic → loop → writer. Counts `rounds` in the trace (Phase 5, for E2) |
 | `taro/runner.py` | `run(question, mode, listener=, overrides=, label=)` returns `(Report, run_dir)`. `overrides` replaces Settings fields for one run (E2 varies `v3_max_rounds`), `label` names the run folder. Shared by the CLI, the server and the evaluation |
 | `taro/server.py` | FastAPI + SSE. `GET /api/run?question=&mode=v1\|v2\|v3\|all`; `slim()` drops prompts, model replies and local paths |
-| `taro/progress.py` | `describe(event)`: one trace event as one readable line. `web/src/lib/format.js` is the same thing for the page |
+| `taro/progress.py` | `describe(event)`: one trace event as one readable line, for the CLI (the page draws the graph instead) |
 | `taro/__main__.py` | the CLI (default `--mode v3`) and `python -m taro serve` |
 | `web/` | the page: `src/` (React), `dist/` (**committed build**), `public/fonts` (offline woff2) |
+| `web/src/lib/graph.js` | folds the trace into `{nodes, edges, rounds, stats}`: a node per step (question, planner, one per search, one per page, critic, writer), the edges between them, and the detail blocks a reader opens. Pure, imports nothing - `node` can run it over a saved `trace.jsonl` |
+| `web/src/components/RunGraph.jsx` | draws that graph: rows of blocks laid out by flexbox, edges measured from the DOM after every render (so a row that wraps still gets its curves) and drawn as SVG curves, the block that is open showing its detail under the graph, the whole thing folding away when the answer lands |
+| `web/src/components/RunStats.jsx` | what the run cost, as tiles that roll to their value and open one at a time: time, model calls, tokens, searches, pages, facts, sources, estimated price. Also `Confidence`: the score as a percentage bar, the sentence mix, and every sentence with its own score |
+| `web/src/components/StepDetail.jsx` | the inside of one step: the query as the tool received it and what came back, the pages with their sizes, every statement with its quote, the rejected quotes, the critic's own words |
 | `eval/questions.jsonl` | the 28 test questions: 10 multi-step, 8 fresh 2026, 5 open, 5 false premise; 9 in Russian. Each has a gold answer and key points; the fresh ones carry the page the gold was checked against |
 | `eval/schemas.py` | `Item` (a question), `Record` (one question in one configuration + the judge's verdicts), `Judgement`, `CitationVerdict` |
 | `eval/dataset.py` | load the questions, load/save records, write `raw.jsonl` |
@@ -48,7 +59,7 @@
 | `README.md` | **RU**: what it is, install, run, mermaid diagram of v3, the headline numbers, limitations |
 | `REPORT.md` | **RU**: how the task was read, the five design decisions, the papers the ideas come from (ReAct, Self-RAG/CRAG, STORM, ALCE, FreshQA, FRAMES), E1-E4 with commentary, the five causes of failure, limitations, ten next steps |
 | `examples/` | 5 saved reports (`report.md` + `report.json`) with an RU index: fr01 in v3 and v1 (the same question with and without search), fr07 (RU, fresh), mh02 (RU, multi-step, shows a derived sentence), fp05 (false premise). Plus one `trace.jsonl` |
-| `tests/` | 95 unit tests, no network. `tests/test_eval.py` (34) covers the question set, the metrics, the judge against a scripted fake model, and the tables |
+| `tests/` | 97 unit tests, no network. `tests/test_eval.py` (34) covers the question set, the metrics, the judge against a scripted fake model, and the tables |
 
 ## How v3 works now
 1. **Planner** (main model, JSON): 3–6 sub-questions, 1–2 queries each (max 8). May set `published_after`.
@@ -110,6 +121,24 @@ Per sentence, from the sources it cites: `score = 0.5*min(sites,3)/3 + 0.5*quali
 - **The marks live in the markdown, not in `Report.answer`.**
 - **The page never re-derives anything** — `lines` and `Source.quality` are sent by the server.
 - **The trace is the UI.** The server forwards the agent's own events, minus what a browser must not see.
+- **The graph is rebuilt from the trace on every render**, never accumulated in state. Events arrive out of
+  order (a rejected quote is traced before the page it came from is finished), so folding the whole list
+  each time is the only version that stays correct.
+- **A question, once sent, belongs to the thread.** It leaves the composer, becomes the turn's heading and
+  cannot be edited; asking again opens a new turn and stops the run before it.
+- **Each round counts its own facts.** `extract_done` traces the run's cumulative total, so the graph adds up
+  the round's own pages instead - otherwise round 2 claimed every fact of round 1 as well.
+- **One failing search is traced twice** (by the search client as `search_error`, by the agent as
+  `search_failed`). The graph merges them on the query text, or a round shows queries that never existed.
+- **The graph folds itself away when the answer arrives.** The answer is the deliverable; the work behind
+  it stays one click away, and everything that is not the text (confidence, cost, sources) is a fold-out
+  under it.
+- **The edges are measured, not computed.** Flexbox lays the blocks out and a layout effect reads their
+  rects, so the curves stay right when a row wraps on a narrow screen. Rows also pick their block width
+  from how many blocks stand in them, or eight searches wrap into a wall.
+- **The composer is one element in two places.** It is `position: fixed` in both the middle of the empty
+  page and the top right corner; the rect is taken in the click handler and replayed as a transform, so
+  the box flies instead of disappearing and reappearing.
 - **`slim()` is a whitelist in spirit.** A test fails if a prompt ever reaches the page.
 - **The evaluation is resumable and stores one file per run.** It is a long chain of calls against a
   shared service, so it has to survive being stopped; `--force` is the only way to pay twice.
@@ -172,9 +201,17 @@ Ordered by what the evaluation showed actually matters.
   "_(read, but the answer does not cite it)_", because dropping one would renumber the rest.
 - Fact statements from the fast model sometimes spell numbers out in words ("две тысячи пятнадцатом").
 - `v3_time_budget_s = 420` is only checked between rounds, so one slow round can overrun it.
-- **The page has not been looked at by a human yet.** Phase 4 verified it headless; the visual pass and
-  the phone-width check are still open.
-- The web UI has no automated test in `pytest`.
+- **Two of eight searches in a round can be refused by Keenable** with "Too many requests - your
+  organization has a 10 RPS limit", because v3 fires a whole round's queries at once and
+  `search_concurrency` is not low enough for a round of 8. It costs real coverage (the round then reads
+  fewer pages), and the run graph now shows it plainly: "8 searches, 48 results, 2 did not come back".
+  Fix: lower `search_concurrency`, or space a round's searches out.
+- **The page has still not been looked at by a human.** It was verified headless again in this pass (see
+  below), but nobody has seen it on a screen, and the phone-width check is open.
+- The web UI has no automated test in `pytest`. What was used instead, and is worth repeating after any
+  change to the graph: `node` over `web/src/lib/graph.js` with a saved `trace.jsonl` (it imports nothing),
+  and a throwaway `esbuild` + `jsdom` script that renders the whole page, types a question, replays a
+  recorded SSE stream and reads back what the page shows. Neither is committed.
 - A report saved by an older version can have `sentences` that no longer match its own `answer`.
 - The server has no limit on how many runs can be started at once.
 - Stopping a run in the browser cancels the server task, but a call already in flight still finishes.
@@ -184,13 +221,16 @@ Ordered by what the evaluation showed actually matters.
 ## Check it works
 ```
 .venv\Scripts\activate
-pytest                                                    # 95 tests, ~6 s, no network
+pytest                                                    # 97 tests, ~10 s, no network
 python -m taro "Who won the Nobel Prize in Physics in 2025 and for what?" --mode v3
 python -m taro "Кто стал директором ИСП РАН после Иванникова и в каком году?" --mode v3
 python -m taro "What was the name of the first human to walk on Mars in 2024?" --mode v3
         # honest but weak: it says the sources do not say, not that nobody has been to Mars
 python -m taro "<question>" --mode v1                     # always 0.00 🔴: nothing was verified
 python -m taro serve                                      # http://localhost:8000
+        # ask one question, watch the graph grow, then open blocks: the planner's sub-questions, each
+        # query with what it came back with, the quotes kept and thrown out, the critic's own words.
+        # Then the tiles under the answer: model calls, tokens, searches, pages, sources, est. price
 python -m eval.run_eval --report                          # rebuild the tables, no network, ~1 s
 python -m eval.run_eval --limit 2 --only e1 --concurrency 1   # 6 real runs, ~2 min
 python -m eval.quote_audit                                # needs the runs/ folders to still be there

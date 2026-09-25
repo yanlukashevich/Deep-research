@@ -90,8 +90,19 @@ class Research:
         queries = _dedupe(queries)[:8] or [self.question]
         self.published_after = plan.published_after if _is_date(plan.published_after) else None
         self.trace.event("step", name="plan_done", subquestions=self.subquestions, queries=queries,
+                         query_subquestions=self._query_owners(plan, queries),
                          published_after=self.published_after)
         return queries
+
+    def _query_owners(self, plan: Plan, queries: list[str]) -> list[int]:
+        """Which sub-question each query was written for, 1-based (0 = none). For the run graph."""
+        owner: dict[str, int] = {}
+        for sq in plan.subquestions:
+            text = normalize_ws(sq.question).strip()
+            n = self.subquestions.index(text) + 1 if text in self.subquestions else 0
+            for q in sq.queries:
+                owner.setdefault(normalize_ws(q).strip(), n)
+        return [owner.get(q, 0) for q in queries]
 
     def _budget_reached(self) -> str | None:
         """Why we should stop, or None. Guards against an endless (and expensive) loop."""
@@ -180,7 +191,8 @@ class Research:
                              subquestion=self._valid_subquestion(raw.subquestion)))
         entry.facts = kept
         self.trace.event("facts", url=result.url, kept=len(kept), rejected=rejected,
-                         statements=[f.statement for f in kept])
+                         statements=[f.statement for f in kept],
+                         quotes=[f.quote for f in kept])
 
     def _valid_subquestion(self, n: int | None) -> int | None:
         return n if n is not None and 1 <= n <= len(self.subquestions) else None

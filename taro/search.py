@@ -131,8 +131,11 @@ class Search:
             self.trace.event("search_error", args=args, error=text[:500])
             raise SearchError(f"search failed: {text[:300]}")
         results = parse_search_results(text)
+        # the results go into the trace as the tool returned them (trimmed), so the UI can show
+        # what a query actually brought back and not only how many hits it had
         self.trace.event("search", args=args, n_results=len(results), latency=round(time.monotonic() - t0, 2),
-                         urls=[r.url for r in results])
+                         results=[{"url": r.url, "title": r.title, "published": r.published,
+                                   "snippet": r.snippet[:240]} for r in results])
         return results
 
     async def fetch(self, url: str, *, max_chars: int = 50_000) -> Page | None:
@@ -148,5 +151,6 @@ class Search:
             self.trace.event("fetch_error", url=url, error=text[:300])
             return None
         page = parse_page(url, text)
-        self.trace.event("fetch", url=url, chars=len(page.text), latency=round(time.monotonic() - t0, 2))
+        self.trace.event("fetch", url=url, title=page.title, chars=len(page.text),
+                         latency=round(time.monotonic() - t0, 2))
         return page

@@ -41,7 +41,7 @@ function Claim({ raw, sentence, sources, quotes }) {
 }
 
 /** The answer itself: paragraphs, lists and headings as the writer wrote them. */
-export function Answer({ report }) {
+export function Answer({ report, large = true }) {
   const sources = Object.fromEntries((report.sources || []).map((s) => [s.id, s]));
   const quotes = {};
   for (const fact of report.facts || []) (quotes[fact.source_id] ||= []).push(fact.quote);
@@ -50,7 +50,7 @@ export function Answer({ report }) {
   const blocks = [];
   let paragraph = [];
   const flush = (key) => {
-    if (paragraph.length) blocks.push(<p key={key} className="mb-4">{paragraph}</p>);
+    if (paragraph.length) blocks.push(<p key={key} className="mb-5">{paragraph}</p>);
     paragraph = [];
   };
 
@@ -60,9 +60,9 @@ export function Answer({ report }) {
       const text = (line.text || "").trim();
       if (text.startsWith("#")) {
         blocks.push(
-          <h3 key={i} className="mt-6 mb-2 font-sans text-sm font-semibold tracking-wide">
+          <h4 key={i} className="mt-6 mb-2 font-sans text-sm font-semibold tracking-wide">
             {text.replace(/^#+\s*/, "")}
-          </h3>
+          </h4>
         );
       }
       return;
@@ -92,7 +92,7 @@ export function Answer({ report }) {
   flush("p-last");
 
   return (
-    <div className="font-serif text-[1.0625rem] leading-[1.7] [text-wrap:pretty]">
+    <div className={`max-w-[46rem] font-serif [text-wrap:pretty] ${large ? "text-[1.1875rem] leading-[1.75]" : "text-[1rem] leading-[1.7]"}`}>
       {blocks.length ? blocks : <p className="text-muted dark:text-night-muted">The run produced no answer.</p>}
     </div>
   );

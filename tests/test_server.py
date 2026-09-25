@@ -89,14 +89,31 @@ def test_a_bad_mode_is_refused(client):
     assert client.get("/api/run", params={"question": "who?", "mode": "v9"}).status_code == 422
 
 
-def test_search_events_arrive_flat_and_facts_are_trimmed():
-    event = server.slim({"kind": "search", "args": {"query": "nobel 2025", "max_results": 8}, "n_results": 8})
+def test_search_events_arrive_flat_and_carry_what_the_tool_returned():
+    event = server.slim({"kind": "search", "n_results": 8,
+                         "args": {"query": "nobel 2025", "max_results": 8, "published_after": "2025-01-01",
+                                  "session_id": "20260101-000000-v3"},
+                         "results": [{"url": f"https://s{i}.org", "title": f"t{i}", "published": None,
+                                      "snippet": "s"} for i in range(9)]})
     assert event["query"] == "nobel 2025" and "args" not in event
-    facts = server.slim({"kind": "facts", "url": "u", "kept": 9, "statements": list("abcdefgh")})
-    assert facts["statements"] == list("abcd")  # the page shows a few, not all of them
+    # the graph node shows what the query was filtered by, but not the run's own session id
+    assert event["filters"] == {"published_after": "2025-01-01"}
+    assert len(event["results"]) == server.MAX_RESULTS
+    assert event["results"][0] == {"url": "https://s0.org", "title": "t0", "published": None, "snippet": "s"}
+    # the urls all survive, so the graph can join a page to the search that found it
+    assert event["urls"] == [f"https://s{i}.org" for i in range(9)]
 
 
-def test_the_log_line_of_every_step_reads_as_a_sentence():
+def test_facts_and_quotes_are_trimmed_before_the_page_sees_them():
+    facts = server.slim({"kind": "facts", "url": "u", "kept": 9, "statements": list("abcdefgh"),
+                         "quotes": ["x" * 400] * 8})
+    assert facts["statements"] == list("abcdef")  # the page shows a few, not all of them
+    assert len(facts["quotes"]) == server.MAX_FACTS and len(facts["quotes"][0]) == server.MAX_QUOTE
+    rejected = server.slim({"kind": "quote_rejected", "url": "u", "statement": "s", "quote": "y" * 400})
+    assert len(rejected["quote"]) == server.MAX_QUOTE
+
+
+def test_the_cli_log_line_of_every_step_reads_as_a_sentence():
     assert describe({"kind": "step", "name": "round", "round": 2, "queries": 4}) == "round 2: 4 searches"
     assert describe({"kind": "step", "name": "critic_done", "enough": True}) == "critic: enough material"
     assert "2 quotes rejected" in describe({"kind": "facts", "url": "u", "kept": 3, "rejected": 2})
