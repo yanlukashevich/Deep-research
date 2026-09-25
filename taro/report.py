@@ -3,12 +3,13 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from .confidence import MARKS, level_of, score_report
+from .pages import domain_quality
 from .schemas import Report, Sentence, Source
 from .text import clean_answer, is_prose_line, parse_citations, split_line, split_sentences
 from .trace import Listener, Trace, new_run_dir
 
 __all__ = ["Listener", "Trace", "new_run_dir", "build_sentences", "finalize", "marked_answer",
-           "to_markdown", "save_report"]
+           "answer_lines", "to_markdown", "save_report"]
 
 
 def build_sentences(answer: str, n_sources: int) -> list[Sentence]:
@@ -25,6 +26,8 @@ def finalize(report: Report, trace: Trace) -> Report:
     """Clean the answer, parse sentences, score them and copy run stats into the report."""
     report.answer = clean_answer(report.answer)
     report.sentences = build_sentences(report.answer, len(report.sources))
+    for source in report.sources:  # the same number the score uses, so a reader can check it
+        source.quality = domain_quality(source.domain or source.url)
     score_report(report)
     report.stats = {k: round(v, 2) for k, v in trace.stats.items()} | {"seconds": round(trace.elapsed(), 1)}
     return report
@@ -49,6 +52,29 @@ def marked_answer(report: Report) -> str:
             pieces.append(f"{raw} {next(marks, '')}".strip() if text else raw)
         out.append(prefix + " ".join(pieces))
     return "\n".join(out)
+
+
+def answer_lines(report: Report) -> list[dict]:
+    """The answer as structured lines for the web UI.
+
+    The same walk as `marked_answer`, but instead of a 🟢🟡🔴 mark each sentence carries its index
+    in `report.sentences`, so the page can underline it and show its "why". The `[n]` markers stay
+    in the text: the page turns them into the chips that show the quote.
+    """
+    lines: list[dict] = []
+    index = 0
+    for line in report.answer.splitlines():
+        if not is_prose_line(line):
+            lines.append({"kind": "raw", "text": line})
+            continue
+        prefix, sentences = split_line(line)
+        parts = []
+        for raw in sentences:
+            text, _ = parse_citations(raw)
+            parts.append({"raw": raw, "sentence": index if text else None})
+            index += 1 if text else 0
+        lines.append({"kind": "prose", "prefix": prefix, "parts": parts})
+    return lines
 
 
 def to_markdown(report: Report) -> str:

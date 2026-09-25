@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* Fonts are vendored in public/fonts (latin + cyrillic woff2 only, ~300 kB): the demo has to
+   render Russian answers and work with no network. Licences: SIL OFL, see public/fonts/LICENSE.txt */
+
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-latin-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-cyrillic-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-cyrillic-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-cyrillic-400-normal.woff2') format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-cyrillic-400-normal.woff2') format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* archive blue-greys: paper under glass, not cream */
+  --color-paper: #eceff3;
+  --color-card: #f7f9fb;
+  --color-ink: #151a23;
+  --color-muted: #5c6673;
+  --color-rule: #ccd4de;
+  --color-accent: #3d3a98;
+
+  --color-night: #0f131a;
+  --color-night-card: #161c25;
+  --color-night-ink: #e3e8ef;
+  --color-night-muted: #98a3b2;
+  --color-night-rule: #2a323d;
+  --color-night-accent: #a9a6f2;
+
+  /* the three verdicts: forced by the subject, used nowhere decorative */
+  --color-solid: #1f7a52;
+  --color-thin: #9a6400;
+  --color-weak: #b23a34;
+  --color-solid-dark: #58c191;
+  --color-thin-dark: #d9a441;
+  --color-weak-dark: #ef8279;
+}
+
+html {
+  color-scheme: light;
+  background: var(--color-paper);
+}
+html.dark {
+  color-scheme: dark;
+  background: var(--color-night);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+.dark body {
+  color: var(--color-night-ink);
+  background: var(--color-night);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.dark :focus-visible {
+  outline-color: var(--color-night-accent);
+}
+
+/* Confidence as a proofreader's mark under the sentence: solid, dashed, dotted.
+   The style carries the meaning, so the page still reads without colour. */
+.claim {
+  text-decoration-line: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 2px;
+}
+.claim-high { text-decoration-style: solid; text-decoration-color: var(--color-solid); }
+.claim-medium { text-decoration-style: dashed; text-decoration-color: var(--color-thin); }
+.claim-low { text-decoration-style: dotted; text-decoration-color: var(--color-weak); }
+.dark .claim-high { text-decoration-color: var(--color-solid-dark); }
+.dark .claim-medium { text-decoration-color: var(--color-thin-dark); }
+.dark .claim-low { text-decoration-color: var(--color-weak-dark); }
+
+.log-line {
+  animation: log-in 220ms ease-out;
+}
+@keyframes log-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .log-line { animation: none; }
+}

@@ -31,6 +31,7 @@ class Source(BaseModel):
     domain: str = ""
     published: str | None = None
     snippet: str = ""  # the text the writer saw (v2)
+    quality: float | None = None  # pages.domain_quality, filled in finalize() for the reader
 
 
 class Fact(BaseModel):
