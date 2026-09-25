@@ -155,6 +155,11 @@ body {
 .dark :focus-visible {
   outline-color: var(--color-night-accent);
 }
+/* the ask box answers focus with the card around it lighting up, so the ring would be a second
+   frame drawn over the first one */
+#question:focus-visible {
+  outline: none;
+}
 
 /* Confidence as a proofreader's mark under the sentence: solid, dashed, dotted.
    The style carries the meaning, so the page still reads without colour. */

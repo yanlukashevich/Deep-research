@@ -1000,3 +1000,109 @@ and switch to the light theme.
 **Commit:** `The page: an empty start, the run as a graph, the answer first`
 
 ---
+
+## Putting it on the internet (Azure App Service)
+
+**What was asked.** Deploy the thing to Azure App Service. The account already runs two unrelated
+apps there, which were to be left alone.
+
+**What I did, step by step.**
+
+1. **Looked at what was already in the account.** Five resource groups and two running apps, both on
+   Basic B1 plans in Poland Central. To be sure nothing of theirs could be disturbed, TARO got its
+   own resource group (`rg-taro`), its own plan and its own app; nothing existing was read from or
+   written to.
+
+2. **Asked which size to pay for.** The free tier costs nothing but stops the app after 60 minutes of
+   processor time a day and puts it to sleep after 20 minutes of quiet, so the first visitor after a
+   pause waits half a minute for it to wake. A research run holds one connection open for one to
+   seven minutes while it streams progress, so sleeping and waking in the middle is a real risk. The
+   answer was Basic B1, the same size as the other two apps.
+
+3. **Found a packaging bug before it could bite.** The list of libraries the project installs
+   (`requirements.txt`) asked for the search library "version 1.9 or newer" and for the HTTP library
+   `httpx`. But the code actually uses the 2.x interface of the search library, and imports a
+   *different* HTTP library, `httpx2`, which was never listed - it only happened to be present
+   because the other libraries drag it in. On this machine that worked by luck. On a fresh Linux
+   machine it is a coin toss. Both were corrected to say what the code really needs.
+
+4. **Created the three Azure pieces** - the group, the plan, the app on Python 3.12 - and told the
+   app how to start itself: one `uvicorn` process, not the usual pool of worker processes. This
+   matters. The code keeps a counter that allows only three simultaneous calls to the shared language
+   model service, and that counter lives inside one process; a pool of four would quietly become
+   twelve simultaneous calls against a service other people share. A single process is also what the
+   live progress stream needs, since a stream has to stay on the machine that started it.
+
+5. **Moved the keys across without ever looking at them.** The keys live in `.env`, which is not
+   deployed and never leaves the machine. They were loaded into a shell and passed straight to Azure
+   as application settings, with the command's output silenced so nothing was echoed. Afterwards only
+   the *names* of the eleven settings were listed back, to confirm they arrived. The settings also
+   point the app at `/home/runs` for its saved reports, because everything else on an App Service
+   machine is wiped when it restarts.
+
+6. **Built a deliberately small package.** Only the program, the built page and the library list -
+   33 files, 386 KB. Then a check listed everything in the package and looked for anything named
+   `.env`, `task.md`, `.venv`, `runs/` or `node_modules`. Nothing matched.
+
+7. **Tested it for real, in three widening steps.** First the health check: the page is built and all
+   three modes are available. Then the simplest mode, one language-model call and no searching:
+   it answered "The capital of Poland is Warsaw" in 2.6 seconds and, correctly, gave it a confidence
+   of 0.00, because nothing was verified. Then the full research agent on a 2025 question.
+
+8. **Checked the page and its edges.** The page, its script, its stylesheet and its fonts all arrive
+   with the right content types (fonts especially - a browser refuses a font served as a generic
+   file). Plain `http` is redirected to `https`. And a request for `/../.env` returns the ordinary
+   page rather than a file, which is the guard in the server doing its job.
+
+**What came out.** The app is live at https://taro-research.azurewebsites.net. The full research run
+took 111 seconds: 16 model calls, 3 rounds, 13 searches, 18 pages fetched, 51 quoted facts kept and 8
+quotes thrown away, 12 sources, confidence 0.41.
+
+**Interesting moments**
+
+- **The first full research run on Azure failed, and it was not Azure's fault.** Every page-reading
+  call came back with a 500 error from the shared model gateway, carrying a message that is plainly a
+  bug inside that gateway rather than a complaint about our request: *"'>' not supported between
+  instances of 'NoneType' and 'int'"* - a comparison against a missing number, somewhere in their
+  routing code. My first instinct was that something about the deployed environment was different.
+  Testing the same call from this machine showed the identical failure, so it was upstream, not ours.
+  I then tried to narrow down which part of our request triggered it - the JSON-only response format,
+  the long page text, the size limit on the reply - and every single variant failed, including one
+  that had succeeded two minutes earlier with a different reply-size limit. Probing seven reply sizes
+  across both models a few minutes later: all fourteen passed. So there was nothing to narrow down.
+  The fast model had simply been unavailable for a few minutes and the gateway reported it badly. The
+  same question on the same deployment then ran clean, with no retries at all.
+- **The real damage was in how patiently we waited.** During that outage the gateway held each
+  request for about ninety seconds before returning its error, and the code treats a 500 as worth
+  retrying four times. So one page cost six minutes of pure waiting, and the run's overall time limit
+  is only consulted between rounds, never during one. A run that should abandon a dead model and
+  write up what it already has instead sat there re-asking. This is written down as the next thing
+  worth fixing; the outage was luck, the six minutes are a design choice.
+- **The known search-throttling problem reproduced exactly, from a different continent.** The agent
+  fires all eight of a round's queries at once, and Keenable allows ten per second, so two came back
+  refused - the same two-out-of-eight the notes predicted. Worth recording that this is really a rate
+  limit and not something about the home network.
+- **The deployed agent caught a contradiction on its first real question and said so.** Asked who won
+  the 2025 physics Nobel, eleven of twelve sources agreed on Clarke, Devoret and Martinis, and a
+  YouTube transcript gave the names as "John Clark, Michelle Devore and Yon Martinez". The answer
+  states the majority version, then says plainly that one source disagrees and cites it. It did not
+  silently drop the odd one out, and it did not average them into mush. The confidence dropped to
+  0.41 partly because of that disagreement, which is the number behaving the way it was designed to.
+
+**What to check by hand**
+
+```
+curl https://taro-research.azurewebsites.net/api/health
+```
+Then open https://taro-research.azurewebsites.net in a browser: an empty page with one box in the
+middle. Ask something and watch the box fly to the corner and the graph draw itself - it is the same
+page as locally, so the checks from the previous entry all apply. Worth confirming specifically on
+the deployed copy: the fonts load (the text should not fall back to a system font), the answer
+arrives without the connection dropping, and a second question in the same tab still works. To prove
+reports survive a restart, ask a question, run
+`az webapp restart -g rg-taro -n taro-research`, and check the run folder is still in `/home/runs`
+via `az webapp ssh`.
+
+**Commit:** `Deploy to Azure App Service`
+
+---

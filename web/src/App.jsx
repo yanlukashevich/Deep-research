@@ -5,12 +5,12 @@ import { MODE_NAME } from "./lib/format";
 import { useRun } from "./lib/useRun";
 
 const EXAMPLES = [
-  "Who won the Nobel Prize in Physics in 2025 and for what?",
-  "Кто стал директором ИСП РАН после Иванникова и в каком году?",
-  "What was the name of the first human to walk on Mars in 2024?",
+  "Кто выиграл последний чемпионат мира по футболу?",
+  "Кто получил Нобелевскую премию по физике в 2025 году и за что?",
+  "Какая сейчас ключевая ставка Банка России?",
+  "В каком городе пройдут зимние Олимпийские игры 2026 года?",
   "Чем LiteLLM отличается от vLLM и когда что выбирать?",
-  "How much older is the Hubble telescope than the astronomer it is named after was when he died?",
-  "Which country hosts the 2026 Winter Olympics, and which city held them last time?",
+  "Кто стал директором ИСП РАН после Иванникова и в каком году?",
 ];
 
 function useTheme() {

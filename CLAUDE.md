@@ -53,6 +53,13 @@ These are planned commands. Confirm them in `HANDOFF.md` once they exist.
 - `python -m taro serve [--host --port]`: start the web UI at http://localhost:8000 (FastAPI + SSE).
   The built page in `web/dist` is committed, so Node is only needed to change the UI: `cd web && npm install && npm run build`
   (`npm run dev` proxies `/api` to a running server on port 8000).
+- Deployed on Azure App Service: **https://taro-research.azurewebsites.net** (resource group
+  `rg-taro`, plan `asp-taro` B1 Linux, app `taro-research`). Redeploy with `az webapp deploy -g rg-taro
+  -n taro-research --src-path deploy.zip --type zip`; the zip holds only `taro/`, `web/dist/` and
+  `requirements.txt`, never `.env`. Keys live as App Service settings. The startup command runs **one**
+  uvicorn process (never gunicorn workers: the LLM semaphore is per event loop, and SSE must stay on
+  one instance). Full details and the zip recipe are in `HANDOFF.md`. Other apps in that subscription
+  are unrelated — do not touch them.
 - `pytest` runs all tests (they need no network; `pytest.ini` sets `asyncio_mode = auto`). `pytest tests/test_x.py::test_name` runs a single test.
 - `python -m eval.run_eval`: run the evaluation and experiments (exists, Phase 5). Resumable: it skips
   every question already stored in `eval/results/records/`, and that folder is re-seeded from the

@@ -17,6 +17,8 @@
 - **Phase 6 (README, report, examples): DONE** - `README.md` and `REPORT.md` in Russian,
   `examples/` with 5 saved reports, fresh-clone check passed (it found two real bugs, both fixed
   below).
+- **Deployment (Azure App Service): DONE (2026-09-25)** - live at
+  https://taro-research.azurewebsites.net. Not in the plan; asked for after the second page pass.
 - **Next: nothing is planned.** The plan is finished. What is left is the TODO list at the bottom,
   ordered by what the evaluation showed actually matters; the two things worth doing first are the
   premise check in the planner and an answer verifier. Nothing has been pushed to GitHub - the user
@@ -171,6 +173,47 @@ Per sentence, from the sources it cites: `score = 0.5*min(sites,3)/3 + 0.5*quali
 - `examples/` holds 5 reports rather than the plan's "4–5", and one of them is a v1 run — the point
   of that pair is the same question with and without search.
 
+## Deployed on Azure
+
+Live: **https://taro-research.azurewebsites.net** (Poland Central, same region as the user's other
+apps, which were not touched).
+
+| what | value |
+|---|---|
+| resource group | `rg-taro` (its own; nothing else lives in it) |
+| plan | `asp-taro`, Linux **B1**, Always On |
+| app | `taro-research`, runtime `PYTHON:3.12`, HTTPS only |
+| startup | `python -m uvicorn --factory taro.server:create_app --host 0.0.0.0 --port ${PORT:-8000} --timeout-keep-alive 620` |
+| runs | `TARO_RUNS_DIR=/home/runs` - `/home` is the only writable, persistent path on App Service |
+
+- **One uvicorn process, never gunicorn workers.** The LLM semaphore in `taro/llm.py` is per event
+  loop, so a second worker would double the parallel calls the shared LiteLLM proxy sees. One process
+  is also what SSE needs: a stream must stay on the instance that started the run.
+- **Keys are App Service settings, not a file.** `.env` is not deployed at all;
+  `config.py` reads `os.environ`, and `load_dotenv` simply finds no file. The zip carries only
+  `taro/`, `web/dist/` and `requirements.txt` - 33 files, 386 KB, no `.env`, no `task.md`, no `runs/`.
+- **Always On matters here**, beyond avoiding cold starts: without it App Service can recycle an idle
+  instance, and a v3 run holds one SSE connection open for one to seven minutes.
+- **`--timeout-keep-alive 620`** covers the longest run the budget allows. The platform's own 230 s
+  idle timeout is never reached because the trace sends an event every few seconds.
+
+To redeploy after a change (rebuild the page first if `web/src` changed):
+```
+cd web && npm run build && cd ..
+python - <<'EOF'
+import zipfile, pathlib
+root = pathlib.Path(".").resolve()
+with zipfile.ZipFile("deploy.zip", "w", zipfile.ZIP_DEFLATED) as z:
+    for d in ("taro", "web/dist"):
+        for f in sorted((root / d).rglob("*")):
+            if f.is_file() and "__pycache__" not in f.parts and f.suffix != ".pyc":
+                z.write(f, f.relative_to(root).as_posix())
+    z.write("requirements.txt")
+EOF
+az webapp deploy -g rg-taro -n taro-research --src-path deploy.zip --type zip
+```
+Logs: `az webapp log tail -g rg-taro -n taro-research`.
+
 ## Known issues / TODO
 Ordered by what the evaluation showed actually matters.
 
@@ -201,6 +244,14 @@ Ordered by what the evaluation showed actually matters.
   "_(read, but the answer does not cite it)_", because dropping one would renumber the rest.
 - Fact statements from the fast model sometimes spell numbers out in words ("две тысячи пятнадцатом").
 - `v3_time_budget_s = 420` is only checked between rounds, so one slow round can overrun it.
+- **The fast model can go down on the shared LiteLLM proxy, and a run then hangs for six minutes.**
+  Seen for real during the Azure check: every `v3_extract` call came back
+  `500 '>' not supported between instances of 'NoneType' and 'int'` - a LiteLLM-internal error, not
+  ours. It cleared by itself within minutes and the same question then ran clean. The damage is in
+  how we wait: the proxy sits on each request for ~90 s before answering 500, `llm_attempts = 4`, and
+  the retry is classed transient, so one page costs ~6 minutes of nothing and `v3_time_budget_s` is
+  only checked between rounds. Fix: give up on a model that has failed every attempt of a round and
+  finish with what was extracted, rather than retrying all four times per page.
 - **Two of eight searches in a round can be refused by Keenable** with "Too many requests - your
   organization has a 10 RPS limit", because v3 fires a whole round's queries at once and
   `search_concurrency` is not low enough for a round of 8. It costs real coverage (the round then reads
@@ -235,6 +286,13 @@ python -m eval.run_eval --report                          # rebuild the tables, 
 python -m eval.run_eval --limit 2 --only e1 --concurrency 1   # 6 real runs, ~2 min
 python -m eval.quote_audit                                # needs the runs/ folders to still be there
 ```
+Against the deployed app (no local install needed):
+```
+curl https://taro-research.azurewebsites.net/api/health
+curl -N "https://taro-research.azurewebsites.net/api/run?question=Who+won+the+2025+Nobel+Prize+in+Physics%3F&mode=v3"
+```
+The second one streams the same trace events the page draws; closing the connection stops the run.
+
 `python -m eval.run_eval` on its own re-runs nothing that is already in `eval/results/records/`, so it
 is safe to repeat; `--force` is the only way to pay for all 108 runs again, about 45 minutes. Deleting
 the folder is *not* enough any more: it is re-seeded from the committed `raw.jsonl`.
