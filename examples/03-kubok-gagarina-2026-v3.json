@@ -1,0 +1,291 @@
+{
+  "question": "Какой клуб выиграл Кубок Гагарина в 2026 году и кого он обыграл в финале?",
+  "mode": "v3",
+  "answer": "Клуб «Локомотив» из Ярославля стал обладателем Кубка Гагарина в 2026 году [1][2][3]. \n\nВ финальной серии «Локомотив» обыграл казанский клуб «Ак Барс» [1][2]. \n\nФинальная серия плей‑офф КХЛ сезона 2025/2026 завершилась победой «Локомотива» со счётом 4‑2 в серии, при этом шестой матч закончился 3‑2 в пользу «Локомотива» [2][1]; решающий матч прошёл 21 мая 2026 года [3][5]. Один источник сообщает, что финальный матч завершился со счётом 4‑1 в пользу «Локомотива» [3], тогда как другие указывают общий счёт серии 4‑2 (победа в шестом матче 3‑2) [2][4][5]. \n\nКубок Гагарина разыгрывается в рамках плей‑офф Континентальной хоккейной лиги и является главным трофеем КХЛ [1][4][5].",
+  "sentences": [
+    {
+      "text": "Клуб «Локомотив» из Ярославля стал обладателем Кубка Гагарина в 2026 году.",
+      "citations": [
+        1,
+        2,
+        3
+      ],
+      "score": 0.82,
+      "level": "high",
+      "why": "3 sites (championat.com, en.iz.ru, ria.ru), quality 0.63"
+    },
+    {
+      "text": "В финальной серии «Локомотив» обыграл казанский клуб «Ак Барс».",
+      "citations": [
+        1,
+        2
+      ],
+      "score": 0.63,
+      "level": "medium",
+      "why": "2 sites (championat.com, ria.ru), quality 0.60"
+    },
+    {
+      "text": "Финальная серия плей‑офф КХЛ сезона 2025/2026 завершилась победой «Локомотива» со счётом 4‑2 в серии, при этом шестой матч закончился 3‑2 в пользу «Локомотива»; решающий матч прошёл 21 мая 2026 года.",
+      "citations": [
+        2,
+        1,
+        3,
+        5
+      ],
+      "score": 0.82,
+      "level": "high",
+      "why": "3 sites (championat.com, en.iz.ru, ria.ru), quality 0.65"
+    },
+    {
+      "text": "Один источник сообщает, что финальный матч завершился со счётом 4‑1 в пользу «Локомотива», тогда как другие указывают общий счёт серии 4‑2 (победа в шестом матче 3‑2).",
+      "citations": [
+        3,
+        2,
+        4,
+        5
+      ],
+      "score": 0.8,
+      "level": "high",
+      "why": "3 sites (championat.com, en.iz.ru, ginohard.com), quality 0.60"
+    },
+    {
+      "text": "Кубок Гагарина разыгрывается в рамках плей‑офф Континентальной хоккейной лиги и является главным трофеем КХЛ.",
+      "citations": [
+        1,
+        4,
+        5
+      ],
+      "score": 0.82,
+      "level": "high",
+      "why": "3 sites (en.iz.ru, ginohard.com, ria.ru), quality 0.63"
+    }
+  ],
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://ria.ru/20260521/khokkey-2093889708.html",
+      "title": "'Локомотив' — снова чемпион! Кубок Гагарина остался в Ярославле!",
+      "domain": "ria.ru",
+      "published": "2026-05-21",
+      "snippet": "В шаге от завершения сезона Противостояние ярославского “Локомотива” и казанского “Ак Барса” в финале Кубка Гагарина-2026 оправдало все ожидания относительно бескомпромиссности борьбы за чемпионский титул. … В остальных семи случаях битва за Кубок Гагарина уходила в решающую седьмую игру. Причем в четырех из семи случаях победителем седьмого матча была команда, которая выиграла шестую встречу; “Ак Барс” до этого сезона трижды играл в шестых матчах финальной серии плей-офф КХЛ и добыл три победы (в 2009, 2010 и 2023 годах). По итогам этих трех предыдущих серий казанцы впоследствии дважды дошли до победы в Кубке Гагарина; “Локомотив”, который перед сегодняшним матчем был в шаге от чемпионства, лишь один раз из предыдущих трех своих финалов Кубка Гагарина, завершил серию на гостевой площадке. “Локомотив” — двукратный обладатель Кубка Гагарина К одному из главных матчей сезона “Ак Барс” и “Локомотив” подошли без изменений в составе: штаб Анвара Гатиятулина, несмотря на замену вратаря в прошлой игре, позицию первого номера казанцев ожидаемо сохранил за Тимуром Биляловым, а Боб Хартли вновь доверился тройке Паник - Фрэз - Радулов. … победителе: автор золотого гола “Локомотива” Кубка Гагарина-2025 убежал один на один и технично переиграл Билялова. … 3:2 — “Локомотив” выстоял, справился с непростой задачей и в годовщину своего первого чемпионства стал четвертым клубом в истории КХЛ, кому удалось выиграть Кубок Гагарина в двух сезонах подряд.",
+      "quality": 0.7
+    },
+    {
+      "id": 2,
+      "url": "https://www.championat.com/hockey/news-6477066-lokomotiv-stal-obladatelem-kubka-gagarina-2026.html",
+      "title": "«Локомотив» стал обладателем Кубка Гагарина — 2026",
+      "domain": "championat.com",
+      "published": "2026-05-21",
+      "snippet": "«Локомотив» стал обладателем Кубка Гагарина — 2026  Ярославский «Локомотив» одержал победу над казанским «Ак Барсом» в шестом матче финальной серии плей-офф Континентальной хоккейной лиги сезона-2025/2026 со счётом 3:2 (4-2 — в серии) и, таким образом, стал обладателем Кубка Гагарина. Заброшенными шайбами в составе победителей отметились Егор Сурин (дважды) и Максим Шалунов. За казанцев отличились Нэйтан Тодд и Никита Лямкин. Отметим, что «Локомотив» стал обладателем Кубка Гагарина второй год подряд. В прошлом сезоне ярославцы одержали победу над челябинским «Трактором» в финальной серии со счётом 4-1. На стадии полуфиналов «Локомотив» в семи встречах сломил сопротивление омского «Авангарда», отыгравшись по ходу серии со счёта 1-3. «Ак Барс» в пяти матчах (4-1) оказался сильнее магнитогорского «Металлурга».",
+      "quality": 0.5
+    },
+    {
+      "id": 3,
+      "url": "https://en.iz.ru/en/2101573/2026-05-21/tretyak-said-about-well-coordinated-and-solid-game-yaroslavl-locomotive",
+      "title": "Tretyak said about the well-coordinated and solid game of the Yaroslavl \"Locomotive\"",
+      "domain": "en.iz.ru",
+      "published": "2026-05-21",
+      "snippet": "Kryazhev Yaroslavl Hockey Club (HC) Lokomotiv won the Gagarin Cup for the second season in a row thanks to a team game. This was announced on May 21 by the president of the Russian Hockey Federation Vladislav Tretyak. “We need to praise both teams. But Lokomotiv looks more solid, plays more smoothly, we can recall the second period of the penultimate match — 11 shots in a row,” TASS quoted him as saying. … HC Lokomotiv won the Gagarin Cup, winning the trophy for the second time in its history, beating Ak Bars Kazan on home ice. The game took place on May 21 and ended with a score of 4:1. The press service of the Kontinental Hockey League (KHL) announced on May 21 that Daniil Isaev, goalkeeper of the Yaroslavl hockey club (HC) Lokomotiv, received the title of the most valuable player of the KHL playoffs.",
+      "quality": 0.7
+    },
+    {
+      "id": 4,
+      "url": "https://ginohard.com/bob-hartley-retires-2nd-gagarin-cup-lokomotiv",
+      "title": "Bob Hartley Retires: ‘I’m Tired, I’m Going Home, I’m Old’",
+      "domain": "ginohard.com",
+      "published": "2026-05-22",
+      "snippet": "The 65-year-old Canadian called it a career Thursday after coaching Lokomotiv Yaroslavl past Ak Bars Kazan in six games to win the 2026 Gagarin Cup. He didn’t dress it up afterward: “I am finished. I am tired. I am going home. I am old,” Hartley said. That’s the Stanley Cup-winning, Jack Adams-winning, two-time Gagarin Cup-winning coach hanging it up at 65. He’s also the first Canadian ever to lift the KHL trophy twice. Lokomotiv clinched it Thursday in Kazan on a 3-2 Game 6 win to take the series 4-2. Teenager Yegor Surin scored twice in the first period, Maxim Shalunov added a third in the third, then Ak Bars made it interesting with two late goals before Lokomotiv closed it out. Here’s how the KHL marked the moment: His trophy case is wild. Two Gagarin Cups (Avangard 2021, Lokomotiv 2026), a Stanley Cup with Ray Bourque’s Avalanche in 2001, the 2015 Jack Adams Award in Calgary, a Calder Cup with the AHL’s Hershey Bears in 1997, a QMJHL championship in Laval and a Swiss National League title with the ZSC Lions in 2012.",
+      "quality": 0.5
+    },
+    {
+      "id": 5,
+      "url": "https://en.iz.ru/en/node/2101592",
+      "title": "On the sleepers again: Lokomotiv won the Gagarin Cup for the second year in a row",
+      "domain": "en.iz.ru",
+      "published": "2026-05-21",
+      "snippet": "On the sleepers again: Lokomotiv won the Gagarin Cup for the second year in a row Yaroslavl won the sixth match of the finals against Ak Bars and defended the championship title. 0 Photo: RIA Novosti/Alexander Kryazhev The Gagarin Cup winner was again Yaroslavl “Locomotive”. On May 21, the Railwaymen won the sixth match of the playoff finals against Ak Bars Kazan (1-0) and won the entire series (4:2). Thus, the club won the KHL main trophy for the second year in a row. … We stayed with Bob Last year’s Gagarin Cup triumph was the Yaroslavl team’s first in the history of the KHL and the first championship in 22 years. Before that, the club won the Super League three times — in 1997 under the name Torpedo, and then in 2002 and 2003 as Lokomotiv. … In the final, Lokomotiv got to Ak Bars, which did not start the season very well, but improved along the way and got a chance to take the Gagarin Cup for the first time since 2018. … Lokomotiv won the Gagarin Cup for the second time in its history. Ak Bars, CSKA, Metallurg have won this trophy three times, Dynamo Moscow and SKA twice, Salavat Yulaev and Avangard once each. If you count all the post-Soviet trophies (the Interethnic Hockey League in 1992-1996 and the Super League in 1997-2008), then Lokomotiv now has five championships.",
+      "quality": 0.7
+    }
+  ],
+  "facts": [
+    {
+      "id": 1,
+      "statement": "Клуб «Локомотив» стал обладателем Кубка Гагарина в две тысячи двадцать шестом году.",
+      "quote": "\"Локомотив\" — обладатель Кубка Гагарина-2026.",
+      "source_id": 1,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 2,
+      "statement": "В финальной серии плей-офф КХЛ две тысячи двадцать шестого года «Локомотив» обыграл «Ак Барс».",
+      "quote": "Ярославцы обыграли \"Ак Барс\" в финальной серии плей-офф КХЛ и защитили чемпионское звание.",
+      "source_id": 1,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 3,
+      "statement": "Шестой матч финальной серии Кубка Гагарина две тысячи двадцать шестого года завершился со счетом три к двум в пользу «Локомотива».",
+      "quote": "3:2 — \"Локомотив\" выстоял, справился с непростой задачей",
+      "source_id": 1,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 4,
+      "statement": "Кубок Гагарина разыгрывается в рамках плей-офф Континентальной хоккейной лиги.",
+      "quote": "матчи финальной серии плей-офф Континентальной хоккейной лиги",
+      "source_id": 1,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 5,
+      "statement": "Ярославский «Локомотив» стал обладателем Кубка Гагарина в 2026 году.",
+      "quote": "Ярославский «Локомотив» одержал победу над казанским «Ак Барсом» в шестом матче финальной серии плей-офф Континентальной хоккейной лиги сезона-2025/2026 со счётом 3:2 (4-2 — в серии) и, таким образом, стал обладателем Кубка Гагарина.",
+      "source_id": 2,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 6,
+      "statement": "В финале Кубка Гагарина 2026 года ярославский «Локомотив» обыграл казанский «Ак Барс».",
+      "quote": "Ярославский «Локомотив» одержал победу над казанским «Ак Барсом» в шестом матче финальной серии плей-офф Континентальной хоккейной лиги сезона-2025/2026",
+      "source_id": 2,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 7,
+      "statement": "Финальная серия плей-офф Континентальной хоккейной лиги сезона-2025/2026 завершилась победой «Локомотива» со счётом 4-2 по серии.",
+      "quote": "Ярославский «Локомотив» одержал победу над казанским «Ак Барсом» в шестом матче финальной серии плей-офф Континентальной хоккейной лиги сезона-2025/2026 со счётом 3:2 (4-2 — в серии)",
+      "source_id": 2,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 8,
+      "statement": "Хоккейный клуб «Локомотив» из Ярославля выиграл Кубок Гагарина в 2026 году.",
+      "quote": "Yaroslavl Hockey Club (HC) Lokomotiv won the Gagarin Cup for the second season in a row thanks to a team game.",
+      "source_id": 3,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 9,
+      "statement": "Финальный матч Кубка Гагарина прошел 21 мая 2026 года и завершился со счетом 4:1 в пользу ХК «Локомотив».",
+      "quote": "The game took place on May 21 and ended with a score of 4:1.",
+      "source_id": 3,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 10,
+      "statement": "В 2026 году Кубок Гагарина выиграл клуб «Локомотив» Ярославль.",
+      "quote": "Bob Hartley retires after coaching Lokomotiv Yaroslavl to the 2026 Gagarin Cup",
+      "source_id": 4,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 11,
+      "statement": "В финале Кубка Гагарина 2026 года «Локомотив» Ярославль обыграл «Ак Барс» Казань.",
+      "quote": "after coaching Lokomotiv Yaroslavl past Ak Bars Kazan in six games to win the 2026 Gagarin Cup",
+      "source_id": 4,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 12,
+      "statement": "Финальная серия Кубка Гагарина 2026 года завершилась со счетом 4-2 в пользу «Локомотива».",
+      "quote": "Lokomotiv clinched it Thursday in Kazan on a 3-2 Game 6 win to take the series 4-2",
+      "source_id": 4,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 13,
+      "statement": "Кубок Гагарина является трофеем Континентальной хоккейной лиги (КХЛ).",
+      "quote": "He’s also the first Canadian ever to lift the KHL trophy twice.",
+      "source_id": 4,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 14,
+      "statement": "В 2026 году Кубок Гагарина выиграл клуб «Локомотив» из Ярославля.",
+      "quote": "The Gagarin Cup winner was again Yaroslavl \"Locomotive\".",
+      "source_id": 5,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 15,
+      "statement": "В финале Кубка Гагарина 2026 года «Локомотив» обыграл команду «Ак Барс» из Казани.",
+      "quote": "On May 21, the Railwaymen won the sixth match of the playoff finals against Ak Bars Kazan (1-0) and won the entire series (4:2).",
+      "source_id": 5,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 16,
+      "statement": "Финальная серия Кубка Гагарина 2026 года завершилась победой «Локомотива» со счетом 4:2, а решающий матч состоялся 21 мая.",
+      "quote": "On May 21, the Railwaymen won the sixth match of the playoff finals against Ak Bars Kazan (1-0) and won the entire series (4:2).",
+      "source_id": 5,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 17,
+      "statement": "Кубок Гагарина является главным трофеем Континентальной хоккейной лиги (КХЛ).",
+      "quote": "Thus, the club won the KHL main trophy for the second year in a row.",
+      "source_id": 5,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    }
+  ],
+  "confidence": 0.78,
+  "confidence_why": "5 of 5 sentences cite a source; 4 different sites cited; average sentence score 0.78",
+  "not_found": [],
+  "subquestions": [
+    "Какой клуб выиграл Кубок Гагарина в 2026 году?",
+    "Кого победивший клуб обыграл в финале Кубка Гагарина 2026 года?",
+    "Каков был результат финальной серии Кубка Гагарина 2026 года и когда она прошла?",
+    "Что такое Кубок Гагарина и в каком чемпионате он разыгрывается?"
+  ],
+  "contradictions": [],
+  "models": {
+    "main": "openai/gpt-oss-120b",
+    "fast": "google/gemma4:31b"
+  },
+  "stats": {
+    "llm_calls": 9.0,
+    "prompt_tokens": 13081.0,
+    "completion_tokens": 3820.0,
+    "rounds": 1.0,
+    "searches": 8.0,
+    "fetches": 6.0,
+    "facts_kept": 17.0,
+    "quotes_rejected": 1.0,
+    "seconds": 65.2
+  },
+  "created_at": "2026-09-25T08:59:59.125242+02:00"
+}

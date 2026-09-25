@@ -28,15 +28,15 @@ from taro.trace import Trace
 
 from .schemas import RESULTS
 
-RUNS = get_settings().runs_dir
 BANDS = [(85.0, "the check should have accepted it"),
          (70.0, "real text of the page, re-typed with edits"),
          (50.0, "a loose paraphrase or a line built out of a table"),
          (0.0, "not on the page at all: invented")]
 
 
-def rejected_quotes(runs: Path = RUNS) -> list[tuple[str, str, str, str]]:
+def rejected_quotes(runs: Path | None = None) -> list[tuple[str, str, str, str]]:
     """(run, url, quote, statement) for every quote the check threw out, read back from the traces."""
+    runs = runs if runs is not None else get_settings().runs_dir  # resolved here: importing needs no keys
     out = []
     for run in sorted(runs.glob("*-v3*")):
         trace = run / "trace.jsonl"

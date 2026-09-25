@@ -3,6 +3,10 @@
 No network. The judge is exercised against a scripted fake model, the same trick `test_v3.py` uses.
 """
 import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -318,3 +322,42 @@ def test_quote_audit_reads_rejections_out_of_a_trace(tmp_path):
         'not json\n', encoding="utf-8")
     (tmp_path / "20260101-000000-v1").mkdir()  # a mode without quotes at all
     assert rejected_quotes(tmp_path) == [(run.name, "https://a.com", "q", "s")]
+
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+# ---------- a fresh clone has neither keys nor resume files ----------
+
+def test_seed_records_unpacks_the_committed_raw_file(tmp_path, monkeypatch):
+    """`records/` is gitignored, so in a fresh clone the tables must come out of `raw.jsonl`."""
+    from eval import dataset
+    record = Record(qid="x1", label="v3", mode="v3", question="q?", type="fresh", lang="en",
+                    answer="a [1]")
+    (tmp_path / "raw.jsonl").write_text(record.model_dump_json() + "\n", encoding="utf-8")
+    monkeypatch.setattr(dataset, "RESULTS", tmp_path)
+    monkeypatch.setattr(dataset, "RECORDS", tmp_path / "records")
+    monkeypatch.setattr(Record, "path", lambda self: tmp_path / "records" / f"{self.label}-{self.qid}.json")
+
+    assert [r.qid for r in dataset.all_records()] == ["x1"]
+    assert (tmp_path / "records" / "v3-x1.json").exists()
+
+
+# ---------- a fresh clone has no keys yet ----------
+
+def test_every_module_imports_without_api_keys():
+    """A reviewer clones the repo, copies .env.example and runs pytest before filling in the keys.
+
+    Nothing may call get_settings() at import time: the keys are only needed to reach the network.
+    Run in a subprocess, because taro.config caches the settings and dotenv has already read .env.
+    """
+    modules = sorted(p.stem for p in (ROOT / "taro").glob("*.py") if not p.stem.startswith("_"))
+    modules += sorted(f"eval.{p.stem}" for p in (ROOT / "eval").glob("*.py") if not p.stem.startswith("_"))
+    modules = [m if m.startswith("eval.") else f"taro.{m}" for m in modules]
+
+    # dotenv does not override what is already in the environment, so blanking them here sticks
+    env = {**os.environ, "LITELLM_API_KEY": "", "KEENABLE_API_KEY": ""}
+    code = "import importlib\n" + "\n".join(f"importlib.import_module({m!r})" for m in modules)
+    done = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
+                          capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr

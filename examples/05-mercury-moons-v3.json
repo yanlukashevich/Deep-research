@@ -1,0 +1,205 @@
+{
+  "question": "How many moons does Mercury have, and what are their names?",
+  "mode": "v3",
+  "answer": "Current scientific consensus is that Mercury has no confirmed natural satellites [1][2]. \n\nAccording to authoritative sources Mercury has zero moons, so there are no names to list [1][2]. \n\nIn 1974 the Mariner 10 spacecraft detected an ultraviolet signal that was briefly interpreted as a possible moon, but the signal was later traced to the distant star 31 Crateris, disproving the claim [2]. \n\nMercury’s lack of moons is explained by its small mass and extreme proximity to the Sun, which produce strong solar tidal forces, high solar radiation, a very small Hill sphere, and dynamical instabilities that make any captured or formed satellite unstable over long periods [1][2].",
+  "sentences": [
+    {
+      "text": "Current scientific consensus is that Mercury has no confirmed natural satellites.",
+      "citations": [
+        1,
+        2
+      ],
+      "score": 0.58,
+      "level": "medium",
+      "why": "2 sites (brainbound.blog, grokipedia.com), quality 0.50"
+    },
+    {
+      "text": "According to authoritative sources Mercury has zero moons, so there are no names to list.",
+      "citations": [
+        1,
+        2
+      ],
+      "score": 0.58,
+      "level": "medium",
+      "why": "2 sites (brainbound.blog, grokipedia.com), quality 0.50"
+    },
+    {
+      "text": "In 1974 the Mariner 10 spacecraft detected an ultraviolet signal that was briefly interpreted as a possible moon, but the signal was later traced to the distant star 31 Crateris, disproving the claim.",
+      "citations": [
+        2
+      ],
+      "score": 0.42,
+      "level": "low",
+      "why": "1 site (brainbound.blog), quality 0.50"
+    },
+    {
+      "text": "Mercury’s lack of moons is explained by its small mass and extreme proximity to the Sun, which produce strong solar tidal forces, high solar radiation, a very small Hill sphere, and dynamical instabilities that make any captured or formed satellite unstable over long periods.",
+      "citations": [
+        1,
+        2
+      ],
+      "score": 0.58,
+      "level": "medium",
+      "why": "2 sites (brainbound.blog, grokipedia.com), quality 0.50"
+    }
+  ],
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://grokipedia.com/page/Hypothetical_moon_of_Mercury",
+      "title": "Hypothetical moon of Mercury",
+      "domain": "grokipedia.com",
+      "published": "2026-01-14",
+      "snippet": "Nebula.[2] Subsequent missions and ground-based surveys have confirmed Mercury’s moonless status, with no natural satellites detected despite targeted searches.[3] NASA’s MESSENGER orbiter, which mapped Mercury comprehensively from 2011 to 2015, identified no orbiting bodies, reinforcing earlier findings from Mariner 10’s imaging that ruled out objects larger than 5 km within 30 Mercury radii.[1] A 2007 ground-based imaging survey using the Nordic Optical Telescope examined regions up to 140 Mercury radii (approximately 342,000 km), extending beyond Mercury’s Hill sphere of about 180,000 km, achieving limiting magnitudes down to 18.6 (corresponding to objects as small as 0.5 km at closer ranges), and detected no dynamically bound satellites, though two unidentified transient sources were noted but not confirmed as hermeocentric.[4] Subsequent flybys by ESA/JAXA’s BepiColombo mission, including the sixth in January 2025, have also detected no natural satellites, as of November 2025. Theoretical models indicate that stable retrograde orbits could exist for millions of years … accretion.[4][5] Theoretical Background Absence of Confirmed Moons Mercury, the innermost planet in the Solar System, has no confirmed natural satellites as of 2025, making it one of only two planets without moons, the other being Venus.[6][7] This absence has been consistently verified through ground-based and space-based observations, with no objects meeting the criteria for natural satellites detected orbiting the planet.[8] According to the International Astronomical Union (IAU), a natural satellite is a celestial body that orbits a planet, dwarf planet, or other smaller Solar System body, typically formed through processes like accretion or capture, and gravitationally bound to its primary.[9] Detecting such bodies around Mercury is particularly challenging due to the planet’s close proximity to the Sun, which causes intense solar glare that overwhelms telescopic views, limiting clear observations to brief windows near dawn or dusk when Mercury is low on the horizon.[8] Additionally, Mercury’s environment features extreme high solar radiation and strong tidal forces from the Sun, which disrupt potential satellite orbits and further complicate detection efforts.[7] Historical",
+      "quality": 0.5
+    },
+    {
+      "id": 2,
+      "url": "https://brainbound.blog/mercury-moons-gravity",
+      "title": "Mercury Moons: Why the Swiftest Planet Stays Solitary (Science)",
+      "domain": "brainbound.blog",
+      "published": null,
+      "snippet": "Mercury Moons: Why the Swiftest Planet Stays Solitary (Science) April 02, 20267 minutes read Mercury has zero natural moons. Due to its extreme proximity to the Sun and its relatively small mass, the planet’s gravitational influence is too weak to maintain a stable orbit for any natural satellite. Understanding this lonely status requires exploring the complex gravitational environment of the inner solar system. … Why Mercury Has No Moons: The Gravitational Battle Key Takeaway: Mercury lacks moons because its Hill Sphere is too small, allowing the Sun’s massive gravity to hijack any potential satellites.  Mercury stands as a desolate exception in a solar system filled with diverse planetary satellites. … MESSENGER Mission Findings It took nearly four decades for NASA to return for a definitive census of the planet’s neighborhood. Between 2011 and 2015, the MESSENGER probe conducted an exhaustive survey while orbiting the planet, specifically hunting for Mercury’s missing moons. The mission employed high-resolution imaging and sensitive gravitational tracking to ensure that even a small, rogue asteroid captured by the planet would be detected. The analytical results were conclusive: the space surrounding the planet is remarkably empty. The mission confirmed that no natural satellites larger than 100 meters in diameter currently exist. This lack of companions is a direct consequence of the sun’s overwhelming gravitational influence, which effectively compresses the planet’s Hill Sphere and destabilizes any object that dares to linger. … Frequently Asked Questions: Mercury’s Solitary Journey Does Mercury have any natural moons? No, Mercury possesses zero natural moons. Despite its position as a major planet in our solar system, it remains a solitary world. This makes it one of only two planets in our celestial neighborhood without a natural satellite; the only other planet to share this moonless distinction is Venus. Why doesn’t Mercury have any moons? The primary reason for Mercury’s lack of companions is its extreme proximity to the Sun and its relatively small mass. The Sun’s massive gravitational pull dominates the region, leaving Mercury with a very compressed Hill Sphere—the volume of space where a planet’s gravity is strong enough to hold onto a moon. Because this zone is so small, any potential satellite would likely be stripped away by the Sun’s tidal forces or destabilized until it crashed into the planet’s surface.",
+      "quality": 0.5
+    }
+  ],
+  "facts": [
+    {
+      "id": 1,
+      "statement": "As of 2025, Mercury has no confirmed natural satellites.",
+      "quote": "Mercury, the innermost planet in the Solar System, has no confirmed natural satellites as of 2025",
+      "source_id": 1,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 2,
+      "statement": "Mercury is one of only two planets without moons, the other being Venus.",
+      "quote": "making it one of only two planets without moons, the other being Venus.",
+      "source_id": 1,
+      "subquestion": 2,
+      "quote_score": 98.59154929577466,
+      "disputed": false
+    },
+    {
+      "id": 3,
+      "statement": "Solar tidal perturbations and dynamical instabilities likely prevent Mercury from retaining captured objects or forming moons during planetary accretion.",
+      "quote": "solar tidal perturbations and dynamical instabilities likely prevent long-term retention of captured objects or inhibit moon formation during planetary accretion.",
+      "source_id": 1,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 4,
+      "statement": "Strong tidal forces from the Sun and extreme high solar radiation disrupt potential satellite orbits around Mercury.",
+      "quote": "Additionally, Mercury's environment features extreme high solar radiation and strong tidal forces from the Sun, which disrupt potential satellite orbits",
+      "source_id": 1,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 5,
+      "statement": "Orbital stability analyses indicate that any hypothetical natural moon would likely be unstable over long periods because of solar perturbations.",
+      "quote": "Orbital stability analyses suggest that any hypothetical natural moon would likely be unstable over long periods due to solar perturbations",
+      "source_id": 1,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 6,
+      "statement": "Mercury has zero natural moons.",
+      "quote": "Mercury has zero natural moons.",
+      "source_id": 2,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 7,
+      "statement": "Mercury is one of only two planets in the solar system that does not have a natural satellite.",
+      "quote": "This makes it one of only two planets in our celestial neighborhood without a natural satellite",
+      "source_id": 2,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 8,
+      "statement": "Mercury's small mass and extreme proximity to the Sun result in a gravitational influence too weak to maintain a stable orbit for a natural satellite.",
+      "quote": "Due to its extreme proximity to the Sun and its relatively small mass, the planet's gravitational influence is too weak to maintain a stable orbit for any natural satellite.",
+      "source_id": 2,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 9,
+      "statement": "The Sun's massive gravity can hijack potential satellites because Mercury's Hill Sphere is too small.",
+      "quote": "Mercury lacks moons because its Hill Sphere is too small, allowing the Sun's massive gravity to hijack any potential satellites.",
+      "source_id": 2,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 10,
+      "statement": "The MESSENGER mission confirmed that no satellites larger than one hundred meters exist around Mercury.",
+      "quote": "MESSENGER | 2011-2015 | Confirmed no satellites larger than 100 meters exist",
+      "source_id": 2,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 11,
+      "statement": "In one thousand nine hundred and seventy-four, the Mariner 10 mission detected ultraviolet radiation that was briefly thought to be a moon.",
+      "quote": "During its inaugural flyby in 1974, the spacecraft detected a localized emission of extreme UV radiation that appeared to track with the planet, suggesting the presence of a nearby companion.",
+      "source_id": 2,
+      "subquestion": 4,
+      "quote_score": 97.90575916230367,
+      "disputed": false
+    },
+    {
+      "id": 12,
+      "statement": "The signal detected by Mariner 10 in one thousand nine hundred and seventy-four was actually from a distant star called 31 Crateris.",
+      "quote": "Instead, the signal was traced to a distant star, 31 Crateris, which had been perfectly, albeit deceptively, aligned with the spacecraft's field of view.",
+      "source_id": 2,
+      "subquestion": 4,
+      "quote_score": 97.38562091503267,
+      "disputed": false
+    }
+  ],
+  "confidence": 0.43,
+  "confidence_why": "4 of 4 sentences cite a source; 2 different sites cited; average sentence score 0.54; only 4 of 5 sub-questions answered (x0.80)",
+  "not_found": [
+    "What are the names of Mercury's moons, if any?"
+  ],
+  "subquestions": [
+    "What is the current scientific consensus on whether Mercury has any natural satellites?",
+    "How many moons does Mercury have according to authoritative sources?",
+    "What are the names of Mercury's moons, if any?",
+    "Have there ever been historical claims or proposed moons of Mercury, and what was the outcome?",
+    "Why is it unlikely for Mercury to retain moons (e.g., tidal forces, proximity to the Sun)?"
+  ],
+  "contradictions": [],
+  "models": {
+    "main": "openai/gpt-oss-120b",
+    "fast": "google/gemma4:31b"
+  },
+  "stats": {
+    "llm_calls": 18.0,
+    "prompt_tokens": 28878.0,
+    "completion_tokens": 3641.0,
+    "rounds": 3.0,
+    "searches": 15.0,
+    "fetches": 14.0,
+    "quotes_rejected": 3.0,
+    "facts_kept": 12.0,
+    "seconds": 47.5
+  },
+  "created_at": "2026-09-25T09:08:30.618089+02:00"
+}

@@ -624,3 +624,136 @@ whole run into five causes with real examples, and `eval/results/failures.md` li
 correct, each with the folder holding its full report and step log.
 
 **Commit:** `Phase 5: evaluation and experiment results`
+
+## Phase 6 — writing it down: README, the report, and a clone from scratch (2026-09-25)
+
+**What I did, step by step**
+
+1. **Read where Phase 5 had left things.** Everything was built and measured; nothing was explained.
+   A stranger opening the repository would have found 28 Python files, a folder of numbers and no
+   front door. Phase 6 is the front door: a README for someone who wants to run it, a report for
+   someone who wants to judge it, a handful of saved answers for someone who just wants to see what
+   it produces, and — the part I expected to be a formality — a check that the thing actually
+   installs on a clean machine.
+
+2. **Picked the examples first, before writing a word.** I went through the 108 saved runs and chose
+   five that each make a different point, rather than five good ones:
+   - the 2026 World Cup answered by the full agent (twelve sources, both sentences green),
+   - **the same question answered by the bare model** ("I don't have information about that", zero
+     sources, confidence 0.00) — the pair is the whole argument for searching, and it takes four
+     seconds to read,
+   - the Gagarin Cup in Russian, where the agent noticed that its sources disagree about the score
+     and wrote a sentence saying so,
+   - a Russian two-step question (when was the institute founded, when did its founder die, how many
+     years between) which shows both the "what we couldn't find" section and a known weakness,
+   - "how many moons does Mercury have, and what are their names?" — a question with a false
+     premise, where the answer says there are none and refuses to invent names.
+
+   Each one is the report file exactly as the agent wrote it, nothing edited. I added an index in
+   Russian explaining what to look at in each, and for one of them the full step-by-step log of the
+   run, so a reader can see the machinery without running anything.
+
+3. **Wrote `README.md`** (in Russian, as the plan requires): what the thing is, the three versions
+   and when each is worth using, the headline numbers, installation, every command, a diagram of how
+   the research loop works, the project layout, and an honest list of limitations. I put the
+   limitations in the README rather than hiding them in the report, because the first question a
+   reader has is "how much can I trust this", and answering it late looks like concealing it.
+
+4. **Wrote `REPORT.md`** (also in Russian) — the long one. How I read the assignment and why that
+   reading turned into these design decisions; the five decisions the system stands on; the prior
+   work the ideas come from and what exactly was taken from each; all four experiments with the
+   tables and, more importantly, with what the tables mean; the five causes of failure; the limits
+   of the measurement itself; and ten things to do next, each attached to the measured problem it
+   would fix.
+
+5. **Ran the clone check.** Cloned the repository into a temporary folder, built a fresh Python
+   environment, installed the requirements, copied the example configuration and ran the tests —
+   pretending to be a reviewer who has not yet been given the keys. **Two tests failed.** Details
+   below; both were real, and both were fixed.
+
+6. **Re-ran the whole check after the fixes**: install, 95 tests pass with no keys at all, the
+   results tables rebuild from the committed data and come out byte-for-byte identical, the web page
+   is served, and then — with the keys filled in — one real question end to end. The agent answered
+   "who became director of the institute after Ivannikov and in what year" correctly, with sources,
+   in 51 seconds, in a folder that had existed for ten minutes.
+
+**What came out**
+
+Three documents and five examples. `README.md` (how to use it), `REPORT.md` (why it is built this
+way and what it is worth), `examples/` (what it produces), plus two bug fixes and two new tests. The
+repository now goes from a clone to a working answer without anyone having to read the code first.
+
+**Interesting moments**
+
+- **The clone check was supposed to be a formality and instead found the worst bug in the project.**
+  The documented command for rebuilding the results tables, run on a fresh clone, quietly **erased
+  them**. The reason is a decision that was sensible in isolation: the evaluation saves one file per
+  run so it can be stopped and resumed, and those 108 files are not committed — the same content
+  lives in one committed file instead. On my machine both exist, so nothing ever looked wrong. On a
+  fresh clone only the committed file exists, the rebuild found zero runs, dutifully wrote out
+  tables of zeros, and overwrote both the tables *and* the committed data they were made from. A
+  reviewer following the README would have destroyed the evidence before reading it. The fix is
+  three lines: when the resume folder is missing, unpack it from the committed file first. What I
+  take from it is that "it works on my machine" is not only a joke about missing libraries — it is
+  about **state that accumulated while you worked and that you stopped seeing**.
+
+- **The second failure was the same illusion in a smaller frame.** Two tests failed on a clean clone
+  with an error about a missing API key — but these are tests of pure functions that touch no
+  network. One module was reading the settings *at import time*, purely to find a default folder
+  path, and reading the settings demands the keys. On my machine the keys are in `.env`, so the line
+  was invisible. I fixed the line and then wrote a test that encodes the rule rather than the
+  instance: it imports every module of the project in a separate process with the keys blanked out,
+  and fails if any of them needs a key just to be loaded. A reviewer running the tests before
+  filling in the configuration is a completely ordinary thing to do, and now it is a thing the tests
+  know about.
+
+- **Choosing which answer to show is an editorial decision, and I caught myself making it badly.**
+  My first list of examples was five confident green reports. That is a brochure, not evidence. The
+  version I kept includes one answer with a red sentence, one that admits it could not find
+  something, and one whose sources are two mediocre websites — because those are the cases where a
+  reader learns what the confidence colour is actually for. The one I am most glad I kept is the
+  bare model failing on the World Cup question: it is the only example with no sources at all, and
+  it makes the point that all the machinery exists for a reason better than any table does.
+
+- **Writing the report forced me to name the thing I had been circling all week.** The biggest
+  surprise of the evaluation was that the quote checker never caught a single invented quote — all
+  129 rejections were real page text, copied carelessly. Writing it up, I had to say what that means
+  rather than just report it, and the honest version is: I defended against the wrong threat. The
+  model does not fabricate quotations. What actually goes wrong is a *true* quotation from a page
+  that should not be trusted, and a sentence that is correct but that no source states — the
+  arithmetic the agent does itself, like "therefore he was 56 years old". Neither is caught by
+  checking that a quote exists. That admission is now the closing section of the report, and it is
+  what the top two items on the future-work list are aimed at.
+
+- **The report is in Russian and the code is in English, and that is more than a formatting rule.**
+  Writing the same argument twice, in two registers, is a decent test of whether you believe it. A
+  couple of claims I had been making casually in English commit messages ("the critic loop pays for
+  itself") turned out to need qualifying once I had to write them out properly: it pays for itself
+  on *some* questions, most runs never use a second round at all, and citation quality actually gets
+  slightly *worse* as more rounds pile up facts. That nuance is in the report now. It was not in my
+  head before I tried to write the sentence.
+
+**What to check by hand**
+```
+pytest                                     # 95 tests, ~6 s, no internet, no keys needed
+```
+Read `README.md` and follow it literally without skipping anything. Open `examples/README.md` and
+then the five reports: in each, pick a coloured sentence, open one of the pages it cites, and search
+that page for the quote printed under the source — it should be there, character for character. Then
+compare `examples/01-worldcup-2026-v3.md` with `examples/02-worldcup-2026-v1.md` side by side: same
+question, same model, one with search and one without.
+
+To repeat the clone check, in an empty folder:
+```
+git clone <repo> fresh && cd fresh
+python -m venv .venv && .venv\Scripts\python -m pip install -r requirements.txt
+copy .env.example .env                              # leave the keys empty
+.venv\Scripts\python -m pytest                      # 95 pass
+.venv\Scripts\python -m eval.run_eval --report      # nothing in eval/results/ may change
+.venv\Scripts\python -m taro serve --port 8123      # the page is served
+```
+Then fill in the two keys and ask one question.
+
+**Commit:** `Phase 6: README, report, examples`
+
+---

@@ -1,0 +1,677 @@
+{
+  "question": "Who won the 2026 FIFA World Cup and what was the score in the final?",
+  "mode": "v3",
+  "answer": "Spain won the 2026 FIFA World Cup [1][2][3][4][5][6][9][10][11][12]. The final was decided by a 1‑0 victory over Argentina after extra time [1][2][3][4][5][6][10][11][12].",
+  "sentences": [
+    {
+      "text": "Spain won the 2026 FIFA World Cup.",
+      "citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12
+      ],
+      "score": 0.76,
+      "level": "high",
+      "why": "9 sites (5min.hr, bbc.com, blasterpost.com), quality 0.52"
+    },
+    {
+      "text": "The final was decided by a 1‑0 victory over Argentina after extra time.",
+      "citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ],
+      "score": 0.76,
+      "level": "high",
+      "why": "8 sites (bbc.com, blasterpost.com, blog.wego.com), quality 0.52"
+    }
+  ],
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://www.bbc.com/sport/football/world-cup",
+      "title": "World Cup 2026: Latest News, Scores, Analysis | BBC",
+      "domain": "bbc.com",
+      "published": "2026-06-11",
+      "snippet": "2026](/sport/football/articles/c5ywnpg45xzo) Only from the BBC [ More games, more controversy - good and bad of biggest World Cup yet From high ticket prices to hydration breaks, new laws and political interventions, there has rarely been a dull moment at the 2026 World Cup.](/sport/football/articles/ce8k0njm23yo) … art.](/culture/article/20260716-10-of-the-world-cups-most-striking-images) Watch [ Watching the World Cup final with Argentina fans BBC Sport followed the Argentina fans who congregated in London to party and watch the World Cup final.](/sport/football/videos/cqlx5zkg97wo) [ Misleading posts about Trump at World Cup final viewed by millions Some of the most viral posts focus on US President Donald Trump and Spain’s wonderkid Lamine Yamal.](/news/videos/cn5n4rxyz3wo) [",
+      "quality": 0.7
+    },
+    {
+      "id": 2,
+      "url": "https://worldcupwiki.com/2026-fifa-world-cup-final",
+      "title": "2026 FIFA World Cup Final Result: Spain 1-0 Argentina (AET)",
+      "domain": "worldcupwiki.com",
+      "published": "2026-07-19",
+      "snippet": "2026 FIFA World Cup Final: Spain 1-0 Argentina, Result, Awards & Highlights Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time at New York New Jersey Stadium in East Rutherford, New Jersey on Sunday, July 19, 2026. Substitute Ferran Torres scored the winning goal in the 106th minute, a left footed strike buried just under the crossbar, to give Spain a second world title after 2010. It was the first World Cup final ever played between the two nations and the championship game of the first 48-team World Cup. … Table of Contents 2026 FIFA World Cup Final Quick Facts Final score Spain 1-0 Argentina (after extra time) Winning goal Ferran Torres, 106th minute  Date Sunday, July 19, 2026, 3:00 PM ET kickoff  Venue New York New Jersey Stadium (MetLife Stadium), East Rutherford, New Jersey  Capacity 82,500  FIFA match number Match 104  Referee Slavko Vincic (Slovenia)  Champion Spain (second title, after 2010)  Runner-up Argentina (defending champions)  Golden Boot Kylian Mbappe, 10 goals  Halftime show 11 minutes. Madonna, Shakira, BTS, Justin Bieber  US broadcast FOX (English), Telemundo (Spanish)  Champion’s prize $50 million  Third place match England 6-4 France, July 18, Miami Stadium … How Spain and Argentina Reached the Final Spain beat France 2-0 at Dallas Stadium on July 14. Mikel Oyarzabal converted a penalty in the 22nd minute and Pedro Porro added the second in the 58th. The European champions conceded just one goal in eight matches across the entire tournament. Argentina beat England 2-1 at Atlanta Stadium on July 15. Anthony Gordon put England ahead before Messi created late goals for Enzo Fernandez and Lautaro Martinez in a stoppage time comeback. England beat France 6-4 in a 10 goal thriller in Miami on July 18 to claim third place, their best World Cup finish since winning the trophy in 1966. Bukayo Saka scored a hat trick and Kylian Mbappe struck twice for France. Semifinal Results Match Teams Score Venue Date Semifinal 1 (Match 101) France vs Spain 0-2 Dallas Stadium July 14  Semifinal 2 (Match 102) England vs Argentina 1-2 Atlanta Stadium July 15  When Was the 2026 FIFA World Cup Final? Sunday, July 19, 2026 at 3:00 PM ET. The match closed a 39-day tournament that opened on June 11 with Mexico vs South Africa at Mexico City Stadium (Estadio Azteca). The Sunday afternoon slot placed the match in European prime time and in the early hours across Asia and Australia. Region Kickoff Time Eastern Time (New York) 3:00 PM ET  Pacific Time (Los Angeles) 12:00 PM PT  Mexico City 1:00 PM  Argentina (Buenos Aires) 4:00 PM  UK (London) 8:00 PM  Spain, France, Germany 9:00 PM  India 12:30 AM (July 20)  Bangladesh 1:00 AM (July 20)  Japan and South Korea 4:00 AM (July 20)  Australia (Sydney) 5:00 AM (July 20)  Where Was the 2026 World Cup Final Held? … Stage Dates Details Opening ceremony and match June 11 Mexico vs South Africa, Mexico City Stadium  Group stage June 11 to June 27 12 groups across 16 venues  Round of 32 June 28 to July 3 New stage, first in World Cup history  Round of 16 July 4 to July 7 All matches in the United States  Quarterfinals July 9 to July 11 France, Spain, Argentina and England advanced  Semifinal 1 July 14 Spain 2-0 France, Dallas Stadium  Semifinal 2 July 15 Argentina 2-1 England, Atlanta Stadium  Third place match July 18 England 6-4 France, Miami Stadium  Final July 19 Spain 1-0 Argentina (aet), New York New Jersey Stadium  The … 2026 FIFA World Cup Final FAQ Who won the 2026 FIFA World Cup Final? Spain. They beat Argentina 1-0 after extra time at New York New Jersey Stadium on July 19, 2026, with substitute Ferran Torres scoring the winner in the 106th minute. Who scored in the 2026 World Cup Final? Ferran Torres scored the only goal, a left footed finish under the crossbar in the 106th minute of extra time. Argentina goalkeeper Emiliano Martinez made 10 saves, a World Cup final record.",
+      "quality": 0.5
+    },
+    {
+      "id": 3,
+      "url": "https://worldcupwiki.com",
+      "title": "World Cup Wiki - Your Complete FIFA World Cup 2026 Guide",
+      "domain": "worldcupwiki.com",
+      "published": "2026-08-03",
+      "snippet": "named… 2026 FIFA World Cup Final: Spain 1-0 Argentina, Result, Awards & Highlights  Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time at New York New Jersey Stadium in East Rutherford, New Jersey on Sunday, July 19, 2026. Substitute Ferran Torres scored the winning goal in the 106th minute, a left footed strike buried just under the crossbar, to give Spain a second…",
+      "quality": 0.5
+    },
+    {
+      "id": 4,
+      "url": "https://qtnest.com/blog/world-cup-2026-complete-picture",
+      "title": "World Cup 2026: The Complete Picture — Spain's Second Title, Mbappé's Record, and the Verdict on 48 Teams",
+      "domain": "qtnest.com",
+      "published": "2026-07-29",
+      "snippet": "48 Teams Spain beat Argentina 1–0 in extra time at MetLife Stadium to win their second World Cup. Here is everything that happened across 39 days, 104 matches and three countries — the results, the records, and what the expanded format actually delivered. The first 48-team World Cup is over. It ran for 39 days across 16 cities in three countries, produced 104 matches and 308 goals, drew the largest crowds in the tournament’s history, and ended on 19 July with Spain lifting the trophy at MetLife Stadium after a 1–0 win over Argentina in extra time. … The final: Spain 1–0 Argentina (after extra time) The final was played on 19 July 2026 at MetLife Stadium in East Rutherford, New Jersey, in front of 80,663 people. For 90 minutes it was one of the most lopsided finals on record — and still goalless. Spain had 65% of the ball and finished with 20 shots, 12 of them on target. Argentina, extraordinarily, did not register a single shot in normal time, becoming the first team ever to go through the 90 minutes of a World Cup final without one. What Argentina did have was resistance, and for an hour and a half it nearly held. Then it frayed at the worst moment: Enzo Fernández was sent off in the third minute of stoppage time at the end of normal time, leaving Argentina to play extra time a man down. Six minutes into extra time, in the 106th, substitute Ferran Torres finally broke it open. He was named man of the match. It gave Spain their second World Cup, and their first since 2010. … How Spain won it: one goal conceded in seven matches The most remarkable statistic of Spain’s tournament is not the trophy — it is that they conceded a single goal on the way to it. Luis de la Fuente’s side won Group H, then beat Austria 3–0 in the new Round of 32, Portugal 1–0 in the Round of 16, Belgium 2–1 in the quarter-final, France 2–0 in the semi-final, and Argentina 1–0 in the final. … Kylian Mbappé scored twice for France, the second a left-footed finish from around 14 yards in the 66th minute, and in doing so passed Messi’s newly set mark of 21 career World Cup goals. Mbappé finished on 22 — the most anyone has scored in the tournament’s 96-year history. His 10 goals in 2026 also won him the Golden Boot, his … Final standings: Spain champions, Argentina runners-up, England third, France fourth.",
+      "quality": 0.5
+    },
+    {
+      "id": 5,
+      "url": "https://blog.wego.com/who-won-the-fifa-world-cup",
+      "title": "Who Won the FIFA World Cup 2026? Final Result and Tournament Awards",
+      "domain": "blog.wego.com",
+      "published": "2026-07-20",
+      "snippet": "Spain are the FIFA World Cup 2026 champions, beating Argentina 1-0 after extra time in the final at MetLife Stadium, East Rutherford, New Jersey, on Sunday 19 July, their second World Cup title after 2010. … The Road to the Title Spain’s knockout run to the trophy: Round of 32: beat Austria 3-0 (Los Angeles Stadium, 2 July) — Mikel Oyarzabal scored twice (36′, 89′) either side of a Pedro Porro goal (66′). Round of 16: beat Portugal 1-0 (Dallas Stadium, 6 July) — Mikel Merino’s stoppage-time winner ended Cristiano Ronaldo’s last World Cup. Quarter-final: beat Belgium 2-1 (Los Angeles Stadium, 10 July) — Fabián Ruiz put Spain ahead (30′), Charles De Ketelaere equalised (41′), before Merino struck a late winner (88′). Semi-final: beat France 2-0 (Dallas Stadium, 14 July) — Oyarzabal converted a penalty (22′) and Porro added a second (58′). Final: beat Argentina 1-0 after extra time (MetLife Stadium, 19 July) — Ferran Torres (106′). Third Place England beat France 6-4 in the third-place play-off in Miami on 18 July, the highest-scoring match at a World Cup since 1982. England raced into a 4-0 half-time lead through Declan Rice (3′), Ezri Konsa (18′) and a Bukayo Saka brace, before France hit back after the break: Kylian Mbappé (48′) and Bradley Barcola made it 4-2, then Mbappé’s second of the game (66′) — his 10th goal of the tournament, sealing the Golden Boot — made it 4-3. Saka completed his hat-trick from the penalty spot in the 87th minute to restore a two-goal cushion at 5-3, only for Ousmane Dembélé’s stoppage-time finish to narrow it to 5-4, before Jude Bellingham sealed the 6-4 win for England in the closing minutes, the country’s best World Cup finish in 60 years. Tournament Awards Award Winner Golden Ball (best player) Rodri (Spain)  Golden Boot (top scorer) Kylian Mbappé (France) — 10 goals  Golden Glove (best goalkeeper) Unai Simón (Spain)  Best Young Player Pau Cubarsí (Spain)",
+      "quality": 0.5
+    },
+    {
+      "id": 6,
+      "url": "https://fdp.fifa.org/assetspublic/ce281/r12552/pdf/FullTimeMatchReport-English.pdf",
+      "title": "MatchReport",
+      "domain": "fdp.fifa.org",
+      "published": "2026-07-19",
+      "snippet": "Final Spain v. Argentina  1-0 AET (0-0, 0-0) #104 | 19 July 2026 | NEW YORK/NEW JERSEY / New York/New Jersey Stadium / USA / Attendance: 80,663 MATCH REPORT Referee: VINCIC Slavko (SVN) VAR: DANKERT Bastian(GER) Reserve assistant referee: ALKALAF Mohammad (JOR) Assistant referee 1: KLANCNIK Tomaz (SVN) AVAR 1: GALLO Nicolas(COL) FIFA Match Director: NASSAR Khaled (EGY) Assistant referee 2: KOVACIC Andraz (SVN) AVAR 2: FIFA Match Commissioner: FERNANDEZ Carlos (GUA) 4ᵗʰ o�cial: MAKHADMEH Adham (JOR) AVAR 3: ALMARRI Khamis(QAT) SPAIN (ESP)",
+      "quality": 0.5
+    },
+    {
+      "id": 7,
+      "url": "https://bbc.co.uk/sport/football/articles/clyxjk0z5y7o",
+      "title": "World Cup 2026: Fifa opens investigation into Argentina post-final trouble",
+      "domain": "bbc.co.uk",
+      "published": "2026-07-20",
+      "snippet": "Fifa opens investigation into Argentina post-final trouble Argentina will face an investigation into the ugly scenes at the end of the World Cup final, Fifa has confirmed. Fifa’s disciplinary committee has appointed a disciplinary and ethics prosecutor to assess what happened after the final whistle at MetLife stadium. Any player or coach involved in the fracas could face suspension, while the Argentine Football Association (AFA) may also be fined. Following their 1-0 defeat on Sunday, members of the Argentina team and backroom staff were involved in altercations with Spain players as they began to celebrate their World Cup success. Nahuel Molina, Leandro Paredes, Thiago Almada and assistant coach Roberto Ayala all appeared to be involved. It was incorrectly reported on Fifa’s commentator information system that Paredes had been sent off by referee Slavko Vincic for pushing Spain’s Eric Garcia by the throat. Paredes’ red card was deleted shortly afterwards and Fifa has confirmed to BBC Sport that no disciplinary action was taken at the time. Argentina had already had one player dismissed, with Enzo Fernandez receiving a second yellow card in second-half stoppage time. … Getty Images As the final whistle blew in New Jersey, a few Argentina players - including Lionel Messi - slumped to the turf. Others stood there motionless as Spain’s players raced across the pitch in jubilation. Rodri, who had been substituted in extra-time, ran over from the dugout to join his team-mates. As the Manchester City midfielder went past Molina, the Argentina defender appeared to punch Rodri on the arm or stomach. This was the fuse which ignited the trouble. Rodri confronted Molina, but it was the Argentina player who thrust forward in an aggressive manner. Garcia ran over to back up his team-mate at which point Paredes got involved too, jabbing Garcia in the throat. Unused substitute Gavi tried to intervene, only to be forced to the ground by Almada. Paredes then pushed Gavi to the floor by putting his hand in the Spaniard’s face. Ayala then looked to be holding Garcia around the throat. He then appeared to strike Spain midfielder Dani Olmo. “Paredes threw two or three haymakers into someone’s face. He went for them,” Alan Shearer said on BBC One’s coverage. “There is no place or space for that. “We know how much it means to them and we know how much it hurts to lose, but there is a way to lose. Too many times we have seen that from Argentina. The reaction after the final whistle is terrible.” Joe Hart added: “The game’s done, they can have absolutely no complaints about what happened today. Disgusting behaviour.”",
+      "quality": 0.7
+    },
+    {
+      "id": 8,
+      "url": "https://iz.ru/en/2136035/2026-07-21/fifa-called-paredes-red-card-erroneous-after-fight-2026-world-cup-final",
+      "title": "FIFA called Paredes' red card erroneous after a fight in the 2026 World Cup final",
+      "domain": "iz.ru",
+      "published": "2026-07-21",
+      "snippet": "Reuters/James Lang The International Football Federation (FIFA) has removed from the information system “erroneous information” about the red card of Argentina midfielder Leandro Paredes after the World Cup final against Spain. This was announced on July 20 by the BBC Sport broadcasting company with reference to the organization. Paredes had a scuffle with the Spanish players after the final whistle of the lost World Cup final. The Argentine first grabbed Spanish defender Eric Garcia by the throat, and then pushed midfielder Gavi. It was up to the Argentine national team teammates to calm the former Zenit St. Petersburg football player. Initially, the FIFA commentator system indicated that the referee of the 2026 World Cup final, Slavko Vincic, had removed Paredes for a post-match brawl. However, this information was later deleted, according to the BBC. The organization confirmed to the broadcaster that the referee did not show Paredes a red card and “no disciplinary measures were applied to the player.” At the same time, the FIFA disciplinary committee appointed a prosecutor for disciplinary and ethical issues to investigate the brawl after the final whistle. It involved not only Paredes, but also, presumably, right-back Nahuel Molina, winger Thiago Almada and assistant coach of Argentina Roberto Ayala. The players and coaches involved in the altercation may face disqualification, and the Argentine Football Association may face a fine. In addition, an investigation was previously initiated against the Argentine national team because of a provocative banner about the Falkland Islands (Malvinas) after winning the semi-finals, when the team knocked England out of the tournament.",
+      "quality": 0.7
+    },
+    {
+      "id": 9,
+      "url": "https://5min.hr/en/clanak/bbc-objavio-dirljivu-posvetu-sp-u-dok-argentina-upada-u-kaos-bizarna-teorija-tucnjava-i-fifa-ina-istraga-mrzdi3w5",
+      "title": "BBC Releases Heartfelt Tribute to World Cup as Argentina Descends into Chaos: Bizarre Theory, Brawl, and FIFA Investigation",
+      "domain": "5min.hr",
+      "published": "2026-07-24",
+      "snippet": "Torn Net and Argentine Conspiracy Theories As the world bids farewell to the tournament, part of the Argentine public still refuses to accept the 1-0 defeat by Spain days after the final. After a petition for a rematch emerged, a new, utterly bizarre theory spread on social media claiming that Argentina actually scored a goal, but the ball did not hit the net because it was supposedly torn. As ‘proof,’ a slow-motion video of one Argentine shot was published, in which the author freezes the frame and claims the ball went through a hole in the net. However, footage from other angles clearly shows the ball did not cross the goal line, and Argentine players neither celebrated nor protested at that moment. The theory has drawn ridicule from the football public. Physical Altercation and Turning Their Backs on Champions Beyond baseless accusations, the final was also marked by serious incidents after the final whistle. Cameras captured Leandro Paredes and Nahuel Molina involved in a physical altercation with Spanish players. According to reports, Paredes attacked several opponents, and Molina struck Rodri with his hand. During the trophy ceremony itself, Argentine players turned their backs on the new world champions, refusing to pay respect to La Roja. The entire series of events sparked sharp reactions and prompted FIFA to take a rare step. … However, kind words do not negate the fact that FIFA has launched an official investigation. The Disciplinary Committee, in accordance with Article 36 of the Disciplinary Code, has appointed a prosecutor for disciplinary and ethical matters whose task is to investigate potential code violations related to post-match events. FIFA stated that further details will be released once the prosecutor completes their report.",
+      "quality": 0.5
+    },
+    {
+      "id": 10,
+      "url": "https://theroanokestar.com/sports/uefa-s-ceferin-skips-world-cup-final-sending-signal-to",
+      "title": "UEFA's Ceferin Skips World Cup Final, Sending Signal to FIFA",
+      "domain": "theroanokestar.com",
+      "published": "2026-07-20",
+      "snippet": "source: BBC UEFA president Aleksander Ceferin deliberately skipped the 2026 FIFA World Cup final between Argentina and Spain at the MetLife Stadium in East Rutherford, New Jersey on July 19, according to reporting by BBC Sport and The Times. The Slovenian official also serves as a FIFA vice-president. He did travel to Mexico City for the tournament’s opening match between the co-hosts and South Africa on June 11, making his absence from the final impossible to dismiss as a scheduling matter. British media interpreted his decision as a direct protest against FIFA president Gianni Infantino and a series of governance decisions that have strained relations between European and world football’s governing bodies. Ceferin has not issued a formal personal statement labeling the move a boycott, but sources cited by The Times and The Independent described his absence as a deliberate message that UEFA’s frustrations had moved well beyond routine institutional disagreements. The statement was made in silence. Spain defeated Argentina 1-0 after extra time in the final, with Ferran Torres scoring the decisive goal in the 106th minute to hand Spain its second World Cup title. … The Balogun Suspension That Sparked an Institutional Dispute Central to the friction was the handling of a red card shown to United States forward Folarin Balogun during the round-of-32 match against Bosnia and Herzegovina on July 1. The referee, after a VAR review, judged Balogun’s challenge on Tarik Muharemović to constitute serious foul play and dismissed him in the 64th minute. The US won the match 2-0. FIFA opened disciplinary proceedings and, in an official decision dated July 5, found Balogun in breach of its Disciplinary Code. A one-match suspension and a fine of 40,000 US dollars were imposed. Enforcement, however, was simultaneously deferred for a one-year probationary period. In practical terms, that allowed Balogun to play in the round of 16 against Belgium — the match in which the automatic suspension would ordinarily have been served. Belgium won that match 4-1, eliminating the host nation. FIFA maintained it had neither overturned the referee’s decision nor erased the red card from the official record, framing its action as a lawful use of discretionary power under its Disciplinary Code. The controversy deepened when it emerged that US President Donald Trump had intervened in the matter. On Friday, Trump and Infantino appeared together at Trump Tower in Manhattan and reflected publicly on the World Cup, including the Balogun controversy, according to reporting from The Athletic. UEFA condemned FIFA’s handling of the episode as unprecedented, incomprehensible, and unjustifiable. The words were pointed. The organization warned that when governing bodies fail to guarantee the certainty of rules, both the integrity of the sport and the credibility of a competition are put at risk. That response, according to BBC Sport, was a key factor in Ceferin’s decision to stay away from the final.",
+      "quality": 0.5
+    },
+    {
+      "id": 11,
+      "url": "https://blasterpost.com/a/fifa-argentina-red-card-world-cup-final-probe",
+      "title": "Fifa probes Argentina after World Cup final clash",
+      "domain": "blasterpost.com",
+      "published": "2026-07-22",
+      "snippet": "Fifa has opened an investigation into Argentina after post-final trouble at the 2026 World Cup final, amid a disputed Fifa Argentina red card report involving Leandro Paredes. A disciplinary and ethics prosecutor will assess whether players, coaches, or the AFA face suspensions or fines for the clash with Spain at MetLife Stadium. Key Takeaways Fifa’s disciplinary committee has appointed a prosecutor to review Argentina’s post-final altercations with Spain. Nahuel Molina, Leandro Paredes, Thiago Almada, and assistant coach Roberto Ayala appeared involved in the fracas. A reported Paredes red card was deleted; Fifa told BBC Sport no on-field disciplinary action was taken then. Players or coaches could face suspensions, and the Argentine Football Association may be fined. What sparked the post-final clash? Spain beat Argentina 1-0 in Sunday’s World Cup final in New Jersey. As substitutes raced on to celebrate, Argentina’s Nahuel Molina appeared to punch Rodri on the arm or stomach near halfway, according to BBC Sport. Rodri confronted Molina. Eric Garcia joined his teammate, then Paredes jabbed Garcia in the throat. Unused substitute Gavi tried to intervene but was forced down by Thiago Almada; Paredes later pushed Gavi to the floor. Assistant coach Roberto Ayala appeared to hold Garcia around the throat and strike Dani Olmo. … Was there a Fifa Argentina red card after full time? Fifa’s commentator information system briefly showed Paredes sent off by referee Slavko Vincic for pushing Garcia by the throat. That entry was deleted shortly afterwards. Fifa confirmed to BBC Sport that no disciplinary action was taken at the time—so the viral Fifa Argentina red card claim did not stick on the night. Argentina had already lost Enzo Fernandez to a second yellow in second-half stoppage time. … What punishment could Argentina face now? By appointing a disciplinary and ethics prosecutor, Fifa can examine offences beyond simple violent conduct, including fair-play breaches under Article 13 of its disciplinary code. Sanctions can include global bans for individuals and fines for the AFA. There is no published timetable for a decision.",
+      "quality": 0.5
+    },
+    {
+      "id": 12,
+      "url": "https://macon.com/sports/article316582957.html",
+      "title": "FIFA expected to investigate Argentina after World Cup final clashes",
+      "domain": "macon.com",
+      "published": "2026-07-20",
+      "snippet": "Sports  FIFA expected to investigate Argentina after World Cup final clashes July 20 (UPI) – FIFA is expected to investigate Argentina after players and coaching staff clashed with members of Spain’s team following Argentina’s 1-0 loss in Sunday’s 2026 World Cup final, Sky Sports and BBC Sport reported. The incidents occurred after the final whistle at MetLife Stadium in East Rutherford, N.J., as Spanish players celebrated winning the tournament. Argentina midfielder Leandro Paredes confronted Spain players Eric García and Gavi, while defender Nahuel Molina attempted to knock over captain Rodri during the celebrations. Videos of the incident also showed Argentina assistant coach Roberto Ayala striking Spain midfielder Dani Olmo. BBC Sport said FIFA’s disciplinary committee will review reports submitted by the referee and other match officials before deciding whether to open formal proceedings or impose sanctions. FIFA can suspend players and team officials and fine national federations under provisions of its disciplinary code covering offensive conduct, violations of fair play and behavior that brings soccer or the governing body into disrepute. Paredes was initially reported as having received a red card after the final whistle for pushing García in the throat. BBC Sport said the red card was later removed from the official match record, leaving Enzo Fernández as Argentina’s only officially dismissed player after he received a second yellow card during second-half stoppage time. The potential investigation comes days after FIFA began disciplinary proceedings against Argentina over a banner displayed by players following their 2-1 semifinal victory over England.The",
+      "quality": 0.5
+    }
+  ],
+  "facts": [
+    {
+      "id": 1,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain World Cup champions receive royal welcome in Madrid",
+      "source_id": 1,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 2,
+      "statement": "Spain won their second World Cup title by defeating Argentina with a score of 1-0 after extra time in the final.",
+      "quote": "Spain manager Luis de la Fuente and his players react to winning their second World Cup title after beating Argentina 1-0 after extra time in the final.",
+      "source_id": 1,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 3,
+      "statement": "Spain and Argentina were the two teams that played in the 2026 FIFA World Cup final.",
+      "quote": "Spain manager Luis de la Fuente and his players react to winning their second World Cup title after beating Argentina 1-0 after extra time in the final.",
+      "source_id": 1,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 4,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain won the 2026 FIFA World Cup Final",
+      "source_id": 2,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 5,
+      "statement": "The final score of the 2026 FIFA World Cup final was Spain 1-0 Argentina after extra time.",
+      "quote": "beating Argentina 1-0 after extra time at New York New Jersey Stadium",
+      "source_id": 2,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 6,
+      "statement": "The 2026 FIFA World Cup final was played on Sunday, July 19, 2026.",
+      "quote": "on Sunday, July 19, 2026",
+      "source_id": 2,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 7,
+      "statement": "The 2026 FIFA World Cup final was played at New York New Jersey Stadium in East Rutherford, New Jersey.",
+      "quote": "at New York New Jersey Stadium in East Rutherford, New Jersey",
+      "source_id": 2,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 8,
+      "statement": "Spain and Argentina were the two teams that contested the 2026 FIFA World Cup final.",
+      "quote": "Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time",
+      "source_id": 2,
+      "subquestion": 4,
+      "quote_score": 97.46835443037975,
+      "disputed": false
+    },
+    {
+      "id": 9,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time",
+      "source_id": 3,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 10,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1-0.",
+      "quote": "The first 48-team World Cup ended on July 19 with Spain beating Argentina 1-0 in the final",
+      "source_id": 3,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 11,
+      "statement": "The 2026 FIFA World Cup final was played on Sunday, July 19, 2026, at MetLife Stadium in East Rutherford, New Jersey.",
+      "quote": "Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time at New York New Jersey Stadium in East Rutherford, New Jersey on Sunday, July 19, 2026.",
+      "source_id": 3,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 12,
+      "statement": "Spain and Argentina contested the 2026 FIFA World Cup final.",
+      "quote": "Spain won the 2026 FIFA World Cup Final, beating Argentina 1-0 after extra time",
+      "source_id": 3,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 13,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain beat Argentina 1–0 in extra time at MetLife Stadium to win their second World Cup.",
+      "source_id": 4,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 14,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1–0 in favor of Spain after extra time.",
+      "quote": "Spain beat Argentina 1–0 in extra time at MetLife Stadium to win their second World Cup.",
+      "source_id": 4,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 15,
+      "statement": "The 2026 FIFA World Cup final was played on 19 July 2026 at MetLife Stadium in East Rutherford, New Jersey.",
+      "quote": "The final was played on 19 July 2026 at MetLife Stadium in East Rutherford, New Jersey, in front of 80,663 people.",
+      "source_id": 4,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 16,
+      "statement": "Spain and Argentina were the two teams that contested the 2026 FIFA World Cup final.",
+      "quote": "Spain beat Argentina 1–0 in extra time at MetLife Stadium to win their second World Cup.",
+      "source_id": 4,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 17,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain are the FIFA World Cup 2026 champions, beating Argentina 1-0 after extra time in the final",
+      "source_id": 5,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 18,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1-0 in favor of Spain after extra time.",
+      "quote": "Spain are the FIFA World Cup 2026 champions, beating Argentina 1-0 after extra time in the final",
+      "source_id": 5,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 19,
+      "statement": "The 2026 FIFA World Cup final was played on Sunday, July 19, 2026, at MetLife Stadium in East Rutherford, New Jersey.",
+      "quote": "in the final at MetLife Stadium, East Rutherford, New Jersey, on Sunday 19 July",
+      "source_id": 5,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 20,
+      "statement": "Spain and Argentina contested the 2026 FIFA World Cup final.",
+      "quote": "Spain are the FIFA World Cup 2026 champions, beating Argentina 1-0 after extra time in the final",
+      "source_id": 5,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 21,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Final\nSpain v. Argentina 1-0 AET (0-0, 0-0)",
+      "source_id": 6,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 22,
+      "statement": "The final score of the 2026 FIFA World Cup final was one to zero after extra time.",
+      "quote": "Final\nSpain v. Argentina 1-0 AET (0-0, 0-0)",
+      "source_id": 6,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 23,
+      "statement": "The 2026 FIFA World Cup final was played on July nineteen, two thousand twenty-six, at the New York/New Jersey Stadium in the United States of America.",
+      "quote": "19 July 2026 | NEW YORK/NEW JERSEY / New York/New Jersey Stadium / USA",
+      "source_id": 6,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 24,
+      "statement": "Spain and Argentina contested the 2026 FIFA World Cup final.",
+      "quote": "Final\nSpain v. Argentina 1-0 AET (0-0, 0-0)",
+      "source_id": 6,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 25,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "members of the Argentina team and backroom staff were involved in altercations with Spain players as they began to celebrate their World Cup success.",
+      "source_id": 7,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 26,
+      "statement": "The final score of the 2026 FIFA World Cup final was one to zero in favor of Spain.",
+      "quote": "Following their 1-0 defeat on Sunday, members of the Argentina team and backroom staff were involved in altercations with Spain players",
+      "source_id": 7,
+      "subquestion": 2,
+      "quote_score": 85.18518518518519,
+      "disputed": false
+    },
+    {
+      "id": 27,
+      "statement": "The 2026 FIFA World Cup final was played at MetLife stadium in New Jersey.",
+      "quote": "Fifa's disciplinary committee has appointed a disciplinary and ethics prosecutor to assess what happened after the final whistle at MetLife stadium. As the final whistle blew in New Jersey",
+      "source_id": 7,
+      "subquestion": 3,
+      "quote_score": 87.7659574468085,
+      "disputed": false
+    },
+    {
+      "id": 28,
+      "statement": "Spain and Argentina contested the 2026 FIFA World Cup final.",
+      "quote": "members of the Argentina team and backroom staff were involved in altercations with Spain players as they began to celebrate their World Cup success.",
+      "source_id": 7,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 29,
+      "statement": "Following the 2026 FIFA World Cup final, Fifa opened an investigation into Argentina due to altercations and ugly scenes involving players and staff after the final whistle.",
+      "quote": "Argentina will face an investigation into the ugly scenes at the end of the World Cup final, Fifa has confirmed.",
+      "source_id": 7,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 30,
+      "statement": "The final score of the 2026 World Cup final was one to zero, with Ferran Torres scoring in the 106th minute.",
+      "quote": "Striker Ferran Torres scored in the 106th minute as part of the winning team.",
+      "source_id": 8,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 31,
+      "statement": "FIFA initially provided erroneous information that referee Slavko Vincic had given Leandro Paredes a red card during the 2026 World Cup final.",
+      "quote": "Initially, the FIFA commentator system indicated that the referee of the 2026 World Cup final, Slavko Vincic, had removed Paredes for a post-match brawl.",
+      "source_id": 8,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 32,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "part of the Argentine public still refuses to accept the 1-0 defeat by Spain days after the final",
+      "source_id": 9,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 33,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1-0 in favor of Spain.",
+      "quote": "part of the Argentine public still refuses to accept the 1-0 defeat by Spain days after the final",
+      "source_id": 9,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 34,
+      "statement": "The 2026 FIFA World Cup final was contested between Spain and Argentina.",
+      "quote": "part of the Argentine public still refuses to accept the 1-0 defeat by Spain days after the final",
+      "source_id": 9,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 35,
+      "statement": "Following the 2026 FIFA World Cup final, Argentine players Leandro Paredes and Nahuel Molina were involved in a physical altercation with Spanish players.",
+      "quote": "Cameras captured Leandro Paredes and Nahuel Molina involved in a physical altercation with Spanish players.",
+      "source_id": 9,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 36,
+      "statement": "Argentine players turned their backs on the Spanish team during the trophy ceremony of the 2026 FIFA World Cup final.",
+      "quote": "During the trophy ceremony itself, Argentine players turned their backs on the new world champions, refusing to pay respect to La Roja.",
+      "source_id": 9,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 37,
+      "statement": "Some Argentine fans claimed a goal was disallowed in the final because the net was torn.",
+      "quote": "a new, utterly bizarre theory spread on social media claiming that Argentina actually scored a goal, but the ball did not hit the net because it was supposedly torn",
+      "source_id": 9,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 38,
+      "statement": "FIFA launched an official investigation into the physical altercation between Spanish and Argentine players after the final.",
+      "quote": "FIFA has launched an official investigation into the physical altercation between Argentine players and Spaniards after the final.",
+      "source_id": 9,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 39,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain defeated Argentina 1-0 after extra time in the final, with Ferran Torres scoring the decisive goal in the 106th minute to hand Spain its second World Cup title.",
+      "source_id": 10,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 40,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1-0 in favor of Spain.",
+      "quote": "Spain defeated Argentina 1-0 after extra time in the final, with Ferran Torres scoring the decisive goal in the 106th minute to hand Spain its second World Cup title.",
+      "source_id": 10,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 41,
+      "statement": "The 2026 FIFA World Cup final was played on July 19 at the MetLife Stadium in East Rutherford, New Jersey.",
+      "quote": "the 2026 FIFA World Cup final between Argentina and Spain at the MetLife Stadium in East Rutherford, New Jersey on July 19",
+      "source_id": 10,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 42,
+      "statement": "Argentina and Spain contested the 2026 FIFA World Cup final.",
+      "quote": "the 2026 FIFA World Cup final between Argentina and Spain at the MetLife Stadium in East Rutherford, New Jersey on July 19",
+      "source_id": 10,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 43,
+      "statement": "Spain won the 2026 FIFA World Cup.",
+      "quote": "Spain beat Argentina 1-0 in Sunday's World Cup final in New Jersey.",
+      "source_id": 11,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 44,
+      "statement": "The final score of the 2026 FIFA World Cup final was 1-0 in favor of Spain.",
+      "quote": "Spain beat Argentina 1-0 in Sunday's World Cup final in New Jersey.",
+      "source_id": 11,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 45,
+      "statement": "The 2026 FIFA World Cup final was played in New Jersey at MetLife Stadium.",
+      "quote": "A disciplinary and ethics prosecutor will assess whether players, coaches, or the AFA face suspensions or fines for the clash with Spain at MetLife Stadium.",
+      "source_id": 11,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 46,
+      "statement": "Spain and Argentina contested the 2026 FIFA World Cup final.",
+      "quote": "Spain beat Argentina 1-0 in Sunday's World Cup final in New Jersey.",
+      "source_id": 11,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 47,
+      "statement": "Fifa opened an investigation into Argentina following post-final altercations and a disputed red card report involving Leandro Paredes.",
+      "quote": "Fifa has opened an investigation into Argentina after post-final trouble at the 2026 World Cup final, amid a disputed Fifa Argentina red card report involving Leandro Paredes.",
+      "source_id": 11,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 48,
+      "statement": "Spain won the 2026 World Cup.",
+      "quote": "The incidents occurred after the final whistle at MetLife Stadium in East Rutherford, N.J., as Spanish players celebrated winning the tournament.",
+      "source_id": 12,
+      "subquestion": 1,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 49,
+      "statement": "The final score of the 2026 World Cup final was 1-0 in favor of Spain.",
+      "quote": "FIFA is expected to investigate Argentina after players and coaching staff clashed with members of Spain's team following Argentina's 1-0 loss in Sunday's 2026 World Cup final",
+      "source_id": 12,
+      "subquestion": 2,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 50,
+      "statement": "The 2026 World Cup final was played on a Sunday at MetLife Stadium in East Rutherford, New Jersey.",
+      "quote": "The incidents occurred after the final whistle at MetLife Stadium in East Rutherford, N.J., as Spanish players celebrated winning the tournament.",
+      "source_id": 12,
+      "subquestion": 3,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 51,
+      "statement": "Spain and Argentina contested the 2026 World Cup final.",
+      "quote": "FIFA is expected to investigate Argentina after players and coaching staff clashed with members of Spain's team following Argentina's 1-0 loss in Sunday's 2026 World Cup final",
+      "source_id": 12,
+      "subquestion": 4,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 52,
+      "statement": "Following the 2026 World Cup final, Argentina players and coaching staff clashed with members of the Spanish team.",
+      "quote": "FIFA is expected to investigate Argentina after players and coaching staff clashed with members of Spain's team following Argentina's 1-0 loss in Sunday's 2026 World Cup final",
+      "source_id": 12,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 53,
+      "statement": "Argentina midfielder Leandro Paredes confronted Spain players Eric García and Gavi after the 2026 World Cup final.",
+      "quote": "Argentina midfielder Leandro Paredes confronted Spain players Eric García and Gavi, while defender Nahuel Molina attempted to knock over captain Rodri during the celebrations.",
+      "source_id": 12,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 54,
+      "statement": "Argentina defender Nahuel Molina attempted to knock over Spain captain Rodri during the celebrations after the 2026 World Cup final.",
+      "quote": "Argentina midfielder Leandro Paredes confronted Spain players Eric García and Gavi, while defender Nahuel Molina attempted to knock over captain Rodri during the celebrations.",
+      "source_id": 12,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    },
+    {
+      "id": 55,
+      "statement": "Argentina assistant coach Roberto Ayala struck Spain midfielder Dani Olmo after the 2026 World Cup final.",
+      "quote": "Videos of the incident also showed Argentina assistant coach Roberto Ayala striking Spain midfielder Dani Olmo.",
+      "source_id": 12,
+      "subquestion": 5,
+      "quote_score": 100.0,
+      "disputed": false
+    }
+  ],
+  "confidence": 0.76,
+  "confidence_why": "2 of 2 sentences cite a source; 9 different sites cited; average sentence score 0.76",
+  "not_found": [],
+  "subquestions": [
+    "Which nation/team won the 2026 FIFA World Cup?",
+    "What was the final score of the 2026 FIFA World Cup final?",
+    "When and where was the 2026 FIFA World Cup final played?",
+    "Which two teams contested the 2026 FIFA World Cup final?",
+    "Were there any notable controversies or disputed decisions in the 2026 FIFA World Cup final?"
+  ],
+  "contradictions": [],
+  "models": {
+    "main": "openai/gpt-oss-120b",
+    "fast": "google/gemma4:31b"
+  },
+  "stats": {
+    "llm_calls": 16.0,
+    "prompt_tokens": 26732.0,
+    "completion_tokens": 5910.0,
+    "rounds": 3.0,
+    "searches": 14.0,
+    "fetches": 18.0,
+    "fetch_errors": 6.0,
+    "facts_kept": 55.0,
+    "quotes_rejected": 4.0,
+    "seconds": 86.2
+  },
+  "created_at": "2026-09-25T08:56:14.225417+02:00"
+}

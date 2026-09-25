@@ -6,16 +6,14 @@
 - **Phase 2 (v3 research agent with critic loop): DONE**
 - **Phase 3 (confidence scoring, report format, tests): DONE**
 - **Phase 4 (CLI and web UI): DONE**
-- **Phase 5 (evaluation and experiments): DONE** — 28 questions, 108 runs, E1–E4 all measured.
-  Results in `eval/results/results.md`, causes in `eval/error_analysis.md`.
-- **Next: Phase 6:** `README.md` and `REPORT.md` (both in **Russian**), `examples/` with 4–5 saved
-  reports in RU and EN, and a fresh-clone check. Commit message: `Phase 6: README, report, examples`.
-  What Phase 6 needs from what exists: every number it has to quote is already in
-  `eval/results/results.md`; the architecture is the diagram in "How v3 works now" below; the error
-  section of `REPORT.md` is `eval/error_analysis.md` rewritten in Russian; good candidates for
-  `examples/` are the `runs/` folders named in `eval/results/raw.jsonl` (`run_dir` per record) —
-  `fr01`/`fr07` for fresh questions, `mh02` for a Russian multi-step one, `fp05` for a false premise,
-  and a v1 run of `fr01` to show what no sources looks like.
+- **Phase 5 (evaluation and experiments): DONE** - 28 questions, 108 runs, E1-E4 all measured.
+- **Phase 6 (README, report, examples): DONE** - `README.md` and `REPORT.md` in Russian,
+  `examples/` with 5 saved reports, fresh-clone check passed (it found two real bugs, both fixed
+  below).
+- **Next: nothing is planned.** The plan is finished. What is left is the TODO list at the bottom,
+  ordered by what the evaluation showed actually matters; the two things worth doing first are the
+  premise check in the planner and an answer verifier. Nothing has been pushed to GitHub - the user
+  asks for that explicitly.
 
 ## What exists
 | file | what it does |
@@ -47,7 +45,10 @@
 | `eval/run_eval.py` | the CLI and every table. Writes `results.md`, `judge_sample.md`, `failures.md`, `raw.jsonl` |
 | `eval/quote_audit.py` | E4 in detail: re-scores every rejected quote against its page and sorts the rejections by what they were → `results/quote_audit.md` |
 | `eval/judge_check.md`, `eval/error_analysis.md` | written by hand: the check of 21 judge decisions, and the failures sorted into five causes |
-| `tests/` | 93 unit tests, no network. `tests/test_eval.py` (34) covers the question set, the metrics, the judge against a scripted fake model, and the tables |
+| `README.md` | **RU**: what it is, install, run, mermaid diagram of v3, the headline numbers, limitations |
+| `REPORT.md` | **RU**: how the task was read, the five design decisions, the papers the ideas come from (ReAct, Self-RAG/CRAG, STORM, ALCE, FreshQA, FRAMES), E1-E4 with commentary, the five causes of failure, limitations, ten next steps |
+| `examples/` | 5 saved reports (`report.md` + `report.json`) with an RU index: fr01 in v3 and v1 (the same question with and without search), fr07 (RU, fresh), mh02 (RU, multi-step, shows a derived sentence), fp05 (false premise). Plus one `trace.jsonl` |
+| `tests/` | 95 unit tests, no network. `tests/test_eval.py` (34) covers the question set, the metrics, the judge against a scripted fake model, and the tables |
 
 ## How v3 works now
 1. **Planner** (main model, JSON): 3–6 sub-questions, 1–2 queries each (max 8). May set `published_after`.
@@ -112,6 +113,12 @@ Per sentence, from the sources it cites: `score = 0.5*min(sites,3)/3 + 0.5*quali
 - **`slim()` is a whitelist in spirit.** A test fails if a prompt ever reaches the page.
 - **The evaluation is resumable and stores one file per run.** It is a long chain of calls against a
   shared service, so it has to survive being stopped; `--force` is the only way to pay twice.
+- **`records/` is seeded from the committed `raw.jsonl`** (`eval/dataset.py:seed_records`). The
+  resume folder is gitignored, so without this a fresh clone would rebuild the tables out of nothing
+  and overwrite the committed results with empty ones. Found by the Phase 6 fresh-clone check.
+- **No module may call `get_settings()` at import time.** A reviewer runs `pytest` before filling in
+  the keys. `tests/test_eval.py::test_every_module_imports_without_api_keys` imports every module of
+  `taro/` and `eval/` in a subprocess with the keys blanked.
 - **The judge is asked three separate questions, never one.** Rolling "is it right", "is it cited" and
   "how sure are you" into one call made the model answer the easy part and copy it into the rest.
 - **The self-confidence call never sees a source** (a test enforces it), or E3 would compare our
@@ -131,6 +138,8 @@ Per sentence, from the sources it cites: `score = 0.5*min(sites,3)/3 + 0.5*quali
   questions were written by hand with gold answers that are stable facts.
 - **The plan's target of ≥85% citation quality was not met: v3 reaches 74%.** Cause 4 in
   `eval/error_analysis.md` explains why, and it is one mechanism, not general sloppiness.
+- `examples/` holds 5 reports rather than the plan's "4–5", and one of them is a v1 run — the point
+  of that pair is the same question with and without search.
 
 ## Known issues / TODO
 Ordered by what the evaluation showed actually matters.
@@ -174,7 +183,7 @@ Ordered by what the evaluation showed actually matters.
 ## Check it works
 ```
 .venv\Scripts\activate
-pytest                                                    # 93 tests, ~5 s, no network
+pytest                                                    # 95 tests, ~6 s, no network
 python -m taro "Who won the Nobel Prize in Physics in 2025 and for what?" --mode v3
 python -m taro "Кто стал директором ИСП РАН после Иванникова и в каком году?" --mode v3
 python -m taro "What was the name of the first human to walk on Mars in 2024?" --mode v3
@@ -186,7 +195,19 @@ python -m eval.run_eval --limit 2 --only e1 --concurrency 1   # 6 real runs, ~2 
 python -m eval.quote_audit                                # needs the runs/ folders to still be there
 ```
 `python -m eval.run_eval` on its own re-runs nothing that is already in `eval/results/records/`, so it
-is safe to repeat; deleting that folder (or `--force`) pays for all 108 runs again, about 45 minutes.
+is safe to repeat; `--force` is the only way to pay for all 108 runs again, about 45 minutes. Deleting
+the folder is *not* enough any more: it is re-seeded from the committed `raw.jsonl`.
+
+Fresh-clone check (done in Phase 6, worth repeating before handing the repo over):
+```
+git clone <repo> fresh && cd fresh
+python -m venv .venv && .venv\Scripts\python -m pip install -r requirements.txt
+copy .env.example .env                 # leave the keys empty for now
+.venv\Scripts\python -m pytest        # 95 pass without any key
+.venv\Scripts\python -m eval.run_eval --report    # results.md and raw.jsonl come out unchanged
+.venv\Scripts\python -m taro serve --port 8123    # the committed page is served
+# then fill in the two keys and run one question
+```
 
 In `eval/results/results.md` check by hand: the E1 row for v1 has 0% on the fresh questions and v3 8/8;
 the per-sentence calibration is monotone (🟢 > 🟡 > 🔴). In `judge_sample.md` open any citation verdict

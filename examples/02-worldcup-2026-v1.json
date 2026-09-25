@@ -1,0 +1,31 @@
+{
+  "question": "Who won the 2026 FIFA World Cup and what was the score in the final?",
+  "mode": "v1",
+  "answer": "I’m sorry, but I don’t have information about the 2026 FIFA World Cup, as it takes place after my training data cut‑off.",
+  "sentences": [
+    {
+      "text": "I’m sorry, but I don’t have information about the 2026 FIFA World Cup, as it takes place after my training data cut‑off.",
+      "citations": [],
+      "score": 0.0,
+      "level": "low",
+      "why": "no source cited"
+    }
+  ],
+  "sources": [],
+  "facts": [],
+  "confidence": 0.0,
+  "confidence_why": "no sources: nothing was searched, so the answer is only what the model already knew",
+  "not_found": [],
+  "subquestions": [],
+  "contradictions": [],
+  "models": {
+    "main": "openai/gpt-oss-120b"
+  },
+  "stats": {
+    "llm_calls": 1.0,
+    "prompt_tokens": 170.0,
+    "completion_tokens": 124.0,
+    "seconds": 1.2
+  },
+  "created_at": "2026-09-25T08:45:14.907396+02:00"
+}
