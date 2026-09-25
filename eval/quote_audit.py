@@ -5,8 +5,9 @@ invented, or was it real text the model re-typed badly? The two are different pr
 model that makes things up, the other is a model that cannot copy - and only the first is what the
 check was built for.
 
-For every `quote_rejected` event in the run folders, the page is fetched again (from the disk cache,
-so this costs nothing) and the quote is scored against it with the agent's own `verify_quote`:
+For every `quote_rejected` event in the run folders, the page is fetched again through Keenable and
+the quote is scored against it with the agent's own `verify_quote`. The re-fetch is a live request,
+and the page may have changed since the run, which a score of >= 85 has to be read against:
 
     >= 85  the check should have accepted it (a bug in the threshold or in the page we re-fetched)
     70-85  real text of the page, re-typed with edits: joined fragments, inserted "...", changed dashes

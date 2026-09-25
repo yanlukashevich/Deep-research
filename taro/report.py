@@ -113,8 +113,7 @@ def to_markdown(report: Report) -> str:
         "",
         f"{s.get('seconds', 0):.0f} s · LLM calls: {s.get('llm_calls', 0):.0f}"
         f" ({s.get('prompt_tokens', 0):.0f} prompt + {s.get('completion_tokens', 0):.0f} completion tokens)"
-        f" · searches: {s.get('searches', 0):.0f} · fetches: {s.get('fetches', 0):.0f}"
-        f" · cache hits: {s.get('cache_hits', 0):.0f}",
+        f" · searches: {s.get('searches', 0):.0f} · fetches: {s.get('fetches', 0):.0f}",
         "",
     ]
     return "\n".join(lines)

@@ -386,7 +386,7 @@ async def main_async(args) -> None:
             names = "/".join(c.label for c in configs)
             print(f"\n=== {len(questions)} questions x {names} ===", flush=True)
             await run_all(questions, configs, concurrency=args.concurrency,
-                          use_cache=not args.no_cache, force=args.force, on_done=progress)
+                          force=args.force, on_done=progress)
     write_results(load_questions())
 
 
@@ -398,7 +398,6 @@ def main() -> None:
     p.add_argument("--limit", type=int, help="use only the first N questions")
     p.add_argument("--concurrency", type=int, default=2, help="runs at a time (default 2)")
     p.add_argument("--force", action="store_true", help="re-run questions that already have a record")
-    p.add_argument("--no-cache", action="store_true", help="bypass the search cache")
     p.add_argument("--report", action="store_true", help="only rebuild the tables from stored records")
     args = p.parse_args()
     args.types = args.types.split(",") if args.types else None

@@ -1,13 +1,15 @@
-"""Keenable MCP: search() and fetch(), cached on disk so repeated runs are free and reproducible."""
+"""Keenable MCP: search() and fetch().
+
+Every call goes to the network. Nothing is cached: a question asked today must be answered from
+the web as it is today, and the evaluation has to measure real runs, not replayed ones.
+"""
 import asyncio
 import html
-import json
 import re
 import time
 from contextlib import AsyncExitStack
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-import diskcache
 import httpx2
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
@@ -78,12 +80,10 @@ class SearchError(Exception):
 class Search:
     """Keenable MCP client. Use as `async with Search(settings, trace) as s:`."""
 
-    def __init__(self, settings: Settings, trace: Trace | None = None, *, session_id: str | None = None,
-                 use_cache: bool = True):
+    def __init__(self, settings: Settings, trace: Trace | None = None, *, session_id: str | None = None):
         self.settings = settings
         self.trace = trace or Trace()
         self.session_id = session_id
-        self.cache = diskcache.Cache(str(settings.cache_dir / "keenable")) if use_cache else None
         self._sem = asyncio.Semaphore(settings.search_concurrency)
         self._stack: AsyncExitStack | None = None
         self._session: ClientSession | None = None
@@ -104,15 +104,9 @@ class Search:
     async def __aexit__(self, *exc) -> None:
         if self._stack:
             await self._stack.aclose()
-        if self.cache is not None:
-            self.cache.close()
 
     async def _call(self, tool: str, args: dict) -> tuple[str, bool]:
-        """Call a Keenable tool. Returns (text, is_error). Successful results are cached."""
-        key = json.dumps([tool, args], sort_keys=True, ensure_ascii=False)
-        if self.cache is not None and (hit := self.cache.get(key)) is not None:
-            self.trace.count("cache_hits")
-            return hit, False
+        """Call a Keenable tool. Returns (text, is_error)."""
         if self._session is None:
             raise SearchError("Search is not connected: use `async with Search(...)`")
         call_args = args | ({"session_id": self.session_id} if self.session_id else {})
@@ -124,8 +118,6 @@ class Search:
                     res = await asyncio.wait_for(self._session.call_tool(tool, call_args),
                                                  self.settings.search_timeout_s)
         text = "".join(c.text for c in res.content if hasattr(c, "text"))
-        if not res.is_error and self.cache is not None:
-            self.cache.set(key, text)
         return text, bool(res.is_error)
 
     async def search(self, query: str, *, max_results: int = 10, **filters) -> list[SearchResult]:

@@ -23,7 +23,7 @@ def _events(text: str) -> list[dict]:
 
 def _fake_run(*, answer: str = "A fact [1].", fail: bool = False):
     """Stand in for runner.run: no network, no LLM, but the same listener/return contract."""
-    async def run(question, mode, *, listener=None, use_cache=True):
+    async def run(question, mode, *, listener=None):
         if listener:
             listener({"t": 0.0, "kind": "start", "question": question, "mode": mode,
                       "run_dir": "C:/secret/path"})

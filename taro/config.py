@@ -26,7 +26,8 @@ class Settings:
     search_concurrency: int = 6
     search_timeout_s: float = 60
 
-    cache_dir: Path = ROOT / "cache"
+    # Where each run writes report.md / report.json / trace.jsonl. TARO_RUNS_DIR moves it off the
+    # code folder, which is read-only on hosts that deploy the app as a package (Azure App Service).
     runs_dir: Path = ROOT / "runs"
 
     # v2 simple RAG
@@ -63,4 +64,5 @@ def get_settings() -> Settings:
         keenable_api_key=_required("KEENABLE_API_KEY"),
         main_model=os.environ.get("TARO_MAIN_MODEL") or "openai/gpt-oss-120b",
         fast_model=os.environ.get("TARO_FAST_MODEL") or "google/gemma4:31b",
+        runs_dir=Path(os.environ.get("TARO_RUNS_DIR", "").strip() or ROOT / "runs"),
     )

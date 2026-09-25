@@ -37,8 +37,9 @@ TARO is a deep-research agent. It takes a question, searches the web through Kee
 - The `mcp` SDK is **2.x**: use `streamable_http_client(url, http_client=httpx2.AsyncClient(headers=...))` and snake_case result fields. `scripts/smoke_test.py` has working code.
 - The Windows console is cp1250, so any script that prints Cyrillic must call `sys.stdout.reconfigure(encoding="utf-8")`.
 - Code and comments are in English. `README.md` and `REPORT.md` are in **Russian**.
-- Keys go only in `.env`. `.gitignore` must cover `.env`, `.venv`, `cache/`, `runs/` and `task.md`.
-- LLM service is shared: keep parallel calls to 3–4, retry on errors, and cache searches and fetches on disk.
+- Keys go only in `.env`. `.gitignore` must cover `.env`, `.venv`, `runs/` and `task.md`.
+- LLM service is shared: keep parallel calls to 3–4 and retry on errors. Searches and fetches are **not**
+  cached: every run goes to the network, so an answer is never older than the run.
 - Push to GitHub only when the user asks.
 
 ## Commands
@@ -48,7 +49,7 @@ These are planned commands. Confirm them in `HANDOFF.md` once they exist.
 - Setup: `python -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`, copy `.env.example` to `.env` and fill in the keys.
 - `python scripts/smoke_test.py`: runs 1 LLM call, 1 Keenable search and 1 fetch (exists, Phase 0).
 - `python scripts/model_bench.py [model ...]`: the model selection benchmark (exists, Phase 0).
-- `python -m taro "question" --mode v1|v2|v3 [--no-cache]`: run the agent (all three exist; `v3` is the default). Output goes to `runs/<YYYYmmdd-HHMMSS>-<mode>/` (`report.md`, `report.json`, `trace.jsonl`). `taro/runner.py:run()` is the shared entry point for the CLI and the server.
+- `python -m taro "question" --mode v1|v2|v3`: run the agent (all three exist; `v3` is the default). Output goes to `runs/<YYYYmmdd-HHMMSS>-<mode>/` (`report.md`, `report.json`, `trace.jsonl`); `TARO_RUNS_DIR` moves that folder elsewhere, e.g. `/home/runs` on Azure App Service. `taro/runner.py:run()` is the shared entry point for the CLI and the server.
 - `python -m taro serve [--host --port]`: start the web UI at http://localhost:8000 (FastAPI + SSE).
   The built page in `web/dist` is committed, so Node is only needed to change the UI: `cd web && npm install && npm run build`
   (`npm run dev` proxies `/api` to a running server on port 8000).

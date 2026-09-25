@@ -24,14 +24,14 @@ export function useRun() {
   }, []);
 
   const start = useCallback(
-    (question, mode, useCache = true) => {
+    (question, mode) => {
       stop();
       const modes = mode === "all" ? MODES : [mode];
       setRuns(Object.fromEntries(modes.map((m) => [m, emptyRun()])));
       setAsked(question);
       setRunning(true);
 
-      const url = `api/run?question=${encodeURIComponent(question)}&mode=${mode}&cache=${useCache}`;
+      const url = `api/run?question=${encodeURIComponent(question)}&mode=${mode}`;
       const source = new EventSource(url);
       sourceRef.current = source;
 

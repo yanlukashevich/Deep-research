@@ -1,4 +1,4 @@
-"""CLI:  python -m taro "question" [--mode v1|v2|v3] [--no-cache]
+"""CLI:  python -m taro "question" [--mode v1|v2|v3]
          python -m taro serve [--host H] [--port P]
 """
 import argparse
@@ -24,7 +24,6 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("question", help='the question, or "serve" to start the web UI')
     parser.add_argument("--mode", choices=["v1", "v2", "v3"], default="v3",
                         help="v1 bare LLM, v2 simple RAG, v3 research agent")
-    parser.add_argument("--no-cache", action="store_true", help="do not use the on-disk search/fetch cache")
     args = parser.parse_args(argv)
 
     console = Console()
@@ -38,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
             console.print(f"[dim]{event['t']:6.1f}s  {line}")
 
     console.print(f"[bold]{args.question}[/bold] [dim]({args.mode})")
-    report, run_dir = asyncio.run(run(args.question, args.mode, listener=show_step, use_cache=not args.no_cache))
+    report, run_dir = asyncio.run(run(args.question, args.mode, listener=show_step))
 
     console.rule(f"[bold]{args.mode}")
     console.print(Markdown(marked_answer(report)))

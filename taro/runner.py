@@ -1,4 +1,4 @@
-"""Runs one question in a given mode and saves the output to runs/<time>-<mode>/.
+"""Runs one question in a given mode and saves the output to <runs_dir>/<time>-<mode>/.
 
 Used by the CLI, the server and the evaluation harness.
 """
@@ -20,7 +20,7 @@ IMPLEMENTED_MODES: tuple[Mode, ...] = ("v1", "v2", "v3")
 
 
 async def run(question: str, mode: Mode, *, listener: Listener | None = None,
-              use_cache: bool = True, overrides: dict[str, Any] | None = None,
+              overrides: dict[str, Any] | None = None,
               label: str | None = None) -> tuple[Report, Path]:
     """Run one question. `overrides` changes Settings fields for this run only (the experiments vary
     `v3_max_rounds` that way); `label` names the run folder when a mode is run more than once."""
@@ -37,7 +37,7 @@ async def run(question: str, mode: Mode, *, listener: Listener | None = None,
         if mode == "v1":
             report = await run_v1(question, llm)
         else:
-            async with Search(settings, trace, session_id=run_dir.name, use_cache=use_cache) as search:
+            async with Search(settings, trace, session_id=run_dir.name) as search:
                 report = await (run_v2(question, llm, search) if mode == "v2"
                                 else run_v3(question, llm, search))
     except Exception as e:

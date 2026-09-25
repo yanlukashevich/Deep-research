@@ -54,7 +54,7 @@ def sse(event: str, data: dict[str, Any]) -> str:
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False, default=str)}\n\n"
 
 
-async def stream_run(question: str, modes: list[Mode], use_cache: bool):
+async def stream_run(question: str, modes: list[Mode]):
     """Run every mode at once and yield SSE frames as the events arrive.
 
     The modes share the LLM semaphore, so running them together costs little more than the slowest
@@ -69,7 +69,7 @@ async def stream_run(question: str, modes: list[Mode], use_cache: bool):
 
     async def one(mode: Mode) -> None:
         try:
-            report, run_dir = await run(question, mode, listener=listener_for(mode), use_cache=use_cache)
+            report, run_dir = await run(question, mode, listener=listener_for(mode))
             queue.put_nowait(sse("report", {
                 "mode": mode,
                 "run": run_dir.name,
@@ -109,11 +109,10 @@ def create_app() -> FastAPI:
     async def api_run(
         question: str = Query(min_length=2),
         mode: str = Query("v3", pattern="^(v1|v2|v3|all)$"),
-        cache: bool = True,
     ) -> StreamingResponse:
         modes: list[Mode] = list(IMPLEMENTED_MODES) if mode == "all" else [mode]  # type: ignore[list-item]
         return StreamingResponse(
-            stream_run(question.strip(), modes, cache),
+            stream_run(question.strip(), modes),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no",
                      "Connection": "keep-alive"},

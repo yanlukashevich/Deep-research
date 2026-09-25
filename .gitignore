@@ -9,8 +9,9 @@ __pycache__/
 .pytest_cache/
 
 # Runtime data
-cache/
 runs/
+# leftover from the removed search cache; safe to delete the folder
+cache/
 # resume files for the evaluation; the same content is committed as eval/results/raw.jsonl
 eval/results/records/
 

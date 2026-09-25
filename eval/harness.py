@@ -91,13 +91,13 @@ async def judge_record(record: Record, item: Item, llm: LLM) -> Record:
     return record
 
 
-async def run_item(item: Item, config: Config, *, use_cache: bool = True, force: bool = False) -> Record:
+async def run_item(item: Item, config: Config, *, force: bool = False) -> Record:
     """One question in one configuration: run it, judge it, save it. Returns the stored record."""
     if not force:
         if (existing := load_record(item.id, config.label)) and existing.ok and existing.judgement:
             return existing
     try:
-        report, run_dir = await runner.run(item.question, config.mode, use_cache=use_cache,
+        report, run_dir = await runner.run(item.question, config.mode,
                                            overrides=config.overrides, label=config.label)
         record = to_record(item, config, report, str(run_dir))
     except Exception as e:
@@ -114,8 +114,7 @@ async def run_item(item: Item, config: Config, *, use_cache: bool = True, force:
 
 
 async def run_all(items: list[Item], configs: list[Config], *, concurrency: int = 2,
-                  use_cache: bool = True, force: bool = False,
-                  on_done=None) -> list[Record]:
+                  force: bool = False, on_done=None) -> list[Record]:
     """Run every (question, configuration) pair, `concurrency` at a time.
 
     The limit is on whole runs, not on calls: the LLM semaphore inside the agent is shared by
@@ -129,7 +128,7 @@ async def run_all(items: list[Item], configs: list[Config], *, concurrency: int 
     async def one(item: Item, config: Config) -> Record:
         nonlocal done
         async with gate:
-            record = await run_item(item, config, use_cache=use_cache, force=force)
+            record = await run_item(item, config, force=force)
         async with lock:
             done += 1
             if on_done:

@@ -18,7 +18,7 @@ class Trace:
     """Records every step of a run.
 
     Each event is appended to trace.jsonl right away (so a crashed run still leaves a log) and passed
-    to an optional listener (the web UI streams these live). `stats` counts calls, tokens and cache hits.
+    to an optional listener (the web UI streams these live). `stats` counts calls and tokens.
     """
 
     def __init__(self, path: Path | None = None, listener: Listener | None = None):

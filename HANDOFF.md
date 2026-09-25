@@ -20,7 +20,7 @@
 |---|---|
 | `taro/config.py` | `get_settings()`: keys and models from `.env`, plus limits (LLM concurrency 3, timeouts, v2 sizes, the v3 budgets) |
 | `taro/llm.py` | `LLM.chat()`: temperature 0.1, tenacity retries on connection/429/5xx/empty content, one semaphore per event loop. `LLM.json(messages, Schema)`: `response_format=json_object`, validates with Pydantic, sends the error back and retries (2 repairs). Every call is logged to the trace with its tokens |
-| `taro/search.py` | `Search` (async context manager, one MCP session): `search(query, **filters)` returns `list[SearchResult]` and `fetch(url)` returns `Page \| None`. `diskcache` in `cache/keenable` (errors aren't cached). Also `normalize_url()`, `domain()`, `clean_title()` and the parsers for Keenable's plain-text output |
+| `taro/search.py` | `Search` (async context manager, one MCP session): `search(query, **filters)` returns `list[SearchResult]` and `fetch(url)` returns `Page \| None`. Nothing is cached: every search and fetch is a live call. Also `normalize_url()`, `domain()`, `clean_title()` and the parsers for Keenable's plain-text output |
 | `taro/schemas.py` | `SearchResult`, `Page`, `Source`, `Fact`, `Sentence`, `Report`, plus the shapes the v3 LLM calls return: `Plan`, `Extraction`, `Critique` |
 | `taro/text.py` | `normalize_ws`, `clean_answer`, `parse_citations` (`[1][2]`, `[1, 2]`, `[1-3]`), `split_sentences`, `remap_citations` (fact numbers → source numbers) |
 | `taro/pages.py` | v3's plain-code helpers: `domain_quality()` (official 1.0 · encyclopedia 0.8 · news 0.7 · unknown 0.5 · blog/forum 0.4), `is_junk()`, `select_pages()`, `relevant_passages()` (BM25 trim), `verify_quote()` (rapidfuzz, min 15 chars) |
@@ -31,8 +31,8 @@
 | `taro/v1_bare.py` | 1 LLM call, no search |
 | `taro/v2_rag.py` | 1 search with the raw question → dedupe by URL → top 8 → 1 LLM call with `[n]` rules |
 | `taro/v3_research.py` | `Research`: planner → (search → pick pages → read → extract quoted facts) → critic → loop → writer. Counts `rounds` in the trace (Phase 5, for E2) |
-| `taro/runner.py` | `run(question, mode, listener=, use_cache=, overrides=, label=)` returns `(Report, run_dir)`. `overrides` replaces Settings fields for one run (E2 varies `v3_max_rounds`), `label` names the run folder. Shared by the CLI, the server and the evaluation |
-| `taro/server.py` | FastAPI + SSE. `GET /api/run?question=&mode=v1\|v2\|v3\|all&cache=`; `slim()` drops prompts, model replies and local paths |
+| `taro/runner.py` | `run(question, mode, listener=, overrides=, label=)` returns `(Report, run_dir)`. `overrides` replaces Settings fields for one run (E2 varies `v3_max_rounds`), `label` names the run folder. Shared by the CLI, the server and the evaluation |
+| `taro/server.py` | FastAPI + SSE. `GET /api/run?question=&mode=v1\|v2\|v3\|all`; `slim()` drops prompts, model replies and local paths |
 | `taro/progress.py` | `describe(event)`: one trace event as one readable line. `web/src/lib/format.js` is the same thing for the page |
 | `taro/__main__.py` | the CLI (default `--mode v3`) and `python -m taro serve` |
 | `web/` | the page: `src/` (React), `dist/` (**committed build**), `public/fonts` (offline woff2) |
@@ -131,7 +131,8 @@ Per sentence, from the sources it cites: `score = 0.5*min(sites,3)/3 + 0.5*quali
   `taro/progress.py`, `pytest.ini`; in `eval/`: `schemas.py`, `dataset.py`, `harness.py`, `metrics.py`,
   `quote_audit.py`, `judge_check.md`, `error_analysis.md`.
 - Tests were written from Phase 1 on, although the plan puts them in Phase 3.
-- Run folders are `runs/<YYYYmmdd-HHMMSS>-<label>/`, so the E2 configurations stay apart.
+- Run folders are `runs/<YYYYmmdd-HHMMSS>-<label>/`, so the E2 configurations stay apart. `TARO_RUNS_DIR`
+  moves that folder off the code directory, which a packaged deploy (Azure App Service) mounts read-only.
 - Fonts are vendored in `web/public/fonts` instead of loaded from a CDN.
 - **The FRAMES questions are written in the style of FRAMES, not taken from the dataset.** The dataset
   is not shipped here and downloading it was not worth a network dependency; the 10 multi-step

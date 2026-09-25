@@ -222,7 +222,7 @@ class Cost:
 
 
 def cost(records: list[Record]) -> Cost:
-    """Averages per run. Cache hits are left in: they are what a repeated run really costs."""
+    """Averages per run: every run is a real one, so these are the true cost of answering."""
     out = Cost(n=len(records))
     if not records:
         return out
