@@ -58,6 +58,7 @@ class Research:
         queries = await self._plan()
         for round_no in range(1, self.settings.v3_max_rounds + 1):
             self.trace.event("step", name="round", round=round_no, queries=len(queries))
+            self.trace.count("rounds")
             await self._search_and_read(queries, round_no)
             rounds_left = self.settings.v3_max_rounds - round_no
             stop = "max_rounds" if not rounds_left else self._budget_reached()

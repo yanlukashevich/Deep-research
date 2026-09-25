@@ -53,4 +53,9 @@ These are planned commands. Confirm them in `HANDOFF.md` once they exist.
   The built page in `web/dist` is committed, so Node is only needed to change the UI: `cd web && npm install && npm run build`
   (`npm run dev` proxies `/api` to a running server on port 8000).
 - `pytest` runs all tests (they need no network; `pytest.ini` sets `asyncio_mode = auto`). `pytest tests/test_x.py::test_name` runs a single test.
-- `python -m eval.run_eval`: run the evaluation and experiments.
+- `python -m eval.run_eval`: run the evaluation and experiments (exists, Phase 5). Resumable: it skips
+  every question already stored in `eval/results/records/`. `--only e1|e2`, `--types`, `--limit`,
+  `--concurrency` (default 2), `--force`, `--report` (rebuild the tables without running anything).
+  Writes `eval/results/`: `results.md`, `raw.jsonl`, `judge_sample.md`, `failures.md`.
+- `python -m eval.quote_audit`: scores every rejected quote against its page again (E4 in detail),
+  writes `eval/results/quote_audit.md`.

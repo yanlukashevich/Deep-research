@@ -1,5 +1,10 @@
-"""Runs one question in a given mode and saves the output to runs/<time>-<mode>/. Used by the CLI and the server."""
+"""Runs one question in a given mode and saves the output to runs/<time>-<mode>/.
+
+Used by the CLI, the server and the evaluation harness.
+"""
+from dataclasses import replace
 from pathlib import Path
+from typing import Any
 
 from .config import get_settings
 from .llm import LLM
@@ -15,11 +20,16 @@ IMPLEMENTED_MODES: tuple[Mode, ...] = ("v1", "v2", "v3")
 
 
 async def run(question: str, mode: Mode, *, listener: Listener | None = None,
-              use_cache: bool = True) -> tuple[Report, Path]:
+              use_cache: bool = True, overrides: dict[str, Any] | None = None,
+              label: str | None = None) -> tuple[Report, Path]:
+    """Run one question. `overrides` changes Settings fields for this run only (the experiments vary
+    `v3_max_rounds` that way); `label` names the run folder when a mode is run more than once."""
     if mode not in IMPLEMENTED_MODES:
         raise NotImplementedError(f"mode {mode} is not implemented yet")
     settings = get_settings()
-    run_dir = new_run_dir(settings.runs_dir, mode)
+    if overrides:
+        settings = replace(settings, **overrides)
+    run_dir = new_run_dir(settings.runs_dir, label or mode)
     trace = Trace(run_dir / "trace.jsonl", listener)
     trace.event("start", question=question, mode=mode, run_dir=str(run_dir))
     llm = LLM(settings, trace)

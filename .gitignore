@@ -11,6 +11,8 @@ __pycache__/
 # Runtime data
 cache/
 runs/
+# resume files for the evaluation; the same content is committed as eval/results/raw.jsonl
+eval/results/records/
 
 # Node
 web/node_modules/

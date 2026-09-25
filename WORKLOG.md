@@ -485,3 +485,142 @@ and watch v1 finish first with no sources at all; download the markdown and conf
 CLI writes; switch to the dark theme; narrow the window to phone width and check nothing overflows sideways.
 
 **Commit:** `Phase 4: CLI and web UI (FastAPI + React)`
+
+---
+
+## Phase 5 — measuring it: does any of this actually help? (2026-09-25)
+
+Up to now the project rested on a story: a bare model makes things up, searching once helps, and a research
+agent that reads pages and checks quotes helps more. This phase was about finding out whether that story is
+true, with numbers anyone can recompute.
+
+**Step 1: write the exam.** I wrote 28 questions and, for each, the answer a well-informed person would give.
+Four kinds, because they fail in different ways:
+
+- 10 **multi-step** questions, where you have to look up one thing to be able to look up the next. "Who was
+  the US president when the first human landed on the Moon, and how old was he that day?" — you need the
+  landing date, then the president, then his birthday, then the subtraction.
+- 8 **fresh 2026** questions, about things that happened this year: who won the World Cup, who topped the
+  Winter Olympics medal table, who got the Turing Award. No model can know these; it has to go and look.
+- 5 **open** questions with no single right answer ("compare PostgreSQL and MySQL"), graded on whether the
+  answer covers the points that matter.
+- 5 **questions built on something that never happened**: the first human to walk on Mars in 2024, the Nobel
+  Prize in mathematics, why a Russian institute that is still open was closed. These are the honesty test.
+
+Nine of the 28 are in Russian.
+
+The fresh questions needed care. I do not know what happened in 2026 either, so writing the answer key out of
+my head would have been inventing the exam as well as sitting it. Instead I ran the project's own search on
+each topic first, read the results, and only wrote down answers that several independent pages agreed on —
+the Wikipedia article and the official site, for instance. Each of those eight questions carries the page the
+answer was checked against, written into the file, so anyone can redo the check.
+
+**Step 2: a grader.** An answer is not a string match: "26 years old" and "twenty-six" are the same answer,
+and an answer can be right about half a question. So a model grades the answers, against the answer key, with
+three separate jobs:
+
+1. Is this answer right, compared to the key?
+2. For every sentence that cites a source: do the quotes from that source actually say what the sentence
+   says? (Here the grader is told, in so many words, that whether the sentence is *true* is none of its
+   business — a true sentence with unrelated evidence is a failure.)
+3. Separately, with all the sources hidden: model, how sure are you that this answer is right?
+
+That third one is not grading, it is the competitor. The whole project claims that a confidence number built
+from evidence beats a model's own feeling about itself, and this is how you test it.
+
+**Step 3: run everything.** 28 questions in three versions, plus 12 of them again with the research agent's
+thinking budget cut to one and two rounds: 108 runs in all, about an hour of wall time. The runner saves each
+finished run to its own file, so stopping it costs nothing — restarting picks up where it left off. That
+turned out to matter: one run died on a certificate error halfway through, and re-running the command redid
+exactly that one.
+
+**What came out**
+
+|  | right | citations that hold up | seconds |
+|---|---|---|---|
+| bare model | 57% | never cites anything | 2 |
+| one search | 79% | 61% | 5 |
+| the research agent | **89%** | **74%** | 57 |
+
+The clean split is on the 2026 questions: **the bare model gets 0 out of 8, and both searching versions get
+8 out of 8.** That is the entire argument for retrieval in one line.
+
+On the confidence number, our formula versus the model's own opinion of itself: our number separates right
+from wrong 79 times out of 100, the model's own 59 — barely better than a coin flip. More telling is where
+the two put their answers. Every single report our formula marked green or yellow was right, 34 for 34. The
+model's own confidence put 54 of the 84 answers in the green, wrong ones included. It is not that the model
+lies about its confidence; it is that it is cheerful about everything.
+
+Cutting the agent's rounds down showed the loop earns its keep: one round gets 83% of the same questions
+right, three rounds 100%, for 1.6 times the cost. Most runs never use the third round — the critic says
+"enough" after the first — so the budget is insurance, not a treadmill.
+
+**Interesting moments**
+
+- **Nobody invented a quote. That was not what I expected to find.** The quote check throws out any quotation
+  that cannot be found on the page it claims to come from, and across all the runs it threw out 129 of them —
+  about one in eight. I had assumed these were fabrications, which is what the check was built for. So I
+  fetched every one of those pages again and scored each rejected quote against it properly. Not one scored
+  below 50 out of 100. Two thirds were the page's own words, re-typed with an ellipsis dropped in or two
+  fragments joined; the rest were paraphrases, or a "quote" assembled out of a table. The small reading model
+  does not make things up. It cannot copy. That is a much less alarming problem — and the check is still
+  worth its cost, because a paraphrase in quotation marks is exactly the thing a reader would go and check
+  and fail to find.
+- **The agent's plan can swallow a lie in the question.** Asked who first walked on Mars in 2024, the planner
+  writes sub-questions like "Which 2024 mission landed the first humans on Mars?" and "On what exact date did
+  he step onto the surface?" Every search then hunts for an event that never happened, nothing is found, and
+  the answer is five polite sentences of "the sources do not say". Honest, and useless. The much simpler
+  version — one search, hand the raw results to the writer — does *better* here, because those raw results
+  are full of pages saying no human has been to Mars, and it just reads them. The research agent's own
+  discipline is what loses it: a sentence that answers none of the sub-questions is discarded before the
+  writer ever sees it. Structure is not free.
+- **"Therefore he was 56" is the most common bad citation in the whole project.** The answer says Nixon was
+  born in 1913 with three good citations, says the landing was in July 1969 with three more, and then says
+  "therefore he was 56 years old" — carrying the same citations. The grader marks it unsupported, and it is
+  right: no page says that. But the confidence formula gives that sentence a green mark, because it only
+  looks at *which* sources are cited, never at whether they say it. Every "how old / how long between"
+  question produces one. It is the single biggest reason the citation number is 74% and not the 85% I was
+  aiming at, and it is one mechanism rather than general sloppiness — which is the useful kind of failure,
+  because you can fix a mechanism.
+- **Six sources, all content farms, and the answer was graded correct.** For the PostgreSQL versus MySQL
+  question the agent read six pages, none of them a database vendor or a benchmark project — sites that exist
+  to rank for that search. The answer it wrote is plausible and cites a very precise number: "at 10M rows,
+  PostgreSQL delivered 12,400 queries per second". No methodology, no hardware, no date. The quote check
+  passes it, because the sentence really is on the page. The site-quality score calls all six "unknown", so
+  the report comes out red, which is the system being right by accident. Checking that a model copied its
+  source honestly is not the same as checking that the source is worth copying, and nothing in the project
+  currently does the second.
+- **The grader was harsher than I was, never softer.** I re-read 21 of its decisions by hand, three of each
+  kind it can give. I agreed with 18. All three disagreements were the same shape: an answer that got part of
+  the question right and honestly said the rest was missing, marked "wrong" instead of "partly right". It
+  never once waved through an invented answer. So the accuracy numbers are a floor. On the citation side it
+  agreed with me nine times out of nine, including a case where it knows perfectly well who Microsoft's chief
+  executive was and still said the cited page does not show it.
+- **I nearly caught the grader hallucinating, and the bug was mine.** One verdict said a sentence about the
+  Eurovision winning song was supported, and the evidence printed underneath it never mentioned the song. I
+  was about to write it up as a grader failure when I checked what the grader had actually been sent: twelve
+  quotes, four of which named the song. The page that prints decisions for hand-checking was trimming the
+  quote list for readability, so the hand-check was checking something the grader never saw. Now that page
+  prints the grader's exact input. A review tool that quietly shows you less than the machine saw will
+  manufacture bugs all day.
+- **Being honest costs the same as being wrong.** A quarter of the research agent's uncited sentences are
+  sentences admitting a gap — "the sources found do not say when the institute was closed". Each scores zero
+  and drags the report's average down exactly as hard as an unsupported claim would. For the two impossible
+  questions the final score is 0.00 for answers made entirely of honest admissions. The whole project exists
+  to reward that kind of sentence, and the formula punishes it. Written up as the first thing to fix.
+
+**What to check by hand**
+```
+pytest                                      # 93 tests, ~5 s, no internet
+python -m eval.run_eval --report            # rebuilds the tables from saved runs, no internet, ~1 s
+python -m eval.run_eval --limit 2 --only e1 --concurrency 1    # 6 real runs, about two minutes
+```
+Then read `eval/results/results.md` top to bottom: the bare model should be at zero on the fresh questions
+and the research agent at eight of eight; the per-sentence table should go down, not up, from green to red.
+Open `eval/results/judge_sample.md`, pick any citation verdict, and read the quotes under it — they are
+exactly what the grader was shown, so if the verdict looks wrong, it is wrong. `eval/judge_check.md` is my
+own pass over 21 of them and says where I disagreed. `eval/error_analysis.md` sorts every failure in the
+whole run into five causes with real examples, and `eval/results/failures.md` lists every answer that was not
+correct, each with the folder holding its full report and step log.
+
+**Commit:** `Phase 5: evaluation and experiment results`
