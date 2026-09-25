@@ -63,6 +63,8 @@ def get_settings() -> Settings:
         keenable_url=_required("KEENABLE_URL"),
         keenable_api_key=_required("KEENABLE_API_KEY"),
         main_model=os.environ.get("TARO_MAIN_MODEL") or "openai/gpt-oss-120b",
-        fast_model=os.environ.get("TARO_FAST_MODEL") or "google/gemma4:31b",
+        # same model as main since 2026-09-25: the gateway serves gemma4:31b at ~28 tok/s
+        # against gpt-oss's ~95, and page reading is the step that repeats most
+        fast_model=os.environ.get("TARO_FAST_MODEL") or "openai/gpt-oss-120b",
         runs_dir=Path(os.environ.get("TARO_RUNS_DIR", "").strip() or ROOT / "runs"),
     )

@@ -1106,3 +1106,100 @@ via `az webapp ssh`.
 **Commit:** `Deploy to Azure App Service`
 
 ---
+
+## Moving page reading to the big model
+
+**What was asked.** The run felt slow, so first: explain why, in plain terms. Then: move page reading
+to `gpt-oss`.
+
+**Why it was slow.** The trace of a real run on the server answers it. Downloading a page takes
+between a quarter of a second and two seconds, and six are downloaded at once - four seconds of the
+whole run. The time goes somewhere else: **reading** the pages, which means handing each one to a
+model and asking for facts with quotes. That was 72 of 111 seconds, about two thirds of everything.
+Three things stacked up. The model doing the reading generated about 28 tokens a second while the
+model doing the planning and writing managed 95 to 140. Only three model calls are allowed at once,
+so six pages queue in two waves. And the very first round of searching had every one of its page
+fetches refused by the search service's ten-per-second limit, which produced nothing and forced two
+more rounds of reading.
+
+**What I did, step by step.**
+
+1. **Measured the two models on the same work.** The obvious test - run both on the same pages - is
+   not obvious to do honestly, because the slow model had by then become so unreliable that five of
+   six pages timed out and the sixth returned six tokens in a minute. Re-running it would have
+   measured an outage, not a model. But every past run saves its full trace, including the exact
+   prompt sent for each page *and the reply that came back*. So the comparison used twelve real page
+   readings: the old model's recorded answer against the new model asked live on the identical
+   prompt.
+
+2. **Checked both halves of the question: speed and honesty.** Speed is the easy half. The half that
+   mattered is whether the new model still quotes faithfully, since the whole design rests on every
+   sentence tracing back to a quote that really appears on the page. Both models' answers were run
+   through the same quote checker the agent itself uses.
+
+3. **Made the switch in three places** - the local settings file, the default in the code (so a fresh
+   clone with no settings file does the right thing), and the setting on the server.
+
+4. **Fixed something the deployment exposed.** One test run died in the middle with the connection
+   dropped. The server had not crashed - it was healthy throughout. The cause: the host cuts any
+   connection that goes quiet for 230 seconds, and while a model call hangs the agent reports nothing
+   at all, so the connection looks dead to the host while the work is very much alive. Worse, my own
+   handover note claimed this could never happen "because the trace sends an event every few
+   seconds". The stream now sends a tiny keep-alive every fifteen seconds, which browsers ignore by
+   design, and a test holds it in place.
+
+**What came out.**
+
+| | usable | facts | quotes that verify | rejected | model time |
+|---|---|---|---|---|---|
+| gemma4:31b (recorded) | 12/12 | 31 | 31 | 0 | 220.8 s |
+| gpt-oss-120b (live) | 12/12 | 33 | 32 | 1 | 150.8 s |
+
+Same quality, one and a half times the speed.
+
+**Interesting moments**
+
+- **The tokens-per-second number lied, and I quoted it before checking.** From raw generation speed -
+  28 against 95 - I told the user to expect roughly three and a half times faster, a run dropping from
+  111 seconds to about 60. The real answer on identical pages is 1.5×. The reason is that the new
+  model thinks before it answers, and that hidden thinking is generated at the same speed as
+  everything else. It is genuinely faster per token and much less than three times faster per page,
+  because it produces far more tokens. Raw speed of a model says little about the speed of a step.
+- **The end-to-end number looks better than the truth, and I nearly reported it.** The same question
+  on the server went from 111 seconds to 68, a 38% improvement that would have made a great headline.
+  It is not a fair comparison: the faster run happened to need two rounds and six pages where the
+  slower one needed three rounds and twelve, mostly because the slow run's first round was destroyed
+  by the search rate limit. Per page, the live runs actually favour the *old* model. One run on each
+  side is noise; the controlled replay on identical pages is the only number worth keeping, and it
+  says 1.5×.
+- **The thing being measured kept dying while being measured.** The first benchmark ran for
+  twenty-two minutes with nothing to show, because it used the project's own retry logic - four
+  attempts, three minutes of patience each - against a model that had stopped responding. Twelve
+  pages through three slots would have taken the better part of an hour. The rewrite talks to the
+  service directly with no retries and a hard cap per call, and prints each page as it finishes
+  instead of at the end. A benchmark of an unreliable thing has to be built so that it cannot itself
+  hang.
+- **Quotes got stricter, not looser.** The worry in swapping the reader was fabricated quotes. The
+  opposite happened: in the deployed run, rejected quotes fell from 8 to 1. The earlier notes
+  recorded the small model as a faithful copyist, and it was - but the bigger model is at least as
+  careful, and it produced two more facts.
+- **What the switch costs.** The new model writes hidden reasoning for every page, so tokens spent on
+  answers roughly quadrupled per page. On this gateway nothing is billed, so it is free here and
+  would not be elsewhere. Worth stating plainly rather than presenting the change as pure gain.
+
+**What to check by hand**
+
+```
+pytest                                    # 98 tests now, no internet
+python -m taro "Who won the Nobel Prize in Physics in 2025 and for what?" --mode v3
+```
+The report header should say `fast=openai/gpt-oss-120b`. Open the page at
+https://taro-research.azurewebsites.net, ask a question, and open a page block: the facts should each
+still carry a quote, and the rejected-quote list should be short. To see the keep-alive, watch the raw
+stream with `curl -N ".../api/run?question=...&mode=v3"` and look for `: ping` lines during any long
+quiet stretch. To go back to the old model, set `TARO_FAST_MODEL` in `.env` and in the App Service
+settings - nothing else refers to a model by name.
+
+**Commit:** `Page reading moves to gpt-oss-120b; keep the SSE stream alive`
+
+---

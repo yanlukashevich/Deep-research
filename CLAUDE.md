@@ -33,7 +33,7 @@ TARO is a deep-research agent. It takes a question, searches the web through Kee
 ## Conventions
 
 - Python 3.12 + asyncio, with no agent frameworks. LLM calls use the `openai` client against LiteLLM (`https://litellm.ispras.ru/`), and search uses the official `mcp` SDK.
-- Models: the main one is `openai/gpt-oss-120b` (context 60k tokens) and the fast one is `google/gemma4:31b`. Both are set in `.env`. Why they were chosen is in `HANDOFF.md`.
+- Models: `openai/gpt-oss-120b` (context 60k tokens) in **both** roles since 2026-09-25 — the gateway serves `google/gemma4:31b` at ~28 tok/s against gpt-oss's ~95, so page reading moved too. Both are set in `.env` (`TARO_MAIN_MODEL`, `TARO_FAST_MODEL`); nothing in the code names a model. The measurement is in `HANDOFF.md`.
 - The `mcp` SDK is **2.x**: use `streamable_http_client(url, http_client=httpx2.AsyncClient(headers=...))` and snake_case result fields. `scripts/smoke_test.py` has working code.
 - The Windows console is cp1250, so any script that prints Cyrillic must call `sys.stdout.reconfigure(encoding="utf-8")`.
 - Code and comments are in English. `README.md` and `REPORT.md` are in **Russian**.

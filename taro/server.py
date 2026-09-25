@@ -38,6 +38,10 @@ MEDIA_TYPES = {".woff2": "font/woff2", ".woff": "font/woff", ".js": "text/javasc
 # fields that must not reach the browser: whole prompts and page texts, megabytes of them
 DROP = {"messages", "response", "run_dir", "text"}
 
+# Keep-alive for a silent stream. Well under the 230 s a load balancer allows (Azure App Service),
+# and far apart enough to cost nothing.
+HEARTBEAT_S = 15.0
+
 # how much of a list or a quote the page gets: the graph shows what a step did, not the whole run
 MAX_RESULTS = 6
 MAX_FACTS = 6
@@ -114,7 +118,14 @@ async def stream_run(question: str, modes: list[Mode]):
     yield sse("hello", {"question": question, "modes": list(modes)})
     try:
         while True:
-            frame = await queue.get()
+            try:
+                frame = await asyncio.wait_for(queue.get(), timeout=HEARTBEAT_S)
+            except asyncio.TimeoutError:
+                # A step that traces nothing while it works (a model call that hangs, a slow fetch)
+                # leaves the stream silent, and Azure App Service cuts a connection idle for 230 s.
+                # An SSE comment keeps it open and is ignored by EventSource.
+                yield ": ping\n\n"
+                continue
             if frame is None:
                 return
             yield frame

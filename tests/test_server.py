@@ -138,3 +138,24 @@ def test_the_page_route_serves_the_built_page_and_nothing_above_it(monkeypatch, 
     client = TestClient(server.create_app())
     assert client.get("/").text == "<html>built</html>"
     assert "real-key" not in client.get("/../secret.env").text  # unknown paths fall back to the page
+
+
+async def test_a_silent_run_still_sends_keep_alives(monkeypatch):
+    """A step that traces nothing must not leave the stream quiet.
+
+    Azure App Service drops a connection idle for 230 s, so a hanging model call would kill a run
+    that is still perfectly alive. The heartbeat is an SSE comment, which EventSource ignores.
+    """
+    import asyncio
+
+    monkeypatch.setattr(server, "HEARTBEAT_S", 0.05)
+
+    async def never_traces(question, mode, *, listener=None, **kw):
+        await asyncio.sleep(0.4)          # works hard, says nothing
+        raise RuntimeError("stopped")
+
+    monkeypatch.setattr(server, "run", never_traces)
+
+    frames = [f async for f in server.stream_run("q", ["v3"])]
+    assert sum(f.startswith(": ping") for f in frames) >= 3, "the stream went silent"
+    assert any("event: failed" in f for f in frames)

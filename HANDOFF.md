@@ -19,6 +19,8 @@
   below).
 - **Deployment (Azure App Service): DONE (2026-09-25)** - live at
   https://taro-research.azurewebsites.net. Not in the plan; asked for after the second page pass.
+- **Page reading moved to the main model: DONE (2026-09-25)** - `TARO_FAST_MODEL` is now
+  `openai/gpt-oss-120b`. Measured, not assumed; see below.
 - **Next: nothing is planned.** The plan is finished. What is left is the TODO list at the bottom,
   ordered by what the evaluation showed actually matters; the two things worth doing first are the
   premise check in the planner and an answer verifier. Nothing has been pushed to GitHub - the user
@@ -67,7 +69,7 @@
 1. **Planner** (main model, JSON): 3–6 sub-questions, 1–2 queries each (max 8). May set `published_after`.
 2. **Round** (up to `v3_max_rounds = 3`): all queries searched in parallel → `select_pages` (≤6 per round,
    ≤2 per site, junk dropped) → fetched in parallel → trimmed to 6k chars by BM25 → the **fast model**
-   extracts `{statement, quote, subquestion}`.
+   extracts `{statement, quote, subquestion}` (since 2026-09-25 that is the same `gpt-oss-120b`).
 3. **Quote check** (plain code): `verify_quote` fuzzy-searches each quote in the full page text and drops
    the fact below 85. Counted in `stats["quotes_rejected"]`.
 4. **Critic** (main model, JSON): enough / missing sub-questions / contradictions / new queries.
@@ -194,8 +196,10 @@ apps, which were not touched).
   `taro/`, `web/dist/` and `requirements.txt` - 33 files, 386 KB, no `.env`, no `task.md`, no `runs/`.
 - **Always On matters here**, beyond avoiding cold starts: without it App Service can recycle an idle
   instance, and a v3 run holds one SSE connection open for one to seven minutes.
-- **`--timeout-keep-alive 620`** covers the longest run the budget allows. The platform's own 230 s
-  idle timeout is never reached because the trace sends an event every few seconds.
+- **`--timeout-keep-alive 620`** covers the longest run the budget allows, and the stream sends an
+  SSE comment (`: ping`) every 15 s. The platform's 230 s idle timeout *is* reachable: a model call
+  that hangs traces nothing at all, and one run was cut mid-research before the heartbeat existed.
+  Events every few seconds are not something the agent guarantees.
 
 To redeploy after a change (rebuild the page first if `web/src` changed):
 ```
@@ -213,6 +217,38 @@ EOF
 az webapp deploy -g rg-taro -n taro-research --src-path deploy.zip --type zip
 ```
 Logs: `az webapp log tail -g rg-taro -n taro-research`.
+
+## Why both roles now run the same model (2026-09-25)
+
+`TARO_FAST_MODEL` was `google/gemma4:31b`. The gateway no longer serves it at a usable speed:
+**~28 output tokens/s against gpt-oss-120b's ~95**, measured identically from this machine and from
+Azure, so it is the gateway and not the network. Phase 0 measured the two as equal (4.3 s vs 4.4 s a
+page); that is no longer true. At its worst during this session gemma timed out entirely - 5 of 6
+pages hit a 60 s cap, and the one that answered returned 6 tokens in 59 s.
+
+The A/B that decided it replayed **12 real page-extractions** taken from saved traces. gemma's side is
+its recorded reply from the run that really happened (it was too unreliable to re-run fairly); gpt-oss
+was called live on the identical prompt:
+
+| | usable | facts | quotes verified | rejected | model time |
+|---|---|---|---|---|---|
+| gemma4:31b (recorded) | 12/12 | 31 | 31 | 0 | 220.8 s |
+| gpt-oss-120b (live) | 12/12 | 33 | 32 | 1 | **150.8 s** |
+
+**Quality is a wash, speed is 1.5×.** That is the number to trust: same inputs, same concurrency.
+
+End to end on Azure the same question went **111 s → 68 s**, but that comparison is confounded and
+should not be quoted as the speedup: the faster run also did 2 rounds and 6 pages where the slower
+one did 3 rounds and 12 (its first round was wiped out by the Keenable rate limit). Per page the live
+runs actually favour gemma (13.8 s vs 18.8 s), which is the opposite of the controlled A/B - one run
+each side is noise, so the A/B stands.
+
+**What it costs:** gpt-oss writes hidden reasoning, so completion tokens roughly quadrupled per page
+(the 68 s run wrote 14.8k completion tokens against 7.4k for a run that read twice as many pages). On
+a per-token bill that is the trade; on this gateway it is not billed.
+
+**If gemma recovers** and the speed matters more than the reasoning, `TARO_FAST_MODEL` in `.env` (and
+the App Service setting of the same name) is the only switch - nothing in the code names a model.
 
 ## Known issues / TODO
 Ordered by what the evaluation showed actually matters.
@@ -244,7 +280,8 @@ Ordered by what the evaluation showed actually matters.
   "_(read, but the answer does not cite it)_", because dropping one would renumber the rest.
 - Fact statements from the fast model sometimes spell numbers out in words ("две тысячи пятнадцатом").
 - `v3_time_budget_s = 420` is only checked between rounds, so one slow round can overrun it.
-- **The fast model can go down on the shared LiteLLM proxy, and a run then hangs for six minutes.**
+- **A model that goes down on the shared LiteLLM proxy hangs a run for six minutes.** (Page reading
+  moved to `gpt-oss-120b` on 2026-09-25, which removes today's worst offender but not the mechanism.)
   Seen for real during the Azure check: every `v3_extract` call came back
   `500 '>' not supported between instances of 'NoneType' and 'int'` - a LiteLLM-internal error, not
   ours. It cleared by itself within minutes and the same question then ran clean. The damage is in
@@ -257,6 +294,11 @@ Ordered by what the evaluation showed actually matters.
   `search_concurrency` is not low enough for a round of 8. It costs real coverage (the round then reads
   fewer pages), and the run graph now shows it plainly: "8 searches, 48 results, 2 did not come back".
   Fix: lower `search_concurrency`, or space a round's searches out.
+- **A run can still end with neither a report nor an error.** Seen once on Azure right after a
+  redeploy: the stream sent `hello`, two heartbeats and then `end`, because the worker task was
+  cancelled (the container recycles after a deployment). `one()` re-raises `CancelledError` by design,
+  so nothing is reported to the page and the reader sees the graph stop. Fix: catch it at the
+  `run_all` level and send a `failed` frame saying the server restarted.
 - **The page has still not been looked at by a human.** It was verified headless again in this pass (see
   below), but nobody has seen it on a screen, and the phone-width check is open.
 - The web UI has no automated test in `pytest`. What was used instead, and is worth repeating after any
