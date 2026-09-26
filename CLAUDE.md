@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 TARO is a deep-research agent. It takes a question, searches the web through Keenable MCP, extracts facts with exact quotes, and writes an answer where every sentence is cited and scored for confidence. The answer must come from the pages it retrieved, not from what the model already knows.
 
-- **The full plan is the source of truth:** `C:\Users\yanlu\.claude\plans\ok-zrob-plan-zrobienia-federated-dewdrop.md`. It covers the phases, the layout, the v1/v2/v3 design, the confidence formula and the verification criteria. Read it before starting.
+- **The full plan is the source of truth:** `PLAN.md` in this repo (a verbatim copy of the original plan, `C:\Users\yanlu\.claude\plans\ok-zrob-plan-zrobienia-federated-dewdrop.md`). It covers the phases, the layout, the v1/v2/v3 design, the confidence formula and the verification criteria. Read it before starting.
 - `task.md` is the original assignment. It contains **API keys**: never commit it and never copy its keys anywhere except `.env`.
 
 ## Working in phases (start here)

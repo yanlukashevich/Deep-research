@@ -20,6 +20,7 @@ confidence 0.78 🟢 — 5 of 5 sentences cite a source; 4 different sites cited
 
 Готовые примеры со ссылками и цитатами — в [`examples/`](examples/README.md).
 Как всё устроено, что измерялось и что из этого вышло — в [`REPORT.md`](REPORT.md).
+Исходный план, по которому проект строился, — в [`PLAN.md`](PLAN.md).
 
 ## Что внутри
 
